@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Messages — Chat AI Agent</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../lists.css">
+<link rel="stylesheet" href="../chat-shell.css">
+<link rel="stylesheet" href="../chat-cards.css">
+<style>
+html, body { margin:0; padding:0; background:#F8F8F8; font-family:var(--font-cn); color:var(--fg-default); }
+.preview-page { max-width:860px; margin:0 auto; padding:32px 24px 80px; }
+h2 { font-size:13px; font-weight:600; color:#999; letter-spacing:0.06em; text-transform:uppercase;
+      margin:48px 0 16px; border-top:1px solid #EEE; padding-top:24px; }
+h2:first-of-type { margin-top:0; }
+.swatch-row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+.label { font-size:12px; color:#999; margin-bottom:6px; }
+.note { font-size:12px; color:#888; background:#FFF8E6; border-left:3px solid #F7981D;
+         padding:8px 12px; border-radius:0 4px 4px 0; margin-top:12px; line-height:18px; }
+.note code { font-family:monospace; font-size:11px; color:#555; }
+
+</style>
+</head>
+<body>
+<div class="preview-page">
+  <!-- ═══════════════════════════════════════════════════════
+       3. ACTION BUTTONS  (white bg · blue text · no border)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>3. Action buttons — white pill, blue text, no border</h2>
+  <div class="swatch-row">
+    <div>
+      <div class="label">Primary — main response CTA</div>
+      <div class="ea-chat-actions" style="background:var(--chat-canvas-bg);padding:12px;border-radius:8px;">
+        <button class="ea-chat-action-btn ea-chat-action-btn--primary">确定，去生成拜访计划</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--primary">安排拜访</button>
+      </div>
+    </div>
+    <div>
+      <div class="label">Secondary — suggested questions (same look)</div>
+      <div class="ea-chat-actions" style="background:var(--chat-canvas-bg);padding:12px;border-radius:8px;">
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">都不合适</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">取消规划</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">查看科室会记录</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. THINKING STREAM  (Figma 7570:31169)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>4. Thinking / status stream</h2>
+
+  <style>
+  /* star SVG inline fill trick for preview */
+  .thinking-star { display:inline-flex; width:16px; height:16px; }
+  </style>
+
+  <div class="swatch-row">
+    <div>
+      <div class="label">In progress (2 done · 1 active) — dot indicator only, no star</div>
+      <div class="ea-chat-thinking">
+        <div class="ea-chat-thinking__row ea-chat-thinking__row--done">
+          <span class="ea-chat-thinking__label">已完成用户的需求理解</span>
+        </div>
+        <div class="ea-chat-thinking__row ea-chat-thinking__row--done">
+          <span class="ea-chat-thinking__label">数据查询中</span>
+        </div>
+        <div class="ea-chat-thinking__row">
+          <span class="ea-chat-thinking__label">答案组织中</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="label">Stop notice</div>
+      <div class="ea-chat-stop-notice">你已让系统停止这条回答</div>
+    </div>
+  </div>
+
+
+</div>
+</body>
+</html>

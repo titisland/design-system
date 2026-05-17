@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>NavigationBar — 顶部导航栏</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../navbar.css">
+<style>
+  html, body { margin:0; padding:0; background:var(--color-bg-f8); font-family:var(--font-cn); color:var(--color-fg-h2); }
+  .stage { padding:32px; max-width:900px; margin:0 auto; }
+  .group { background:var(--color-bg-white); border:1px solid var(--color-border-base);
+            border-radius:12px; padding:20px; margin-bottom:24px; }
+  .group__title { font-size:16px; font-weight:500; color:#000; margin:0 0 4px; }
+  .group__sub { font-size:12px; color:var(--color-fg-h4); margin:0 0 16px;
+                 font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .label { font-size:11px; color:var(--color-fg-h4); margin:0 0 6px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  /* Demo phone-frame to host the navbar at native width */
+  .phone { width:100%; max-width:440px; background:var(--color-bg-f8);
+            border:1px solid var(--color-border-base); border-radius:14px; overflow:hidden;
+            box-shadow:var(--shadow-light); margin-bottom:14px; }
+  /* Reusable status-bar inner (signal + battery glyphs) */
+  .si-signal { display:inline-flex; gap:1.5px; align-items:flex-end; }
+  .si-signal span { width:3px; background:var(--color-white); border-radius:1px; }
+  .si-signal span:nth-child(1) { height:3px; }
+  .si-signal span:nth-child(2) { height:5px; }
+  .si-signal span:nth-child(3) { height:7px; }
+  .si-signal span:nth-child(4) { height:9px; }
+  .si-batt { width:22px; height:11px; border:1px solid var(--color-white); border-radius:2px;
+              position:relative; padding:1px; }
+  .si-batt::after { content:""; position:absolute; right:-3px; top:3px; width:1.5px; height:5px;
+                     background:var(--color-white); border-radius:0 1px 1px 0; }
+  .si-batt-fill { height:100%; width:75%; background:var(--color-white); border-radius:1px; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="group">
+    <h2 class="group__title">NavigationBar — 顶部导航栏</h2>
+    <p class="group__sub">.ea-navbar · 88 fixed (44 status + 44 row) · width 100% adaptive · brand-blue bg · white-only icons (Figma 62:13869)</p>
+
+    <p class="label">默认（back · 居中标题 · more）</p>
+    <div class="phone">
+      <header class="ea-navbar">
+        <div class="ea-navbar__status">
+          <span class="ea-navbar__status-time">11:31</span>
+          <div class="ea-navbar__status-icons">
+            <div class="si-signal"><span></span><span></span><span></span><span></span></div>
+            <span>5G</span>
+            <div class="si-batt"><div class="si-batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="ea-navbar__row">
+          <div class="ea-navbar__leading">
+            <button type="button" class="ea-navbar__icon" aria-label="返回"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_126%29%22%3E%20%3Cpath%20d%3D%22M7.00032%2015.0313C7.00282%2015.3202%207.11425%2015.6083%207.33469%2015.8288L21.1715%2029.6656C21.6174%2030.1115%2022.3403%2030.1115%2022.7863%2029.6656C23.2322%2029.2196%2023.2322%2028.4967%2022.7863%2028.0508L9.74811%2015.0127L22.8116%201.94918C23.2575%201.5033%2023.2575%200.78031%2022.8116%200.33443C22.3657%20-0.111487%2021.6427%20-0.111487%2021.1968%200.33443L7.33444%2014.1968C7.10458%2014.4267%206.99322%2014.7301%207.00032%2015.0313Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_126%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+          <h1 class="ea-navbar__title">页面名称</h1>
+          <div class="ea-navbar__trailing">
+            <button type="button" class="ea-navbar__icon" aria-label="更多"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M4.28571%2017.2857C5.39029%2017.2857%206.28571%2016.3903%206.28571%2015.2857C6.28571%2014.1811%205.39029%2013.2857%204.28571%2013.2857C3.18114%2013.2857%202.28571%2014.1811%202.28571%2015.2857C2.28571%2016.3903%203.18114%2017.2857%204.28571%2017.2857ZM4.28571%2019.5714C1.91879%2019.5714%200%2017.6526%200%2015.2857C0%2012.9188%201.91879%2011%204.28571%2011C6.65264%2011%208.57143%2012.9188%208.57143%2015.2857C8.57143%2017.6526%206.65264%2019.5714%204.28571%2019.5714ZM15%2017.2857C16.1046%2017.2857%2017%2016.3903%2017%2015.2857C17%2014.1811%2016.1046%2013.2857%2015%2013.2857C13.8954%2013.2857%2013%2014.1811%2013%2015.2857C13%2016.3903%2013.8954%2017.2857%2015%2017.2857ZM15%2019.5714C12.6331%2019.5714%2010.7143%2017.6526%2010.7143%2015.2857C10.7143%2012.9188%2012.6331%2011%2015%2011C17.3669%2011%2019.2857%2012.9188%2019.2857%2015.2857C19.2857%2017.6526%2017.3669%2019.5714%2015%2019.5714ZM25.7143%2017.2857C26.8189%2017.2857%2027.7143%2016.3903%2027.7143%2015.2857C27.7143%2014.1811%2026.8189%2013.2857%2025.7143%2013.2857C24.6097%2013.2857%2023.7143%2014.1811%2023.7143%2015.2857C23.7143%2016.3903%2024.6097%2017.2857%2025.7143%2017.2857ZM25.7143%2019.5714C23.3474%2019.5714%2021.4286%2017.6526%2021.4286%2015.2857C21.4286%2012.9188%2023.3474%2011%2025.7143%2011C28.0812%2011%2030%2012.9188%2030%2015.2857C30%2017.6526%2028.0812%2019.5714%2025.7143%2019.5714Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <p class="label">超长标题（自动 ellipsis）</p>
+    <div class="phone">
+      <header class="ea-navbar">
+        <div class="ea-navbar__status">
+          <span class="ea-navbar__status-time">11:31</span>
+          <div class="ea-navbar__status-icons">
+            <div class="si-signal"><span></span><span></span><span></span><span></span></div>
+            <span>5G</span>
+            <div class="si-batt"><div class="si-batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="ea-navbar__row">
+          <div class="ea-navbar__leading">
+            <button type="button" class="ea-navbar__icon" aria-label="返回"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_126%29%22%3E%20%3Cpath%20d%3D%22M7.00032%2015.0313C7.00282%2015.3202%207.11425%2015.6083%207.33469%2015.8288L21.1715%2029.6656C21.6174%2030.1115%2022.3403%2030.1115%2022.7863%2029.6656C23.2322%2029.2196%2023.2322%2028.4967%2022.7863%2028.0508L9.74811%2015.0127L22.8116%201.94918C23.2575%201.5033%2023.2575%200.78031%2022.8116%200.33443C22.3657%20-0.111487%2021.6427%20-0.111487%2021.1968%200.33443L7.33444%2014.1968C7.10458%2014.4267%206.99322%2014.7301%207.00032%2015.0313Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_126%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+          <h1 class="ea-navbar__title">优选治疗方案：维我替尼上海地区第三期临床研讨会</h1>
+          <div class="ea-navbar__trailing">
+            <button type="button" class="ea-navbar__icon" aria-label="更多"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M4.28571%2017.2857C5.39029%2017.2857%206.28571%2016.3903%206.28571%2015.2857C6.28571%2014.1811%205.39029%2013.2857%204.28571%2013.2857C3.18114%2013.2857%202.28571%2014.1811%202.28571%2015.2857C2.28571%2016.3903%203.18114%2017.2857%204.28571%2017.2857ZM4.28571%2019.5714C1.91879%2019.5714%200%2017.6526%200%2015.2857C0%2012.9188%201.91879%2011%204.28571%2011C6.65264%2011%208.57143%2012.9188%208.57143%2015.2857C8.57143%2017.6526%206.65264%2019.5714%204.28571%2019.5714ZM15%2017.2857C16.1046%2017.2857%2017%2016.3903%2017%2015.2857C17%2014.1811%2016.1046%2013.2857%2015%2013.2857C13.8954%2013.2857%2013%2014.1811%2013%2015.2857C13%2016.3903%2013.8954%2017.2857%2015%2017.2857ZM15%2019.5714C12.6331%2019.5714%2010.7143%2017.6526%2010.7143%2015.2857C10.7143%2012.9188%2012.6331%2011%2015%2011C17.3669%2011%2019.2857%2012.9188%2019.2857%2015.2857C19.2857%2017.6526%2017.3669%2019.5714%2015%2019.5714ZM25.7143%2017.2857C26.8189%2017.2857%2027.7143%2016.3903%2027.7143%2015.2857C27.7143%2014.1811%2026.8189%2013.2857%2025.7143%2013.2857C24.6097%2013.2857%2023.7143%2014.1811%2023.7143%2015.2857C23.7143%2016.3903%2024.6097%2017.2857%2025.7143%2017.2857ZM25.7143%2019.5714C23.3474%2019.5714%2021.4286%2017.6526%2021.4286%2015.2857C21.4286%2012.9188%2023.3474%2011%2025.7143%2011C28.0812%2011%2030%2012.9188%2030%2015.2857C30%2017.6526%2028.0812%2019.5714%2025.7143%2019.5714Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <p class="label">无右侧按钮（trailing 占位保持标题居中）</p>
+    <div class="phone">
+      <header class="ea-navbar">
+        <div class="ea-navbar__status">
+          <span class="ea-navbar__status-time">11:31</span>
+          <div class="ea-navbar__status-icons">
+            <div class="si-signal"><span></span><span></span><span></span><span></span></div>
+            <span>5G</span>
+            <div class="si-batt"><div class="si-batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="ea-navbar__row">
+          <div class="ea-navbar__leading">
+            <button type="button" class="ea-navbar__icon" aria-label="返回"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_126%29%22%3E%20%3Cpath%20d%3D%22M7.00032%2015.0313C7.00282%2015.3202%207.11425%2015.6083%207.33469%2015.8288L21.1715%2029.6656C21.6174%2030.1115%2022.3403%2030.1115%2022.7863%2029.6656C23.2322%2029.2196%2023.2322%2028.4967%2022.7863%2028.0508L9.74811%2015.0127L22.8116%201.94918C23.2575%201.5033%2023.2575%200.78031%2022.8116%200.33443C22.3657%20-0.111487%2021.6427%20-0.111487%2021.1968%200.33443L7.33444%2014.1968C7.10458%2014.4267%206.99322%2014.7301%207.00032%2015.0313Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_126%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+          <h1 class="ea-navbar__title">页面名称</h1>
+          <div class="ea-navbar__trailing">
+            <span class="ea-navbar__icon ea-navbar__icon--empty"></span>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <p class="label">无 back（顶层 tab 页 — 也用占位）</p>
+    <div class="phone">
+      <header class="ea-navbar">
+        <div class="ea-navbar__status">
+          <span class="ea-navbar__status-time">11:31</span>
+          <div class="ea-navbar__status-icons">
+            <div class="si-signal"><span></span><span></span><span></span><span></span></div>
+            <span>5G</span>
+            <div class="si-batt"><div class="si-batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="ea-navbar__row">
+          <div class="ea-navbar__leading">
+            <span class="ea-navbar__icon ea-navbar__icon--empty"></span>
+          </div>
+          <h1 class="ea-navbar__title">首页</h1>
+          <div class="ea-navbar__trailing">
+            <button type="button" class="ea-navbar__icon" aria-label="更多"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M4.28571%2017.2857C5.39029%2017.2857%206.28571%2016.3903%206.28571%2015.2857C6.28571%2014.1811%205.39029%2013.2857%204.28571%2013.2857C3.18114%2013.2857%202.28571%2014.1811%202.28571%2015.2857C2.28571%2016.3903%203.18114%2017.2857%204.28571%2017.2857ZM4.28571%2019.5714C1.91879%2019.5714%200%2017.6526%200%2015.2857C0%2012.9188%201.91879%2011%204.28571%2011C6.65264%2011%208.57143%2012.9188%208.57143%2015.2857C8.57143%2017.6526%206.65264%2019.5714%204.28571%2019.5714ZM15%2017.2857C16.1046%2017.2857%2017%2016.3903%2017%2015.2857C17%2014.1811%2016.1046%2013.2857%2015%2013.2857C13.8954%2013.2857%2013%2014.1811%2013%2015.2857C13%2016.3903%2013.8954%2017.2857%2015%2017.2857ZM15%2019.5714C12.6331%2019.5714%2010.7143%2017.6526%2010.7143%2015.2857C10.7143%2012.9188%2012.6331%2011%2015%2011C17.3669%2011%2019.2857%2012.9188%2019.2857%2015.2857C19.2857%2017.6526%2017.3669%2019.5714%2015%2019.5714ZM25.7143%2017.2857C26.8189%2017.2857%2027.7143%2016.3903%2027.7143%2015.2857C27.7143%2014.1811%2026.8189%2013.2857%2025.7143%2013.2857C24.6097%2013.2857%2023.7143%2014.1811%2023.7143%2015.2857C23.7143%2016.3903%2024.6097%2017.2857%2025.7143%2017.2857ZM25.7143%2019.5714C23.3474%2019.5714%2021.4286%2017.6526%2021.4286%2015.2857C21.4286%2012.9188%2023.3474%2011%2025.7143%2011C28.0812%2011%2030%2012.9188%2030%2015.2857C30%2017.6526%2028.0812%2019.5714%2025.7143%2019.5714Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+        </div>
+      </header>
+    </div>
+  </div>
+
+  <div class="group">
+    <h2 class="group__title">使用方法 / Usage</h2>
+    <p class="group__sub">复制下面的 markup 到任何 page，引用 navbar.css 即可，不要把样式写到 page 自己的 &lt;style&gt; 里。</p>
+    <pre style="background:var(--color-bg-f5); padding:16px; border-radius:6px; font-size:12px; line-height:18px; overflow-x:auto; color:var(--color-fg-h2)"><code>&lt;link rel="stylesheet" href="path/to/navbar.css"&gt;
+
+&lt;header class="ea-navbar"&gt;
+  &lt;div class="ea-navbar__status"&gt;
+    &lt;span class="ea-navbar__status-time"&gt;11:31&lt;/span&gt;
+    &lt;div class="ea-navbar__status-icons"&gt;…&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="ea-navbar__row"&gt;
+    &lt;div class="ea-navbar__leading"&gt;
+      &lt;button class="ea-navbar__icon" style="--icon: url(线性-向左方向.svg)"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;h1 class="ea-navbar__title"&gt;页面名称&lt;/h1&gt;
+    &lt;div class="ea-navbar__trailing"&gt;
+      &lt;button class="ea-navbar__icon" style="--icon: url(线性-更多.svg)"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+  </div>
+
+</div>
+</body>
+</html>

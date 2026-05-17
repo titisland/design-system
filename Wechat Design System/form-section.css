@@ -1,0 +1,83 @@
+/* WeChat Design System — Form Section Header (表单分组标题)
+   --------------------------------------------------------
+   Source: Figma 详情页面 (9I1NNGaRTsFFcAnWFzW5qe) node 2481:62357
+           (Frame 104 / Group 105 — section header strip).
+
+   Section dividers used between groups of form rows on detail
+   pages — "基本信息" / "联系方式" / "执业信息" etc. The header is
+   a 40-tall strip with a soft-blue tinted inner pill behind a
+   bold short title.
+
+   Layout:
+     ┌────────────────────────────────────────────────┐
+     │  ┌────────────────────────────────────────────┐│
+     │  │ 基本信息                                   ││
+     │  └────────────────────────────────────────────┘│
+     └────────────────────────────────────────────────┘
+                          40px tall
+                inner strip 32 tall, padded 8/8
+
+   Pair with forms.css — the section header sits ABOVE a stack
+   of `.ff-row` view-mode rows.
+
+   Spec:
+     • Outer strip   — 40px tall, white bg
+     • Inner pill    — 32 tall, light-blue tint
+                       background: --color-bg-extra-blue-2 (5% wash)
+                       OR --color-bg-tint-blue (legacy alias) — both work
+     • Title         — 14 / 500 / #000
+     • Inner padding — 4 (top) / 8 (sides) / 4 (bottom)
+*/
+
+:root {
+  --fsec-h:           40px;
+  --fsec-pad-x:       8px;
+  --fsec-pad-y:       4px;
+  --fsec-strip-h:     32px;
+  --fsec-strip-bg:    var(--color-bg-extra-blue-2);   /* very soft blue wash */
+  --fsec-strip-pad-x: 8px;
+  --fsec-radius:      var(--r-base);
+  --fsec-title-fs:    14px;
+  --fsec-title-fw:    var(--fw-medium);
+  --fsec-title-color: var(--color-fg-h1);             /* #000 */
+}
+
+.ea-form-section {
+  width: 100%;
+  height: var(--fsec-h);
+  padding: var(--fsec-pad-y) var(--fsec-pad-x);
+  background: var(--color-bg-white);
+  box-sizing: border-box;
+  font-family: var(--font-cn);
+  display: flex;
+  align-items: stretch;
+}
+
+.ea-form-section__strip {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--fsec-strip-h);
+  background: var(--fsec-strip-bg);
+  border-radius: var(--fsec-radius);
+  padding: 0 var(--fsec-strip-pad-x);
+  display: flex;
+  align-items: center;
+}
+
+.ea-form-section__title {
+  font-size: var(--fsec-title-fs);
+  font-weight: var(--fsec-title-fw);
+  color: var(--fsec-title-color);
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Optional small badge / count to the right of the title */
+.ea-form-section__count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--color-fg-h4);
+  font-weight: var(--fw-regular);
+}

@@ -1,0 +1,250 @@
+/* Event Agent — Form fields (一级表单)
+   Tokens & components reverse-engineered from the Figma reference
+   (/for-claude/frame). Field row is fluid; only the label column has a
+   fixed width — value column flexes to fill the container.
+     ┌────────────────── fluid ──────────────────┐
+     │ 15│ 105 (label)  10  value (flex)       │15│
+     └────────────────────────────────────────────┘
+   Label column = #666 14/22, value column = #333 14/100%
+   (#E5E5E5 placeholder, #999 readonly, #FF5543 error).
+   Hairline #EEE at row bottom. Required prefixed by an 8-pointed
+   sparkle (NOT an asterisk char) in #FF5543. */
+
+:root {
+  --ff-row-px:       15px;
+  --ff-label-w:      105px;
+  --ff-gap:          10px;
+  --ff-row-h:        45px;     /* no hint / no error */
+  --ff-row-h-err:    62px;     /* with inline error  */
+  --ff-row-h-hint:   65px;     /* with hint text     */
+
+  --ff-fs:           14px;
+  --ff-lh-label:     22px;
+  --ff-lh-value:     1;        /* 100% */
+
+  --ff-color-label:  rgb(102,102,102);   /* #666 */
+  --ff-color-value:  rgb(51,51,51);      /* #333 */
+  --ff-color-placeholder: rgb(229,229,229);  /* #E5E5E5 */
+  --ff-color-readonly: rgb(153,153,153);  /* #999 */
+  --ff-color-error:  rgb(255,85,67);     /* #FF5543 */
+  --ff-color-divider: rgb(238,238,238);  /* #EEE */
+
+  --ff-font: "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB",
+             "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+}
+
+/* ── Row shell ─────────────────────────────────────────── */
+
+.ff-row {
+  position: relative;
+  width: 100%;
+  min-height: var(--ff-row-h);
+  background: #fff;
+  padding: 5px var(--ff-row-px);
+  font-family: var(--ff-font);
+  font-size: var(--ff-fs);
+  box-sizing: border-box;
+}
+.ff-row::after {
+  /* hairline divider at bottom (matches /page4/EEEEEE345 token) */
+  content: "";
+  position: absolute;
+  left: var(--ff-row-px);
+  right: var(--ff-row-px);
+  bottom: 0;
+  height: 1px;
+  background: var(--ff-color-divider);
+}
+
+.ff-row__inner {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ff-gap);
+  min-height: 35px;
+  align-items: flex-start;
+}
+
+/* ── Label column ─────────────────────────────────────── */
+
+.ff-label {
+  flex: 0 0 var(--ff-label-w);
+  width: var(--ff-label-w);
+  min-height: 35px;
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  align-items: center;
+  color: var(--ff-color-label);
+  font-size: var(--ff-fs);
+  line-height: var(--ff-lh-label);
+}
+.ff-label__txt { display: inline-block; }
+
+/* The 8-point sparkle "*" — figma path d="M 6.5 3.072 L 4.005 3.563 …" */
+.ff-required {
+  flex: 0 0 6.5px;
+  width: 6.5px;
+  height: 6.5px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6.5 6.5'><path d='M 6.5 3.072 L 4.005 3.563 L 5.75 5.755 L 4.671 6.5 L 3.271 4.079 L 1.855 6.5 L 0.776 5.755 L 2.512 3.563 L 0 3.072 L 0.438 1.854 L 2.816 2.768 L 2.588 0 L 3.946 0 L 3.709 2.768 L 6.087 1.854 L 6.5 3.072 Z' fill='%23FF5543'/></svg>")
+    no-repeat center / contain;
+  align-self: center;
+}
+
+/* ── Value column ─────────────────────────────────────── */
+
+.ff-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 35px;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--ff-fs);
+  color: var(--ff-color-value);
+  line-height: var(--ff-lh-value);
+}
+.ff-value__text {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  color: var(--ff-color-value);
+}
+.ff-value__placeholder { color: var(--ff-color-placeholder); }
+.ff-value__readonly    { color: var(--ff-color-readonly); }
+
+/* Error message under the value (row grows to 62) */
+.ff-row--error { min-height: var(--ff-row-h-err); }
+.ff-error {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--ff-color-error);
+  margin-top: 2px;
+}
+
+/* Inline hint message under the WHOLE row (row grows to 65) */
+.ff-row--hint { min-height: var(--ff-row-h-hint); }
+.ff-hint {
+  font-size: 12px;
+  line-height: 1;
+  color: var(--ff-color-readonly);
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Edit primitives inside .ff-value ─────────────────── */
+
+/* boolean — radio group (是 / 否) stacked vertically per figma */
+.ff-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 7px;
+}
+.ff-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: var(--ff-fs);
+  color: var(--ff-color-value);
+}
+.ff-radio input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--ff-color-readonly);
+  border-radius: 50%;
+  background: #fff;
+  margin: 0;
+  position: relative;
+  cursor: pointer;
+}
+.ff-radio input[type="radio"]:checked {
+  border-color: rgb(32,105,214);
+}
+.ff-radio input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: rgb(32,105,214);
+}
+
+/* picklist — segmented inline (single select) */
+.ff-segment { display: inline-flex; gap: 8px; align-items: center; }
+.ff-segment__opt {
+  height: 28px;
+  padding: 0 12px;
+  background: #fff;
+  border: 1px solid var(--ff-color-divider);
+  border-radius: 4px;
+  font: inherit;
+  color: var(--ff-color-value);
+  cursor: pointer;
+}
+.ff-segment__opt[aria-pressed="true"] {
+  border-color: rgb(32,105,214);
+  color: rgb(32,105,214);
+  background: rgb(239,247,254);
+}
+
+/* lookup / date — value text + right-aligned trigger glyph */
+.ff-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 35px;
+  cursor: pointer;
+}
+.ff-trigger__icon {
+  width: 14px;
+  height: 14px;
+  color: var(--ff-color-readonly);
+  flex: 0 0 14px;
+  /* When used as a span with --icon set, render the icon as a mask so the
+     library SVG drives the shape and color comes from currentColor. */
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+/* longtext — multi-line; row grows to fit */
+.ff-row--longtext { min-height: auto; padding-bottom: 10px; }
+.ff-row--longtext .ff-row__inner { align-items: flex-start; }
+.ff-row--longtext .ff-value { width: auto; }
+.ff-textarea {
+  width: 100%;
+  min-height: 92px;
+  padding: 7px 0 0;
+  border: 0;
+  outline: 0;
+  resize: vertical;
+  font: inherit;
+  color: var(--ff-color-value);
+  line-height: 1.6;
+  background: transparent;
+}
+.ff-textarea::placeholder { color: var(--ff-color-placeholder); }
+.ff-textarea-readonly {
+  padding-top: 7px;
+  line-height: 1.6;
+  color: var(--ff-color-value);
+  white-space: pre-wrap;
+}

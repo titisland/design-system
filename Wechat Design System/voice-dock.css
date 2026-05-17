@@ -1,0 +1,134 @@
+/* =========================================================
+   Voice Call Voice Agent — Floating Voice Input Dock
+   voice-dock.css
+   ─────────────────────────────────────────────────────────
+   The 194px tall frosted-glass dock pinned above the iOS
+   home indicator. Contains:
+     - Voice Call mode toggle pill
+     - "按住说话" press-to-record button
+     - "内容由AI生成" disclaimer
+
+   The dock uses backdrop-filter so the chat body scrolls
+   visibly behind it. The iOS home indicator (34px black
+   pill) sits visually over the dock bottom edge.
+
+   Depends on: colors_and_type.css
+   ========================================================= */
+
+/* ── Dock container ── */
+.vc-dock {
+  position: fixed;
+  bottom: 34px;   /* sit above the iOS home indicator */
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--vc-device-width);
+  height: 194px;
+  background: var(--vc-bg-modal-glass);          /* rgba(255,255,255,0.60) */
+  backdrop-filter: var(--vc-blur-dock);           /* blur(12px) */
+  -webkit-backdrop-filter: var(--vc-blur-dock);
+  border-radius: var(--vc-r-sheet);               /* 20px 20px 0 0 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 16px 0;
+}
+
+/* When used inside a static mockup (not fixed positioning) */
+.vc-dock--static {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  width: 100%;
+}
+
+/* ── Inner input panel (white card with shadow) ── */
+.vc-dock__panel {
+  width: 100%;
+  background: var(--color-bg-white);
+  border-radius: var(--vc-r-card);   /* 12px */
+  box-shadow: var(--vc-shadow-dock); /* 0 0 20px rgba(0,0,0,.15) */
+  overflow: hidden;
+}
+
+/* ── Mode toggle row (Voice Call pill) ── */
+.vc-dock__mode-row {
+  border-bottom: 1px solid var(--color-border-base);
+  padding: 8px 12px;
+}
+.vc-dock__mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-bg-f5);   /* #F5F5F5 */
+  border-radius: var(--vc-r-pill);
+  padding: 4px 12px;
+  cursor: pointer;
+}
+.vc-dock__mode-label {
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+}
+.vc-dock__mode-caret {
+  width: 12px;
+  height: 12px;
+  color: var(--fg-subtle);
+}
+
+/* ── "按住说话" record button row ── */
+.vc-dock__record-row {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* keyboard icon — left absolute */
+.vc-dock__keyboard-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  color: var(--fg-default);
+}
+
+.vc-dock__record-btn {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-title);  /* 16px */
+  color: var(--fg-default);
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+.vc-dock__record-btn:active {
+  opacity: 0.7;
+}
+
+/* language toggle icon — right absolute */
+.vc-dock__lang-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  color: var(--fg-default);
+}
+
+/* ── "内容由AI生成" disclaimer ── */
+.vc-dock__disclaimer {
+  font-family: var(--font-en);
+  font-size: 12px;
+  letter-spacing: 0.167px;
+  color: var(--vc-fg-5);    /* #AAAAAA */
+  margin-top: 4px;
+  flex-shrink: 0;
+}

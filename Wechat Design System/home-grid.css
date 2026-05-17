@@ -1,0 +1,83 @@
+/* WeChat Design System — Home Grid (功能入口)
+   --------------------------------------------------------
+   Source: Figma 首页_WeChat (JO8xVSc8EDUiyPWZizfGsu) node 6:2026.
+
+   The functional-entry grid sits below the user-info banner.
+   It's a fixed 4-column grid of icon + label tiles. Each tile
+   represents a top-level entry into a domain list (我的医生 /
+   拜访 / 活动 etc.). Tapping a tile navigates to that list,
+   and the list's avatar glyph inherits THIS tile's icon (see
+   the "avatar inheritance rule" in lists.css).
+
+   Spec:
+     • Card         — 白底，左右 margin 16px，圆角 8px
+                       box-shadow: 0 4px 8px rgba(0,0,0,0.05)
+     • Columns      — 4 固定列
+     • Row gap      — 16px
+     • Icon         — Homepage-* business icon，<img> 渲染，保留多色
+     • Label        — 12 / 400 / #333，单行 ellipsis
+
+   ── Icon rule ─────────────────────────────────────────────
+   ALL grid icons MUST come from assets/icons/Homepage/.
+   ────────────────────────────────────────────────────────── */
+
+:root {
+  --hg-cols:        4;
+  --hg-gap:         16px;
+  --hg-tile-pad-y:  0;
+  --hg-tile-pad-x:  0;
+  --hg-icon-size:   40px;
+  --hg-label-fs:    var(--fs-caption);     /* 12 */
+  --hg-label-color: var(--color-fg-h2);    /* #333 */
+  --hg-label-mt:    8px;
+}
+
+.ea-home-grid {
+  margin: 0 16px;
+  background: var(--color-bg-white);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.10);
+  display: grid;
+  grid-template-columns: repeat(var(--hg-cols), minmax(0, 1fr));
+  row-gap: var(--hg-gap);
+  column-gap: 0;
+  padding: 16px 8px;
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+}
+
+.ea-home-grid__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--hg-label-mt);
+  padding: var(--hg-tile-pad-y) var(--hg-tile-pad-x);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  color: inherit;
+}
+.ea-home-grid__tile:active { opacity: 0.6; }
+
+.ea-home-grid__icon {
+  width: var(--hg-icon-size);
+  height: var(--hg-icon-size);
+  display: block;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.ea-home-grid__label {
+  font-size: var(--hg-label-fs);
+  line-height: 18px;
+  color: var(--hg-label-color);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+

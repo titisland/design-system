@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cards — Chat AI Agent</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../lists.css">
+<link rel="stylesheet" href="../chat-shell.css">
+<link rel="stylesheet" href="../chat-cards.css">
+<style>
+html, body { margin:0; padding:0; background:#F8F8F8; font-family:var(--font-cn); color:var(--fg-default); }
+.preview-page { max-width:860px; margin:0 auto; padding:32px 24px 80px; }
+h2 { font-size:13px; font-weight:600; color:#999; letter-spacing:0.06em; text-transform:uppercase;
+      margin:48px 0 16px; border-top:1px solid #EEE; padding-top:24px; }
+h2:first-of-type { margin-top:0; }
+.swatch-row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+.label { font-size:12px; color:#999; margin-bottom:6px; }
+.note { font-size:12px; color:#888; background:#FFF8E6; border-left:3px solid #F7981D;
+         padding:8px 12px; border-radius:0 4px 4px 0; margin-top:12px; line-height:18px; }
+.note code { font-family:monospace; font-size:11px; color:#555; }
+</style>
+</head>
+<body>
+<div class="preview-page">
+
+  <!-- ═══════════════════════════════════════════════════════
+       6. STRATEGY CARD  (.ea-card--strategy)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>6. Strategy card — orange frame + white inner row</h2>
+  <div class="swatch-row">
+    <div style="max-width:343px;">
+      <div class="label">ea-card--strategy (pre-call planner market strategy)</div>
+      <article class="ea-card ea-card--strategy">
+        <div class="ea-card-strategy__row">
+          <span class="ea-card-strategy__icon"
+                style="color: var(--color-brand-veeva);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          </span>
+          <div class="ea-card-strategy__body">
+            <div class="ea-card-strategy__label">市场产品策略</div>
+            <div class="ea-card-strategy__heading">聚焦"深度缓解，超长生存"</div>
+          </div>
+          <button type="button" class="ea-card-strategy__expand">
+            展开
+            <span class="ea-card-strategy__expand-icon"
+                  style="--icon: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22M2 4l4 4 4-4%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>')">
+            </span>
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <div style="max-width:343px;">
+      <div class="label">ea-card--strategy — alternate content</div>
+      <article class="ea-card ea-card--strategy">
+        <div class="ea-card-strategy__row">
+          <span class="ea-card-strategy__icon"
+                style="color: var(--color-brand-veeva);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H8v-2h4v2zm4-4H8v-2h8v2zm0-4H8V7h8v2z"/></svg>
+          </span>
+          <div class="ea-card-strategy__body">
+            <div class="ea-card-strategy__label">医生拜访行为目标</div>
+            <div class="ea-card-strategy__heading">聚焦"赢一线"行为目标</div>
+          </div>
+          <button type="button" class="ea-card-strategy__expand">
+            展开
+            <span class="ea-card-strategy__expand-icon"
+                  style="--icon: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22M2 4l4 4 4-4%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>')">
+            </span>
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       7. SOURCE CARD  (.ea-chat-source-card)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>7. Source card — 资料引用卡片</h2>
+  <!--
+    语义内容搜索结果卡片。两列网格 (.ea-chat-source-list)，每张卡片：
+    左侧 48×48 封面缩略图 + 右侧正文（标题 2 行截断 + 发布年份 + 页码 + 查看原文）。
+
+    Figma: Chat.fig — 规范-semantic content search
+  -->
+
+  <div style="max-width:500px;">
+    <div class="ea-chat-source-list">
+
+      <div class="ea-chat-source-card">
+        <div class="ea-chat-source-card__thumb"
+             style="background-color: var(--color-bg-f2);"></div>
+        <div class="ea-chat-source-card__body">
+          <p class="ea-chat-source-card__title">老年高血压患者使用克洛凯添加治疗的健康资源使用和费用分析</p>
+          <p class="ea-chat-source-card__meta">2024年发布</p>
+          <div class="ea-chat-source-card__footer">
+            <span class="ea-chat-source-card__page">第 15 页</span>
+            <span class="ea-chat-source-card__link">查看原文</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ea-chat-source-card">
+        <div class="ea-chat-source-card__thumb"
+             style="background-color: var(--color-bg-f2);"></div>
+        <div class="ea-chat-source-card__body">
+          <p class="ea-chat-source-card__title">维我替尼一线治疗晚期胃癌患者的长期获益数据综述</p>
+          <p class="ea-chat-source-card__meta">2025年发布</p>
+          <div class="ea-chat-source-card__footer">
+            <span class="ea-chat-source-card__page">第 3 页</span>
+            <span class="ea-chat-source-card__link">查看原文</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       8. CARD WITH BADGE  (.ea-card__badge)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>8. Card with badge — top-right corner tag</h2>
+  <!--
+    右上角标签：绝对定位于卡片右上角，圆角跟随卡片右上角。
+    颜色变体：--blue / --orange / --green / --gray / --red
+    用法：在 ea-card 内放一个 ea-card__badge（无需额外 position:relative，
+    因为 ea-card 已内置 position:relative）。
+  -->
+
+  <div class="swatch-row">
+
+    <div>
+      <div class="label">ea-card__badge--blue</div>
+      <div class="ea-card ea-card--shadow" style="width:300px;">
+        <span class="ea-card__badge ea-card__badge--blue">进行中</span>
+        <div class="ea-card__item">
+          <div class="ea-card__item-head">
+            <img src="../assets/icons/Homepage/Homepage-拜访.svg" width="28" height="28" style="flex-shrink:0; border-radius:6px; display:block;">
+            <div class="ea-card__body" style="padding-right:48px;">
+              <p class="ea-card__title">沈杨医生 学术拜访</p>
+              <p class="ea-card__field">时间：2026-05-15 14:00</p>
+              <p class="ea-card__field">负责人：西城主管1</p>
+            </div>
+          </div>
+          <div class="ea-card__item-footer">
+            <button class="ea-card__view-btn">查看</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">ea-card__badge--orange</div>
+      <div class="ea-card ea-card--shadow" style="width:300px;">
+        <span class="ea-card__badge ea-card__badge--orange">即将开始</span>
+        <div class="ea-card__item">
+          <div class="ea-card__item-head">
+            <img src="../assets/icons/Homepage/Homepage-活动.svg" width="28" height="28" style="flex-shrink:0; border-radius:6px; display:block;">
+            <div class="ea-card__body" style="padding-right:56px;">
+              <p class="ea-card__title">维我替尼产品研讨会</p>
+              <p class="ea-card__field">时间：2025-05-10 09:00</p>
+              <p class="ea-card__field">会议类型：科室会</p>
+            </div>
+          </div>
+          <div class="ea-card__item-footer">
+            <button class="ea-card__view-btn">查看</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">ea-card__badge--green</div>
+      <div class="ea-card ea-card--shadow" style="width:300px;">
+        <span class="ea-card__badge ea-card__badge--green">已完成</span>
+        <div class="ea-card__item">
+          <div class="ea-card__item-head">
+            <img src="../assets/icons/Homepage/Homepage-拜访.svg" width="28" height="28" style="flex-shrink:0; border-radius:6px; display:block;">
+            <div class="ea-card__body" style="padding-right:48px;">
+              <p class="ea-card__title">李伟医生 常规拜访</p>
+              <p class="ea-card__field">时间：2026-04-28 10:30</p>
+              <p class="ea-card__field">负责人：东城代表3</p>
+            </div>
+          </div>
+          <div class="ea-card__item-footer">
+            <button class="ea-card__view-btn">查看</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">ea-card__badge--gray</div>
+      <div class="ea-card ea-card--shadow" style="width:300px;">
+        <span class="ea-card__badge ea-card__badge--gray">未完成</span>
+        <div class="ea-card__item">
+          <div class="ea-card__item-head">
+            <img src="../assets/icons/Homepage/Homepage-拜访.svg" width="28" height="28" style="flex-shrink:0; border-radius:6px; display:block;">
+            <div class="ea-card__body" style="padding-right:48px;">
+              <p class="ea-card__title">王磊医生 计划拜访</p>
+              <p class="ea-card__field">时间：2026-02-20 15:00</p>
+              <p class="ea-card__field">负责人：西城主管1</p>
+            </div>
+          </div>
+          <div class="ea-card__item-footer">
+            <button class="ea-card__view-btn">查看</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 资料卡片 + badge -->
+  <div class="swatch-row" style="margin-top:16px;">
+
+    <div>
+      <div class="label">ea-chat-source-card + ea-card__badge--blue</div>
+      <div style="width:300px;">
+        <div class="ea-chat-source-card">
+          <span class="ea-card__badge ea-card__badge--blue">新资料</span>
+          <div class="ea-chat-source-card__thumb"
+               style="background-color: var(--color-bg-f2);"></div>
+          <div class="ea-chat-source-card__body" style="padding-right:40px;">
+            <p class="ea-chat-source-card__title">维我替尼一线治疗晚期胃癌患者的长期获益数据综述</p>
+            <p class="ea-chat-source-card__meta">2025年发布</p>
+            <div class="ea-chat-source-card__footer">
+              <span class="ea-chat-source-card__page">第 3 页</span>
+              <span class="ea-chat-source-card__link">查看原文</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">ea-chat-source-card + ea-card__badge--orange</div>
+      <div style="width:300px;">
+        <div class="ea-chat-source-card">
+          <span class="ea-card__badge ea-card__badge--orange">已更新</span>
+          <div class="ea-chat-source-card__thumb"
+               style="background-color: var(--color-bg-f2);"></div>
+          <div class="ea-chat-source-card__body" style="padding-right:48px;">
+            <p class="ea-chat-source-card__title">老年高血压患者使用克洛凯添加治疗的健康资源使用和费用分析</p>
+            <p class="ea-chat-source-card__meta">2024年发布</p>
+            <div class="ea-chat-source-card__footer">
+              <span class="ea-chat-source-card__page">第 15 页</span>
+              <span class="ea-chat-source-card__link">查看原文</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       9. CARDS + TIPS  (.ea-card--tipped)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>9. Cards + tips — .ea-card--tipped</h2>
+  <div class="note">
+    可点击卡片。点击切换 <code>.is-active</code> → 蓝色边框。
+    Tip 块右侧 chevron 点击展开 / 收起第 3 行以后的文字（切换 <code>.ea-card__tip-body--open</code> + <code>.ea-card__tip-chevron--open</code>）。
+  </div>
+
+  <div class="swatch-row">
+
+    <div>
+      <div class="label">默认态</div>
+      <div class="ea-card ea-card--shadow ea-card--tipped"
+           style="width:343px;"
+           onclick="this.classList.toggle('is-active')">
+        <p class="ea-card__title">邀请参加"上海心脏介入大会"城市会</p>
+        <div class="ea-card__tip-block">
+          <p class="ea-card__tip-body" id="tip1">
+            依据：下周在上海市场部会举办一场克洛凯全国临床医学新进展研讨会的上海站的会议，可以邀请医生参会，深化产品认知。
+          </p>
+          <span class="ea-card__tip-chevron" id="chev1"
+                onclick="event.stopPropagation(); toggleTip('tip1','chev1')"></span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">已选中态 (.is-active)</div>
+      <div class="ea-card ea-card--shadow ea-card--tipped is-active"
+           style="width:343px;"
+           onclick="this.classList.toggle('is-active')">
+        <p class="ea-card__title">安排竞品医生的科室会</p>
+        <div class="ea-card__tip-block">
+          <p class="ea-card__tip-body" id="tip2">
+            依据：该医生近 3 个月处方主要集中在竞品，建议通过科室会形式深化克洛凯循证数据沟通，提升处方转化率。
+          </p>
+          <span class="ea-card__tip-chevron" id="chev2"
+                onclick="event.stopPropagation(); toggleTip('tip2','chev2')"></span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">Tip 展开态</div>
+      <div class="ea-card ea-card--shadow ea-card--tipped"
+           style="width:343px;"
+           onclick="this.classList.toggle('is-active')">
+        <p class="ea-card__title">跟进医学问询并发送最新资料</p>
+        <div class="ea-card__tip-block">
+          <p class="ea-card__tip-body ea-card__tip-body--open" id="tip3">
+            依据：上周医生主动发起了关于克洛凯在老年患者中安全性的医学问询，建议在 48 小时内跟进回复，并附上最新的临床安全性研究数据，以进一步建立学术信任。
+          </p>
+          <span class="ea-card__tip-chevron ea-card__tip-chevron--open" id="chev3"
+                onclick="event.stopPropagation(); toggleTip('tip3','chev3')"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTip(tipId, chevId) {
+      const tip  = document.getElementById(tipId);
+      const chev = document.getElementById(chevId);
+      tip.classList.toggle('ea-card__tip-body--open');
+      chev.classList.toggle('ea-card__tip-chevron--open');
+    }
+  </script>
+
+
+</div>
+</body>
+</html>

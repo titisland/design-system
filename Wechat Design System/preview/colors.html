@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>Color System — 2026 spec</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;padding:24px;background:#fff;font-family:var(--font-cn);color:#000}
+  h1{font-size:22px;font-weight:600;margin:0 0 4px}
+  .sub{color:#999;font-size:13px;margin:0 0 20px}
+  h2{font-size:16px;font-weight:500;margin:28px 0 4px}
+  h3{font-size:13px;font-weight:500;margin:14px 0 8px;color:#333}
+  .desc{color:#999;font-size:12px;margin:0 0 12px}
+  .ramp{display:flex;border-radius:var(--r-base);overflow:hidden;border:1px solid var(--color-border-base)}
+  .ramp .c{flex:1;height:64px;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;
+           font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px}
+  .ramp .c.base{flex:1.4}
+  .ramp .c.base .name{font-size:12px;font-weight:600}
+  .row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:8px}
+  .sw{width:140px}
+  .sw .chip{height:48px;border-radius:var(--r-base);border:1px solid var(--color-border-base)}
+  .sw .lbl{font-size:11px;color:#666;padding-top:6px;display:flex;justify-content:space-between;
+           font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .sw .lbl b{font-family:var(--font-cn);font-weight:500;color:#000;font-size:12px}
+  .palette{display:grid;grid-template-columns:repeat(9,1fr);gap:8px}
+  .palette .c{height:60px;border-radius:var(--r-base);position:relative;color:#fff;font-size:10px;padding:6px;
+              font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+</style></head>
+<body>
+
+<h1>Color System</h1>
+<p class="sub">2026 WeChat Design System · 4 brand families × 5 secondary semantics × text/border/background ramps · 9-color data palette · usage examples</p>
+
+<h2>Brand</h2>
+<p class="desc">每个品牌色一个 base + 6 阶 alpha tints (5/10/15/40/50/65%)</p>
+
+<h3>Brand · Veeva (primary)</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-brand-veeva);color:#fff"><div class="name">Base</div>#F7981D</div>
+  <div class="c" style="background:var(--color-brand-veeva-light-6);color:#fff">light-6 65%</div>
+  <div class="c" style="background:var(--color-brand-veeva-light-5);color:#fff">light-5 50%</div>
+  <div class="c" style="background:var(--color-brand-veeva-light-4);color:#fff">light-4 40%</div>
+  <div class="c" style="background:var(--color-brand-veeva-light-2);color:#666">light-2 15%</div>
+  <div class="c" style="background:var(--color-brand-veeva-light-1);color:#999">light-1 10%</div>
+  <div class="c" style="background:var(--color-brand-veeva-light-0);color:#999">light-0 5%</div>
+</div>
+
+<h3>Brand · J&amp;J</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-brand-jj);color:#fff"><div class="name">Base</div>#EB1700</div>
+  <div class="c" style="background:var(--color-brand-jj-light-6);color:#fff">light-6</div>
+  <div class="c" style="background:var(--color-brand-jj-light-5);color:#fff">light-5</div>
+  <div class="c" style="background:var(--color-brand-jj-light-4);color:#fff">light-4</div>
+  <div class="c" style="background:var(--color-brand-jj-light-2);color:#666">light-2</div>
+  <div class="c" style="background:var(--color-brand-jj-light-1);color:#999">light-1</div>
+  <div class="c" style="background:var(--color-brand-jj-light-0);color:#999">light-0</div>
+</div>
+
+<h3>Brand · MSD</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-brand-msd);color:#fff"><div class="name">Base</div>#00857C</div>
+  <div class="c" style="background:var(--color-brand-msd-light-6);color:#fff">light-6</div>
+  <div class="c" style="background:var(--color-brand-msd-light-5);color:#fff">light-5</div>
+  <div class="c" style="background:var(--color-brand-msd-light-4);color:#fff">light-4</div>
+  <div class="c" style="background:var(--color-brand-msd-light-2);color:#666">light-2</div>
+  <div class="c" style="background:var(--color-brand-msd-light-1);color:#999">light-1</div>
+  <div class="c" style="background:var(--color-brand-msd-light-0);color:#999">light-0</div>
+</div>
+
+<h3>Brand · Merck</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-brand-merck);color:#fff"><div class="name">Base</div>#503191</div>
+  <div class="c" style="background:var(--color-brand-merck-light-6);color:#fff">light-6</div>
+  <div class="c" style="background:var(--color-brand-merck-light-5);color:#fff">light-5</div>
+  <div class="c" style="background:var(--color-brand-merck-light-4);color:#fff">light-4</div>
+  <div class="c" style="background:var(--color-brand-merck-light-2);color:#666">light-2</div>
+  <div class="c" style="background:var(--color-brand-merck-light-1);color:#999">light-1</div>
+  <div class="c" style="background:var(--color-brand-merck-light-0);color:#999">light-0</div>
+</div>
+
+<h2>Secondary (semantic)</h2>
+<p class="desc">用于系统中的辅助配色</p>
+
+<h3>Veeva Blue — canonical brand blue (hyperlinks &amp; primary blue accents)</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-veeva-blue);color:#fff"><div class="name">Base</div>#007AFF</div>
+  <div class="c" style="background:var(--color-veeva-blue-light-6);color:#fff">light-6 65%</div>
+  <div class="c" style="background:var(--color-veeva-blue-light-5);color:#fff">light-5 50%</div>
+  <div class="c" style="background:var(--color-veeva-blue-light-4);color:#fff">light-4 40%</div>
+  <div class="c" style="background:var(--color-veeva-blue-light-2);color:#666">light-2 15%</div>
+  <div class="c" style="background:var(--color-veeva-blue-light-1);color:#999">light-1 10%</div>
+  <div class="c" style="background:var(--color-veeva-blue-light-0);color:#999">light-0 5%</div>
+</div>
+
+<h3>Success</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-success);color:#fff"><div class="name">Base</div>#00DF93</div>
+  <div class="c" style="background:var(--color-success-light-6);color:#fff">light-6</div>
+  <div class="c" style="background:var(--color-success-light-5);color:#fff">light-5</div>
+  <div class="c" style="background:var(--color-success-light-4);color:#fff">light-4</div>
+  <div class="c" style="background:var(--color-success-light-2);color:#666">light-2</div>
+  <div class="c" style="background:var(--color-success-light-1);color:#999">light-1</div>
+  <div class="c" style="background:var(--color-success-light-0);color:#999">light-0</div>
+</div>
+
+<h3>Warning — yellow (NOT brand orange)</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-warning);color:#000"><div class="name">Base</div>#FFCC00</div>
+  <div class="c" style="background:var(--color-warning-light-6);color:#000">light-6</div>
+  <div class="c" style="background:var(--color-warning-light-5);color:#000">light-5</div>
+  <div class="c" style="background:var(--color-warning-light-4);color:#000">light-4</div>
+  <div class="c" style="background:var(--color-warning-light-2);color:#666">light-2</div>
+  <div class="c" style="background:var(--color-warning-light-1);color:#999">light-1</div>
+  <div class="c" style="background:var(--color-warning-light-0);color:#999">light-0</div>
+</div>
+
+<h3>Error</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-error);color:#fff"><div class="name">Base</div>#FF5543</div>
+  <div class="c" style="background:var(--color-error-light-6);color:#fff">light-6</div>
+  <div class="c" style="background:var(--color-error-light-5);color:#fff">light-5</div>
+  <div class="c" style="background:var(--color-error-light-4);color:#fff">light-4</div>
+  <div class="c" style="background:var(--color-error-light-2);color:#666">light-2</div>
+  <div class="c" style="background:var(--color-error-light-1);color:#999">light-1</div>
+  <div class="c" style="background:var(--color-error-light-0);color:#999">light-0</div>
+</div>
+
+<h3>Info — slate</h3>
+<div class="ramp">
+  <div class="c base" style="background:var(--color-info);color:#fff"><div class="name">Base</div>#7788A2</div>
+  <div class="c" style="background:var(--color-info-light-6);color:#fff">light-6</div>
+  <div class="c" style="background:var(--color-info-light-5);color:#fff">light-5</div>
+  <div class="c" style="background:var(--color-info-light-4);color:#fff">light-4</div>
+  <div class="c" style="background:var(--color-info-light-2);color:#666">light-2</div>
+  <div class="c" style="background:var(--color-info-light-1);color:#999">light-1</div>
+</div>
+
+<h2>Neutral · Text</h2>
+<div class="row">
+  <div class="sw"><div class="chip" style="background:var(--color-fg-h1)"></div><div class="lbl"><b>H1</b><span>#000000</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-fg-h2)"></div><div class="lbl"><b>H2</b><span>#333333</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-fg-h3)"></div><div class="lbl"><b>H3</b><span>#666666</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-fg-h4)"></div><div class="lbl"><b>H4</b><span>#999999</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-fg-placeholder)"></div><div class="lbl"><b>Placeholder</b><span>#B5B5B5</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-fg-disabled)"></div><div class="lbl"><b>Disabled</b><span>#CCCCCC</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-fg-info)"></div><div class="lbl"><b>Info</b><span>#5F646E</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-veeva-blue)"></div><div class="lbl"><b>Link / Veeva Blue</b><span>#007AFF</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-section-blue)"></div><div class="lbl"><b>Section text</b><span>#2069D6</span></div></div>
+</div>
+
+<h2>Neutral · Border</h2>
+<div class="row">
+  <div class="sw"><div class="chip" style="background:#fff;border-color:var(--color-border-base);border-width:2px"></div><div class="lbl"><b>Base</b><span>#EEEEEE</span></div></div>
+  <div class="sw"><div class="chip" style="background:#fff;border-color:var(--color-border-e2);border-width:2px"></div><div class="lbl"><b>#E2</b><span>#E2E2E2</span></div></div>
+  <div class="sw"><div class="chip" style="background:#fff;border-color:var(--color-border-cc);border-width:2px"></div><div class="lbl"><b>#CC</b><span>#CCCCCC</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-border-l6)"></div><div class="lbl"><b>L6</b><span>#F2F5FC</span></div></div>
+</div>
+
+<h2>Neutral · Background</h2>
+<div class="row">
+  <div class="sw"><div class="chip" style="background:var(--color-bg-f2)"></div><div class="lbl"><b>F2</b><span>#F2F2F2</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-f5)"></div><div class="lbl"><b>F5</b><span>#F5F5F5</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-f8)"></div><div class="lbl"><b>F8</b><span>#F8F8F8</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-fa)"></div><div class="lbl"><b>FA</b><span>#FAFAFA</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-white);border-color:var(--color-border-cc)"></div><div class="lbl"><b>White</b><span>#FFFFFF</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-overlay)"></div><div class="lbl"><b>overlay</b><span>#000 50%</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-extra-blue-0)"></div><div class="lbl"><b>extra blue 0</b><span>007AFF 15%</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-extra-blue-1)"></div><div class="lbl"><b>extra blue 1</b><span>007AFF 10%</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--color-bg-extra-blue-2)"></div><div class="lbl"><b>extra blue 2</b><span>007AFF 5%</span></div></div>
+</div>
+
+<h2>Color Palette · 多色配色 (charts / data)</h2>
+<p class="desc">用于组合的彩色配色，hex-named tokens (--color-palette-XXXXXX)</p>
+<div class="palette">
+  <div class="c" style="background:var(--color-palette-F26D5F)">F26D5F</div>
+  <div class="c" style="background:var(--color-palette-FF945A)">FF945A</div>
+  <div class="c" style="background:var(--color-palette-FFCC00);color:#000">FFCC00</div>
+  <div class="c" style="background:var(--color-palette-C4E649);color:#000">C4E649</div>
+  <div class="c" style="background:var(--color-palette-3EDDB1)">3EDDB1</div>
+  <div class="c" style="background:var(--color-palette-43E3EB);color:#000">43E3EB</div>
+  <div class="c" style="background:var(--color-palette-39D3FF);color:#000">39D3FF</div>
+  <div class="c" style="background:var(--color-palette-88A8FF)">88A8FF</div>
+  <div class="c" style="background:var(--color-palette-ACA3FF)">ACA3FF</div>
+</div>
+
+<h2>Usage · 使用示例</h2>
+<p class="desc">几种常见的 token 应用场景：状态 chip、bullet dot · 实际组件 demo 在 prompts.html / lists.html / forms-edit.html 等页里</p>
+
+<h3>Status chips (状态标签)</h3>
+<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px;">
+  <span style="padding:4px 10px; border-radius:var(--r-base); font-size:14px; background:var(--color-brand-veeva-light-1); color:var(--color-brand-veeva)">审批通过</span>
+  <span style="padding:4px 10px; border-radius:var(--r-base); font-size:14px; background:var(--color-section-blue); color:#fff">微信已认证</span>
+  <span style="padding:4px 10px; border-radius:var(--r-base); font-size:14px; background:var(--color-success-light-2); color:var(--color-success)">已完成</span>
+  <span style="padding:4px 10px; border-radius:var(--r-base); font-size:14px; background:var(--color-bg-f5); color:var(--color-fg-h4)">草稿</span>
+  <span style="padding:4px 10px; border-radius:var(--r-base); font-size:14px; background:var(--color-error-light-1); color:var(--color-error)">错误</span>
+  <span style="padding:4px 10px; border-radius:var(--r-base); font-size:14px; background:var(--color-warning-light-2); color:#7a5a00">警示</span>
+</div>
+
+<h3>Bullet markers (列表点)</h3>
+<div style="display:flex; flex-wrap:wrap; gap:18px; font-size:13px; color:var(--color-fg-h2)">
+  <div style="display:flex; align-items:center; gap:8px">
+    <span style="width:6px; height:6px; border-radius:50%; background:var(--color-section-blue)"></span>Bot 回复 Point
+  </div>
+  <div style="display:flex; align-items:center; gap:8px">
+    <span style="width:6px; height:6px; border-radius:50%; background:var(--color-success)"></span>已完成用户的需求理解
+  </div>
+  <div style="display:flex; align-items:center; gap:8px">
+    <span style="width:6px; height:6px; border-radius:50%; background:var(--color-fg-h2)"></span>答案组织中
+  </div>
+</div>
+
+</body></html>

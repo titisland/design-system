@@ -1,0 +1,1310 @@
+/* WeChat CRM — Chat AI Agent Shell
+   ─────────────────────────────────────────────────────────────
+   Components in this file:
+
+   Page shell
+     .ea-chat              — full-height flex-column page shell
+     .ea-chat__canvas      — scrollable conversation stage (#EFF7FE bg)
+     .ea-chat__input-bar   — pinned input row at bottom (placeholder)
+
+   Message rows
+     .ea-chat-msg          — single message wrapper
+     .ea-chat-msg--ai      — AI message (left-aligned, white bubble)
+     .ea-chat-msg--user    — user message (right-aligned, brand tint)
+     .ea-chat-msg--system  — system notice (centered, no avatar, no bubble)
+     .ea-chat-msg__avatar  — 28 × 28 AI avatar circle
+     .ea-chat-msg__bubble  — shaped bubble container
+     .ea-chat-msg__body    — flex-column content inside AI bubble
+     .ea-chat-msg__section — a logical section within the bubble
+                             (12 px gap between sections, 4 px within)
+
+   Markdown content (inside .ea-chat-msg__body)
+     .ea-chat-msg__h2      — section heading  (16 px / 500 / #000)
+     .ea-chat-msg__h3      — sub-heading      (14 px / 500 / #666)
+     .ea-chat-msg__text    — body paragraph   (14 px / 400 / #333)
+     .ea-chat-msg__muted   — secondary text   (14 px / 400 / #666)
+     .ea-chat-msg__strong  — inline bold span
+     .ea-chat-msg__em      — inline italic span
+     .ea-chat-msg__ul      — unordered list with custom 6 × 6 px dot bullets
+     .ea-chat-msg__ol      — ordered list
+     .ea-chat-msg__li      — list item
+     .ea-chat-msg__li--l2  — level-2 list item (14 px extra indent)
+     .ea-chat-msg__table   — comparison / data table
+
+   Action buttons (white bg, blue text, no border — all variants identical)
+     .ea-chat-actions               — wrapping flex row of action pills
+     .ea-chat-actions--col          — column layout (vertical stack)
+     .ea-chat-action-btn            — base pill button
+     .ea-chat-action-btn--primary   — blue text (semantic, same look as secondary)
+     .ea-chat-action-btn--secondary — blue text (suggested questions)
+
+   Status & feedback
+     .ea-chat-thinking        — AI thinking/status stream block
+     .ea-chat-thinking__row   — single step row (--done modifier for completed)
+     .ea-chat-thinking__dot   — AI sparkle icon (mask-image, 16×16, color shifts by state)
+     .ea-chat-thinking__label — step label text
+     .ea-chat-stop-notice     — "你已让系统停止这条回答" system message
+
+   Hello message (入场引导)
+     .ea-chat-hello           — welcome block before first exchange
+     .ea-chat-hello__icon     — brand AI icon (mask, 32 × 32)
+     .ea-chat-hello__title    — greeting headline
+     .ea-chat-hello__sub      — subtitle / hint text
+
+   Chat header (bottom-sheet / overlay)
+     .ea-chat-header          — 52px white top panel, 14px top radius
+     .ea-chat-header__close   — 16×16 X icon button (mask or SVG)
+     .ea-chat-header__title   — absolutely centered title
+
+   Input bar (按住说话 voice default)
+     .ea-chat-input           — transparent outer wrapper
+     .ea-chat-input__bar      — padding container (8px 16px 0)
+     .ea-chat-input__inner    — flex-col gap-8
+     .ea-chat-input__pill     — white full-pill 48px (radius 100px, shadow)
+     .ea-chat-input__mode     — left 24×24 keyboard icon (mask or SVG)
+     .ea-chat-input__label    — center "按住说话" label
+     .ea-chat-input__phantom  — invisible right spacer (balances left icon)
+     .ea-chat-input__send     — right 24×24 send icon (hidden in voice state)
+     .ea-chat-input__badge    — "内容由AI生成" inline (inside inner stack)
+     .ea-chat-ai-mark         — "内容由AI生成" external (between bar + home)
+     .ea-chat-input__home     — 34px home indicator safe area
+     .ea-chat-input__field    — <textarea> inside the pill (text mode)
+
+   Bot entry — list / detail pages only (NOT homepage — 首页不用 FAB)
+     .ea-chat-fab             — floating orange 8-pointed-star button
+     .ea-chat-fab__icon       — 28 × 28 star glyph (mask or inline svg)
+     .ea-chat-hint            — notification bubble shown above the FAB
+     .ea-chat-hint__row       — icon + text flex row
+     .ea-chat-hint__icon      — 16 × 16 ai-star icon (mask)
+     .ea-chat-hint__text      — 14 px / #333 notification text
+     .ea-chat-hint__dismiss   — "忽略" dismiss label
+     ⚠ 首页 hint footer 只允许"忽略"，禁止出现"更多"
+   ⚠ Chat shell 弹窗高度自适应：max-height = 100vh − 导航栏高度 − 30px
+     导航栏高度因设备而异（状态栏 + 44px 标题栏），JS 动态注入 --chat-nav-h
+
+   Artboard sources (Figma: Event_Agent_WeChat  2mdVDpgyJXO6LcyoGehsjz):
+     320:5481  文本·示例    — text / markdown message spec
+     320:6089  按钮·示例    — action button patterns
+     320:6797  Bot入口-详情 — FAB + hint bubble
+     [pending] full chat shell, input bar, hello message
+
+   Pair with: colors_and_type.css
+
+   ── Icon usage rule ────────────────────────────────────────
+   Icon wrapper elements (.ea-chat-fab__icon, .ea-chat-input__mode,
+   .ea-chat-hint__icon, .ea-chat-hello__icon …) support TWO patterns.
+   Pick ONE — never mix them on the same element.
+
+     Pattern A — Mask-driven (icon from URL, no SVG child):
+       How it works: mask clips the element's background-color to
+                     the icon silhouette shape.
+       Usage:
+         <span class="ea-chat-hint__icon"
+               style="--icon: url(ai-star.svg);
+                      background-color: #F7981D;"></span>
+       Rules:
+         • Set BOTH --icon URL AND background-color inline.
+         • Do NOT put an SVG child inside.
+         • Do NOT put background-color in the class itself
+           (when mask is absent the whole element becomes a solid block).
+
+     Pattern B — SVG child (inline SVG, no mask URL):
+       How it works: the SVG's fill attribute provides icon color;
+                     the wrapper is transparent.
+       Usage:
+         <span class="ea-chat-hint__icon"
+               style="color: #F7981D;">
+           <svg fill="currentColor" …>…</svg>
+         </span>
+       Rules:
+         • Set `color` (not background-color) on the wrapper if you
+           need to pass a color into fill="currentColor".
+         • Do NOT set background-color inline — there is no mask,
+           so background-color fills the whole element as a solid block,
+           not the icon shape.
+         • Set fill directly on the SVG/path if you prefer:
+           <svg fill="#F7981D"> (then no inline style needed on span).
+
+   ✓ Exception — dedicated mask-only sub-elements (.ea-chat-msg__avatar-glyph,
+     .ea-chat-input__send-icon) always use Pattern A and correctly keep
+     `background-color: currentColor` in the class. These elements never
+     host SVG children — they ARE the glyph, not a container.
+   ─────────────────────────────────────────────────────────────
+*/
+
+:root {
+  /* ── Shell height constraint ──────────────────────────────── */
+  /*
+     The chat overlay is a bottom sheet that rises from the bottom of the
+     WeChat page. Its height adapts to content but MUST NOT overlap the
+     native WeChat navigation bar (导航栏) at the top.
+
+     Rule: max-height = viewport height − nav-bar height − 30 px gap.
+
+     WeChat nav bar height varies by device (status bar + 44 px title bar).
+     The recommended token value below uses 74 px (44 px title + 30 px gap)
+     as a safe default; override per-page with the actual nav-bar bottom offset.
+
+     In WeChat miniprogram JS, obtain the exact value via:
+       wx.getSystemInfo → { statusBarHeight } + 44 px (title bar)
+     Then set: el.style.setProperty('--chat-nav-h', offset + 'px')
+
+     ⚠ Do NOT exceed this max-height. The overlay must never cover the nav bar.
+  */
+  --chat-nav-h:               74px;   /* safe default: 44px title + 30px gap */
+  --chat-shell-max-h:         calc(100vh - var(--chat-nav-h));
+
+  /* ── Canvas ───────────────────────────────────────────────── */
+  --chat-canvas-bg:           linear-gradient(180deg, #DDF1FF 0%, #F8FAFE 100%);
+  --chat-canvas-pad-x:        12px;
+  --chat-canvas-pad-y:        16px;
+  --chat-msg-gap:             12px;   /* row-to-row vertical spacing */
+
+  /* ── AI bubble ────────────────────────────────────────────── */
+  --chat-ai-bubble-bg:        var(--color-bg-white);
+  --chat-ai-bubble-radius:    var(--r-md);             /* 8px */
+  --chat-ai-bubble-pad:       12px;
+  --chat-ai-bubble-shadow:    var(--shadow-float);     /* 0 0 20px rgba(0,0,0,.15) */
+  --chat-ai-max-w:            88%;
+  --chat-ai-section-gap:      12px;   /* between .ea-chat-msg__section blocks */
+  --chat-ai-item-gap:         4px;    /* between items within a section */
+
+  /* ── User bubble ──────────────────────────────────────────── */
+  /* gradient updated to Chat spec (135° cyan→teal→mint); old teal→blue retired */
+  --chat-user-bubble-bg:      linear-gradient(
+                                135deg,
+                                var(--color-chat-cyan)   0%,
+                                var(--color-chat-cyan-2) 52%,
+                                var(--color-chat-mint)   100%
+                              );
+  --chat-user-bubble-fg:      var(--color-fg-h2);   /* #333 — dark text on light mint */
+  --chat-user-bubble-radius:  18px;
+  --chat-user-bubble-pad:     10px 16px;
+  --chat-user-max-w:          80%;
+
+  /* ── Avatar (AI side) ─────────────────────────────────────── */
+  --chat-avatar-size:         28px;
+  --chat-avatar-bg:           var(--color-brand-veeva);
+  --chat-avatar-fg:           var(--color-white);
+  --chat-msg-gap-x:           8px;    /* avatar ↔ bubble */
+
+  /* ── Markdown typography ──────────────────────────────────── */
+  --chat-h2-fs:               var(--fs-title);     /* 16 px */
+  --chat-h2-fw:               var(--fw-medium);    /* 500 */
+  --chat-h2-fg:               var(--color-fg-h1);  /* #000 */
+  --chat-h3-fs:               var(--fs-body);      /* 14 px */
+  --chat-h3-fw:               var(--fw-medium);    /* 500 */
+  --chat-h3-fg:               var(--color-fg-h3);  /* #666 */
+  --chat-text-fs:             var(--fs-body);      /* 14 px */
+  --chat-text-fg:             var(--color-fg-h2);  /* #333 */
+  --chat-muted-fg:            var(--color-fg-h3);  /* #666 */
+  --chat-lh:                  22px;                /* body line-height */
+
+  /* ── Bullet list ──────────────────────────────────────────── */
+  --chat-bullet-size:         6px;
+  --chat-bullet-color:        var(--color-veeva-blue);  /* #007AFF */
+  --chat-bullet-gap:          8px;                 /* dot ↔ text */
+  --chat-bullet-l2-indent:    0px;
+
+  /* ── Table ────────────────────────────────────────────────── */
+  --chat-table-border:        1px solid var(--color-border-base);
+  --chat-table-header-bg:     var(--color-bg-f5);
+  --chat-table-cell-pad:      6px 10px;
+  --chat-table-fs:            var(--fs-body-sm);   /* 13 px */
+
+  /* ── Action buttons ───────────────────────────────────────── */
+  --chat-btn-h:               36px;
+  --chat-btn-pad:             0 16px;
+  --chat-btn-radius:          var(--r-circle);
+  --chat-btn-fs:              var(--fs-body);       /* 14 px */
+  --chat-btn-fw:              var(--fw-regular);    /* 400 */
+  --chat-actions-gap:         8px;
+  /* All action buttons: white bg, blue text, no border */
+  --chat-btn-primary-fg:      var(--color-veeva-blue);
+  --chat-btn-primary-border:  0;
+  --chat-btn-primary-bg:      var(--color-bg-white);
+  /* Secondary matches primary */
+  --chat-btn-secondary-fg:    var(--color-veeva-blue);
+  --chat-btn-secondary-border: 0;
+  --chat-btn-secondary-bg:    var(--color-bg-white);
+
+  /* ── Thinking stream ──────────────────────────────────────── */
+  --chat-thinking-done-fg:    var(--color-success); /* completed: sparkle + label (#00DF93) */
+  --chat-thinking-active-fg:  var(--color-fg-h2);   /* #333 in-progress label */
+  --chat-thinking-fs:         var(--fs-body);        /* 14 px */
+  --chat-thinking-icon-size:  16px;                  /* AI sparkle star (mask-image element) */
+
+  /* ── Input bar (按住说话 — voice input default) ────────────── */
+  --chat-input-bg:              var(--color-bg-white);
+  --chat-input-radius-top:      20px;
+  --chat-input-blur:            6px;
+  --chat-input-pad:             8px 16px 0;
+  --chat-input-gap:             8px;
+
+  /* Talk pill */
+  --chat-input-pill-bg:         var(--color-bg-white);
+  --chat-input-pill-radius:     var(--r-circle);
+  --chat-input-pill-shadow:     var(--shadow-float);
+  --chat-input-pill-h:          48px;
+  --chat-input-pill-pad:        0 12px;
+
+  /* "按住说话" label */
+  --chat-input-label-fs:        16px;
+  --chat-input-label-fw:        var(--fw-bold);
+  --chat-input-label-fg:        var(--color-fg-h2);     /* #333 */
+
+  /* Mode / send icons */
+  --chat-input-icon-size:       24px;
+
+  /* "内容由AI生成" badge */
+  --chat-input-badge-fs:        var(--fs-caption);      /* 12px */
+  --chat-input-badge-fg:        #AAAAAA;
+  --chat-input-badge-tracking:  0.167px;
+
+  /* Home indicator safe area */
+  --chat-home-h:                34px;
+  --chat-home-indicator-w:      134px;
+  --chat-home-indicator-h:      5px;
+
+  /* ── FAB (Bot entry button) ───────────────────────────────── */
+  --chat-fab-size:            42px;
+  --chat-fab-icon-size:       28px;
+  --chat-fab-bg:              var(--color-brand-veeva);   /* #F7981D */
+  --chat-fab-border:          3px solid #FF9E16;
+  --chat-fab-shadow:          0 4px 6px rgba(0, 0, 0, 0.12);
+  --chat-fab-icon-shadow:     drop-shadow(0 1px 2px rgba(230, 81, 0, 0.8));
+
+  /* ── Hint bubble (Bot entry notification) ─────────────────── */
+  --chat-hint-width:          208px;
+  --chat-hint-radius:         8px;
+  --chat-hint-border:         2px solid rgba(247, 152, 29, 0.65);
+  --chat-hint-gradient:       linear-gradient(
+                                171deg,
+                                rgba(247, 152, 29, 0.15) 11.6%,
+                                rgba(247, 152, 29, 0)    96.6%
+                              );
+  --chat-hint-shadow:         0 0 6px rgba(0, 0, 0, 0.12);
+  --chat-hint-pad:            10px 10px 8px;
+  --chat-hint-icon-size:      16px;
+  --chat-hint-text-fg:        var(--color-fg-h2);   /* #333 */
+  --chat-hint-dismiss-fg:     #B9B9B9;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   1. PAGE SHELL
+   ══════════════════════════════════════════════════════════════ */
+
+/* Bottom-sheet overlay — height adapts to content, capped so the sheet
+   never reaches the WeChat navigation bar.
+
+   Layout: the sheet is positioned at the bottom of the page (position:
+   fixed/absolute, bottom:0). Its height is content-driven but must not
+   exceed --chat-shell-max-h (= 100vh − nav-bar height − 30 px gap).
+
+   Implementation pattern:
+     <div class="ea-chat" style="height: auto; max-height: var(--chat-shell-max-h);">
+       …
+     </div>
+
+   The outer wrapper should use border-top-left-radius / border-top-right-radius
+   (typically 14px, matching .ea-chat-header) and overflow: hidden.
+
+   ⚠ The WeChat native nav bar is NOT part of the chat shell DS.
+      Do not include a page nav bar replica inside .ea-chat markup. */
+.ea-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: var(--chat-shell-max-h);
+  border-top-left-radius: var(--chat-header-radius);    /* 14px — rounds the sheet top */
+  border-top-right-radius: var(--chat-header-radius);
+  overflow: hidden;
+  background: var(--chat-canvas-bg);
+  font-family: var(--font-cn);
+}
+
+/* Scrollable conversation area */
+.ea-chat__canvas {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--chat-canvas-pad-y) var(--chat-canvas-pad-x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--chat-msg-gap);
+}
+
+/* Pinned input area at the bottom of the shell */
+.ea-chat__input-bar {
+  flex: 0 0 auto;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2. MESSAGE ROW
+   ══════════════════════════════════════════════════════════════
+
+   Anatomy (AI row):
+     [.ea-chat-msg__avatar]  [.ea-chat-msg__bubble]
+                               └─ .ea-chat-msg__body
+                                    └─ .ea-chat-msg__section × N
+                                         ├─ .ea-chat-msg__h2
+                                         ├─ .ea-chat-msg__text
+                                         ├─ .ea-chat-msg__ul
+                                         └─ .ea-chat-actions
+
+   Anatomy (user row):
+     [.ea-chat-msg__bubble]  ← right-aligned, no avatar
+*/
+
+.ea-chat-msg {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--chat-msg-gap-x);
+  width: 100%;
+}
+
+/* ── AI message (left-aligned) ─────────────────────────────── */
+.ea-chat-msg--ai {
+  justify-content: flex-start;
+}
+
+/* ── User message (right-aligned) ─────────────────────────── */
+.ea-chat-msg--user {
+  justify-content: flex-end;
+}
+
+/* ── System notice (centered, no bubble, no avatar) ────────── */
+.ea-chat-msg--system {
+  justify-content: center;
+}
+
+/* ── Avatar (AI side only) ─────────────────────────────────── */
+.ea-chat-msg__avatar {
+  flex: 0 0 var(--chat-avatar-size);
+  width: var(--chat-avatar-size);
+  height: var(--chat-avatar-size);
+  border-radius: 50%;
+  background: var(--chat-avatar-bg);
+  color: var(--chat-avatar-fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.ea-chat-msg__avatar svg  { width: 60%; height: 60%; display: block; }
+.ea-chat-msg__avatar img  { width: 100%; height: 100%; object-fit: cover; }
+.ea-chat-msg__avatar-glyph {
+  width: 60%; height: 60%; display: block;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+/* ── Bubble container ──────────────────────────────────────── */
+.ea-chat-msg__bubble {
+  border-radius: var(--chat-ai-bubble-radius);
+  max-width: var(--chat-ai-max-w);
+}
+
+/* AI bubble — card variant (default) */
+.ea-chat-msg--ai .ea-chat-msg__bubble {
+  background: var(--chat-ai-bubble-bg);
+  box-shadow: var(--chat-ai-bubble-shadow);
+  padding: var(--chat-ai-bubble-pad);
+  border-radius: var(--chat-ai-bubble-radius) var(--chat-ai-bubble-radius)
+                 var(--chat-ai-bubble-radius) 2px;  /* small tail-side corner */
+}
+
+/* Plain text AI message — no card bubble (use for bare bot text like in PCP).
+   Add .ea-chat-msg--ai-plain to .ea-chat-msg for this variant. */
+.ea-chat-msg--ai-plain .ea-chat-msg__bubble {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* User bubble — cyan→mint gradient; text is dark (#333) not white */
+.ea-chat-msg--user .ea-chat-msg__bubble {
+  background: var(--chat-user-bubble-bg);
+  color: var(--chat-user-bubble-fg);   /* #333 — gradient is light, needs dark text */
+  padding: var(--chat-user-bubble-pad);
+  max-width: var(--chat-user-max-w);
+  font-size: var(--chat-text-fs);
+  line-height: var(--chat-lh);
+  border-radius: var(--chat-user-bubble-radius);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   3. MARKDOWN CONTENT (inside .ea-chat-msg__body)
+   ══════════════════════════════════════════════════════════════ */
+
+/* Content wrapper — sections are separated by 12 px */
+.ea-chat-msg__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chat-ai-section-gap);
+}
+
+/* A logical section — items within gap at 4 px */
+.ea-chat-msg__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chat-ai-item-gap);
+}
+
+/* Section heading (16 px / 500 / #000) */
+.ea-chat-msg__h2 {
+  font-size: var(--chat-h2-fs);
+  font-weight: var(--chat-h2-fw);
+  color: var(--chat-h2-fg);
+  line-height: 24px;
+  margin: 0;
+}
+
+/* Sub-heading (14 px / 500 / #666) */
+.ea-chat-msg__h3 {
+  font-size: var(--chat-h3-fs);
+  font-weight: var(--chat-h3-fw);
+  color: var(--chat-h3-fg);
+  line-height: var(--chat-lh);
+  margin: 0;
+}
+
+/* Body text (14 px / 400 / #333) */
+.ea-chat-msg__text {
+  font-size: var(--chat-text-fs);
+  font-weight: var(--fw-regular);
+  color: var(--chat-text-fg);
+  line-height: var(--chat-lh);
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Secondary / muted text (14 px / 400 / #666) */
+.ea-chat-msg__muted {
+  font-size: var(--chat-text-fs);
+  font-weight: var(--fw-regular);
+  color: var(--chat-muted-fg);
+  line-height: var(--chat-lh);
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Inline rich-text helpers */
+.ea-chat-msg__strong { font-weight: var(--fw-bold); }
+.ea-chat-msg__em     { font-style: italic; }
+
+/* ── Unordered list — custom 6 × 6 px dot bullets ──────────── */
+.ea-chat-msg__ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ea-chat-msg__ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  counter-reset: ea-chat-ol;
+}
+
+/* Level-1 list item */
+.ea-chat-msg__li {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--chat-bullet-gap);
+  font-size: var(--chat-text-fs);
+  color: var(--chat-text-fg);
+  line-height: var(--chat-lh);
+}
+
+/* Bullet dot (::before on unordered) */
+.ea-chat-msg__ul .ea-chat-msg__li::before {
+  content: "";
+  flex: 0 0 var(--chat-bullet-size);
+  width: var(--chat-bullet-size);
+  height: var(--chat-bullet-size);
+  border-radius: 50%;
+  background: var(--chat-bullet-color);
+  margin-top: calc((var(--chat-lh) - var(--chat-bullet-size)) / 2);
+}
+
+/* Numbered counter */
+.ea-chat-msg__ol .ea-chat-msg__li {
+  counter-increment: ea-chat-ol;
+}
+.ea-chat-msg__ol .ea-chat-msg__li::before {
+  content: counter(ea-chat-ol) ".";
+  flex: 0 0 auto;
+  font-size: var(--chat-text-fs);
+  color: var(--chat-muted-fg);
+  line-height: var(--chat-lh);
+  min-width: 18px;
+}
+
+/* Level-2 item — extra left indent, smaller dot */
+.ea-chat-msg__li--l2 {
+  padding-left: var(--chat-bullet-l2-indent);
+  color: var(--chat-muted-fg);
+}
+.ea-chat-msg__ul .ea-chat-msg__li--l2::before {
+  background: transparent;
+  border: 1.5px solid var(--chat-bullet-color);
+  margin-top: calc((var(--chat-lh) - var(--chat-bullet-size)) / 2);
+}
+
+/* ── Comparison table ──────────────────────────────────────── */
+.ea-chat-msg__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--chat-table-fs);
+  color: var(--chat-text-fg);
+  line-height: 20px;
+  overflow-x: auto;
+  display: block;
+}
+.ea-chat-msg__table th,
+.ea-chat-msg__table td {
+  padding: var(--chat-table-cell-pad);
+  border: var(--chat-table-border);
+  text-align: left;
+  white-space: nowrap;
+}
+.ea-chat-msg__table th {
+  background: var(--chat-table-header-bg);
+  font-weight: var(--fw-medium);
+  color: var(--color-fg-h1);
+}
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   4. ACTION BUTTONS
+   ══════════════════════════════════════════════════════════════
+
+   Usage
+   ─────
+   Inline after AI message (text or card):
+     <div class="ea-chat-actions">
+       <button class="ea-chat-action-btn ea-chat-action-btn--primary">查看详情</button>
+       <button class="ea-chat-action-btn ea-chat-action-btn--secondary">还有哪些医生？</button>
+     </div>
+
+   Inside a card (reuse same classes — card provides padding/border):
+     <div class="ea-chat-actions ea-chat-actions--col">
+       <button class="ea-chat-action-btn ea-chat-action-btn--primary">查看</button>
+     </div>
+*/
+
+.ea-chat-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--chat-actions-gap);
+  font-family: var(--font-cn);
+}
+
+/* Vertical stack layout (inside cards) */
+.ea-chat-actions--col {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.ea-chat-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--chat-btn-h);
+  padding: var(--chat-btn-pad);
+  border-radius: var(--chat-btn-radius);
+  font-size: var(--chat-btn-fs);
+  font-weight: var(--chat-btn-fw);
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 100ms ease;
+  background: var(--chat-btn-secondary-bg);
+  border: var(--chat-btn-secondary-border);
+  color: var(--chat-btn-secondary-fg);
+}
+.ea-chat-action-btn:active { opacity: 0.65; }
+
+/* Primary — blue border + blue text (main response CTA) */
+.ea-chat-action-btn--primary {
+  background: var(--chat-btn-primary-bg);
+  border: var(--chat-btn-primary-border);
+  color: var(--chat-btn-primary-fg);
+}
+
+/* Secondary — gray border + dark text (suggested questions) */
+.ea-chat-action-btn--secondary {
+  background: var(--chat-btn-secondary-bg);
+  border: var(--chat-btn-secondary-border);
+  color: var(--chat-btn-secondary-fg);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   5. THINKING / STATUS STREAM
+   ══════════════════════════════════════════════════════════════
+   Shows intermediate AI processing steps while a response is
+   being generated. Each row is an AI sparkle icon + label text.
+
+   ── Icon approach ───────────────────────────────────────────
+   The step icon is a 16×16 .ea-chat-thinking__dot element using
+   mask-image to render the AI sparkle SVG. Color shifts by state:
+
+   State model:
+     pending  → gray sparkle  (--color-fg-disabled / #CCC) + label #333
+     active   → orange sparkle (--color-brand-veeva) + pulse animation
+     --done   → green sparkle  (--color-success / #00DF93) + green label
+
+   ── HTML ────────────────────────────────────────────────────
+     <div class="ea-chat-thinking">
+       <div class="ea-chat-thinking__row ea-chat-thinking__row--done">
+         <span class="ea-chat-thinking__dot"
+               style="--icon: url(../assets/icons/ai-sparkle.svg)"></span>
+         <span class="ea-chat-thinking__label">已完成用户的需求理解</span>
+       </div>
+       <div class="ea-chat-thinking__row">
+         <span class="ea-chat-thinking__dot"
+               style="--icon: url(../assets/icons/ai-sparkle.svg)"></span>
+         <span class="ea-chat-thinking__label">答案组织中</span>
+       </div>
+     </div>
+
+   ── Icon URL shorthand ───────────────────────────────────────
+   Set --icon once on the parent .ea-chat-thinking and omit it
+   from each row if all rows use the same sparkle file:
+     <div class="ea-chat-thinking"
+          style="--icon: url(../assets/icons/ai-sparkle.svg)">
+*/
+
+.ea-chat-thinking {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.ea-chat-thinking__row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sparkle icon — mask-driven, color controlled by background-color */
+.ea-chat-thinking__dot {
+  flex: 0 0 var(--chat-thinking-icon-size);
+  width: var(--chat-thinking-icon-size);
+  height: var(--chat-thinking-icon-size);
+  display: block;
+  align-self: center;
+  background-color: var(--color-fg-disabled);   /* pending: gray #CCC */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+  transition: background-color 200ms ease;
+}
+
+/* Active/in-progress — orange sparkle with pulse */
+.ea-chat-thinking__row:not(.ea-chat-thinking__row--done) .ea-chat-thinking__dot {
+  background-color: var(--color-brand-veeva);
+  animation: ea-chat-dot-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes ea-chat-dot-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+/* Label */
+.ea-chat-thinking__label {
+  font-size: var(--chat-thinking-fs);
+  color: var(--chat-thinking-active-fg);   /* #333 */
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+/* Completed step — green sparkle + green label */
+.ea-chat-thinking__row--done .ea-chat-thinking__dot {
+  background-color: var(--chat-thinking-done-fg);   /* --color-success #00DF93 */
+  animation: none;
+}
+.ea-chat-thinking__row--done .ea-chat-thinking__label {
+  color: var(--chat-thinking-done-fg);
+}
+
+/* ── Stop notice ────────────────────────────────────────────── */
+.ea-chat-stop-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  font-size: var(--fs-caption);
+  color: var(--color-fg-h4);
+  text-align: center;
+  font-family: var(--font-cn);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   6. HELLO MESSAGE  (入场引导)
+   ══════════════════════════════════════════════════════════════
+   First component rendered in the canvas before any exchange.
+   Contains a brand greeting and quick-start action buttons.
+
+   NOTE: full visual spec pending (Figma artboard not yet received).
+   These values follow DS conventions and will be updated on review.
+*/
+
+.ea-chat-hello {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px var(--chat-canvas-pad-x) 16px;
+  text-align: center;
+  font-family: var(--font-cn);
+}
+
+.ea-chat-hello__icon {
+  width: 48px;
+  height: 48px;
+  /* background-color: NOT set — see icon usage rule at top of file */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+.ea-chat-hello__title {
+  font-size: var(--fs-section);   /* 20 px */
+  font-weight: var(--fw-medium);
+  color: var(--fg-title);
+  line-height: 1.3;
+}
+
+.ea-chat-hello__sub {
+  font-size: var(--fs-body);
+  color: var(--fg-muted);
+  line-height: var(--lh-body);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   7. INPUT BAR — 按住说话 (voice default)  (Figma 7570:31169)
+   ══════════════════════════════════════════════════════════════
+   The default input bar is a voice-input control ("按住说话").
+   A keyboard icon on the left lets the user switch to text mode.
+   The send icon is hidden (opacity 0) in the voice-default state
+   and becomes visible when there is pending text to send.
+
+   Structure:
+     .ea-chat-input            — outer wrapper (backdrop-blur, top radius)
+       .ea-chat-input__bar     — padding container (16/16/8px)
+         .ea-chat-input__inner — flex-col gap-8
+           .ea-chat-input__pill  — white card (48px, r12, shadow)
+             .ea-chat-input__mode  — left icon 24×24 (keyboard)
+             .ea-chat-input__label — center label "按住说话"
+             .ea-chat-input__send  — right icon 24×24 (hidden default)
+           .ea-chat-input__badge — "内容由AI生成" centered footer
+       .ea-chat-input__home    — 34px home indicator safe area
+
+   Modifiers:
+     .ea-chat-input--text      — text mode (pill becomes textarea)
+     .ea-chat-input--has-text  — reveal the send button
+*/
+
+/* Outer wrapper — transparent, no top radius.
+   The pill inside provides its own white surface.
+   The canvas gradient shows through behind the pill. */
+.ea-chat-input {
+  background: transparent;
+  font-family: var(--font-cn);
+  flex: 0 0 auto;
+}
+
+/* Padding wrapper */
+.ea-chat-input__bar {
+  padding: var(--chat-input-pad);
+  display: flex;
+  flex-direction: column;
+  gap: var(--chat-input-gap);
+}
+
+/* Flex-column inner stack */
+.ea-chat-input__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chat-input-gap);
+}
+
+/* ── Main pill ──────────────────────────────────────────────── */
+/* White card with shadow — the actual press-to-talk button */
+.ea-chat-input__pill {
+  width: 100%;
+  height: var(--chat-input-pill-h);
+  background: var(--chat-input-pill-bg);
+  border-radius: var(--chat-input-pill-radius);
+  box-shadow: var(--chat-input-pill-shadow);
+  padding: var(--chat-input-pill-pad);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 0;
+  font-family: inherit;
+}
+.ea-chat-input__pill:active { opacity: 0.85; }
+
+/* Left icon — keyboard / mode switch */
+.ea-chat-input__mode {
+  flex: 0 0 var(--chat-input-icon-size);
+  width: var(--chat-input-icon-size);
+  height: var(--chat-input-icon-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: NOT set — see icon usage rule at top of file.
+     Mask usage: add style="--icon: url(...); background-color: var(--color-fg-h3);"
+     SVG child usage: SVG fill handles color.                      */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+  color: var(--color-fg-h3);
+}
+.ea-chat-input__mode svg { width: 100%; height: 100%; display: block; color: inherit; }
+
+/* Center label "按住说话" */
+.ea-chat-input__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--chat-input-label-fs);
+  font-weight: var(--chat-input-label-fw);
+  color: var(--chat-input-label-fg);
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right icon — send (hidden in voice-default state) */
+.ea-chat-input__send {
+  flex: 0 0 var(--chat-input-icon-size);
+  width: var(--chat-input-icon-size);
+  height: var(--chat-input-icon-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;           /* hidden in default voice state */
+  pointer-events: none;
+  transition: opacity 150ms ease;
+  color: var(--color-brand-veeva);
+}
+.ea-chat-input__send-icon {
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+.ea-chat-input__send-icon svg { width: 100%; height: 100%; display: block; }
+
+/* Reveal send when there's text to submit */
+.ea-chat-input--has-text .ea-chat-input__send {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Phantom spacer — invisible right-side element that mirrors the left
+   mode icon width, making the center label truly horizontally centered.
+   Used in voice-default (按住说话) layout. */
+.ea-chat-input__phantom {
+  flex: 0 0 var(--chat-input-icon-size);
+  width: var(--chat-input-icon-size);
+  height: var(--chat-input-icon-size);
+  visibility: hidden;
+}
+
+/* ── "内容由AI生成" badge (inline variant — inside .ea-chat-input__inner) ─ */
+.ea-chat-input__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  border-radius: var(--r-base);
+  font-size: var(--chat-input-badge-fs);
+  color: var(--chat-input-badge-fg);
+  letter-spacing: var(--chat-input-badge-tracking);
+  line-height: 1.4;
+  text-align: center;
+  font-family: inherit;
+}
+
+/* ── "内容由AI生成" AI mark (external standalone variant) ─────────
+   Place as a sibling after .ea-chat-input__bar and before
+   .ea-chat-input__home for the standard PreCallPlanner-style layout:
+     <div class="ea-chat-input">
+       <div class="ea-chat-input__bar">…pill…</div>
+       <div class="ea-chat-ai-mark">内容由AI生成</div>
+       <div class="ea-chat-input__home"></div>
+     </div>
+*/
+.ea-chat-ai-mark {
+  flex: 0 0 auto;
+  text-align: center;
+  font-size: var(--chat-input-badge-fs);
+  color: var(--chat-input-badge-fg);
+  letter-spacing: var(--chat-input-badge-tracking);
+  padding: 4px 0 8px;
+  font-family: inherit;
+}
+
+/* ── Home indicator safe area ───────────────────────────────── */
+/* Contains the iOS home indicator pill at the bottom.
+   Height is fixed at 34px; the pill itself is positioned within. */
+.ea-chat-input__home {
+  height: var(--chat-home-h);
+  position: relative;
+  overflow: hidden;
+}
+.ea-chat-input__home::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  width: var(--chat-home-indicator-w);
+  height: var(--chat-home-indicator-h);
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.20);
+}
+
+/* ── Text-mode variant (.ea-chat-input--text) ───────────────── */
+/* When the user switches from voice to keyboard input.
+   The pill becomes a multi-line textarea.
+   Full spec pending — placeholder layout below. */
+.ea-chat-input--text .ea-chat-input__pill {
+  height: auto;
+  min-height: var(--chat-input-pill-h);
+  align-items: flex-end;
+  cursor: default;
+}
+.ea-chat-input--text .ea-chat-input__label {
+  display: none;
+}
+.ea-chat-input__field {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--fs-body);     /* 14px */
+  line-height: 22px;
+  color: var(--fg-default);
+  resize: none;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 0;
+  display: none;   /* shown only in text mode */
+}
+.ea-chat-input--text .ea-chat-input__field { display: block; }
+.ea-chat-input__field::placeholder { color: var(--fg-placeholder); }
+
+
+/* ══════════════════════════════════════════════════════════════
+   8. BOT ENTRY — FAB  (Figma 320:6797)
+   ══════════════════════════════════════════════════════════════
+   Floating action button placed at the bottom-right of a list
+   or detail page. Tapping it opens the Chat AI Agent dialog.
+
+   ── 页面范围规则 ─────────────────────────────────────────────
+   FAB 出现在：  列表页（HCP 列表、活动列表等）、详情页
+   FAB 不出现在：首页（Home）
+   首页的 AI 入口由首页自己的模块负责（home-grid.css 等），
+   不使用浮动 FAB 方案。
+
+   Usage:
+     <button class="ea-chat-fab" aria-label="AI 助手">
+       <span class="ea-chat-fab__icon" style="--icon: url(ai-star.svg)"></span>
+     </button>
+
+   Position (page-level):
+     position: fixed; right: 16px; bottom: calc(env(safe-area-inset-bottom) + 16px);
+*/
+
+.ea-chat-fab {
+  width: var(--chat-fab-size);
+  height: var(--chat-fab-size);
+  border-radius: 50%;
+  background: var(--chat-fab-bg);
+  border: var(--chat-fab-border);
+  box-shadow: var(--chat-fab-shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  /* fixed positioning is left to the page — keep this component position-agnostic */
+}
+.ea-chat-fab:active { opacity: 0.85; }
+
+.ea-chat-fab__icon {
+  width: var(--chat-fab-icon-size);
+  height: var(--chat-fab-icon-size);
+  display: block;
+  /* background-color: NOT set — see icon usage rule at top of file.
+     Mask usage: add style="--icon: url(...); background-color: #fff;"
+     SVG child usage: SVG fill="white" handles color.              */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+  /* star glyph drop-shadow via filter */
+  filter: var(--chat-fab-icon-shadow);
+}
+
+/* Inline SVG variant (when mask URL isn't available) */
+.ea-chat-fab__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: var(--chat-fab-icon-shadow);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   9. BOT ENTRY — HINT BUBBLE  (Figma 320:6797)
+   ══════════════════════════════════════════════════════════════
+   Notification bubble shown above the FAB to draw user attention.
+   Dismissed by tapping the "忽略" label.
+
+   ── 首页入口规则 ─────────────────────────────────────────────
+   首页（Home）的 AI 入口气泡 footer 只允许出现"忽略"操作。
+   ✗ 禁止：在首页 hint footer 中放置"更多"或任何展开链接。
+   ✓ 允许：列表页 / 详情页可根据需要在 footer 添加"更多"链接，
+            但首页严格只保留 .ea-chat-hint__dismiss（忽略）。
+
+   Usage:
+     <div class="ea-chat-hint">
+       <div class="ea-chat-hint__row">
+         <span class="ea-chat-hint__icon" style="--icon: url(ai-star.svg)"></span>
+         <span class="ea-chat-hint__text">您有一个医学问询尚未提交</span>
+       </div>
+       <div class="ea-chat-hint__footer">
+         <span class="ea-chat-hint__dismiss">忽略</span>
+         <!-- ✗ 首页禁止出现"更多" -->
+       </div>
+     </div>
+
+   Position (page-level, paired with FAB):
+     position: fixed; right: 16px;
+     bottom: calc(env(safe-area-inset-bottom) + 16px + var(--chat-fab-size) + 8px);
+*/
+
+.ea-chat-hint {
+  width: var(--chat-hint-width);
+  border-radius: var(--chat-hint-radius);
+  border: var(--chat-hint-border);
+  background: var(--chat-hint-gradient), var(--color-bg-white);
+  box-shadow: var(--chat-hint-shadow);
+  padding: var(--chat-hint-pad);
+  font-family: var(--font-cn);
+}
+
+.ea-chat-hint__row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.ea-chat-hint__icon {
+  flex: 0 0 var(--chat-hint-icon-size);
+  width: var(--chat-hint-icon-size);
+  height: var(--chat-hint-icon-size);
+  margin-top: 3px;  /* optical align with 22 px line-height text */
+  /* background-color: NOT set — see icon usage rule at top of file */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+  /* Inline SVG fallback */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-fg-h2);
+}
+.ea-chat-hint__icon svg { width: 100%; height: 100%; display: block; }
+
+.ea-chat-hint__text {
+  flex: 1 1 auto;
+  font-size: var(--chat-hint-text-fg, var(--fs-body));
+  font-size: var(--fs-body);   /* 14 px */
+  color: var(--chat-hint-text-fg);
+  line-height: 20px;
+  word-break: break-word;
+}
+
+.ea-chat-hint__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.ea-chat-hint__dismiss {
+  font-size: var(--fs-caption);   /* 12 px */
+  color: var(--chat-hint-dismiss-fg);
+  padding: 0 8px;
+  cursor: pointer;
+  border-radius: var(--r-circle);
+  line-height: 20px;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   10. CHAT HEADER  (.ea-chat-header)
+   ══════════════════════════════════════════════════════════════
+   White top panel for the chat bottom-sheet/overlay.
+   X close button left-aligned; title absolutely centered
+   so it stays visually centered regardless of left/right content.
+
+   Derived from PreCallPlanner.vue .pcp-header.
+
+   Structure:
+     <header class="ea-chat-header">
+       <button class="ea-chat-header__close"
+               style="--icon: url(icon-close.svg); background-color: var(--color-fg-h2);"
+               aria-label="关闭"></button>
+       <h2 class="ea-chat-header__title">Veeva AI</h2>
+     </header>
+
+   Note: .ea-chat-header__close follows the icon usage rule —
+   background-color is NOT set in the class.
+   Pass it inline alongside --icon when using mask-driven icons.
+*/
+
+:root {
+  --chat-header-h:            52px;
+  --chat-header-bg:           var(--color-bg-white);
+  --chat-header-radius:       14px;
+  --chat-header-pad-x:        16px;
+  --chat-header-title-fs:     var(--fs-title);    /* 16px */
+  --chat-header-title-fw:     var(--fw-medium);   /* 500 */
+  --chat-header-close-size:   16px;
+}
+
+.ea-chat-header {
+  flex: 0 0 var(--chat-header-h);
+  height: var(--chat-header-h);
+  background: var(--chat-header-bg);
+  border-top-left-radius: var(--chat-header-radius);
+  border-top-right-radius: var(--chat-header-radius);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--chat-header-pad-x);
+  position: relative;
+  font-family: var(--font-cn);
+}
+
+/* X close icon button — mask or SVG child, see icon usage rule */
+.ea-chat-header__close {
+  flex: 0 0 var(--chat-header-close-size);
+  width: var(--chat-header-close-size);
+  height: var(--chat-header-close-size);
+  /* background-color: NOT set — see icon usage rule at top of file.
+     Mask usage: style="--icon: url(...); background-color: var(--color-fg-h2);"
+     SVG child: place <svg> inside the <button>.                    */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-chat-header__close svg { width: 100%; height: 100%; display: block; }
+.ea-chat-header__close:active { opacity: 0.65; }
+
+/* Title — absolutely centered independent of close button width.
+   Resets generic h2 styles (text-transform, letter-spacing, border, padding)
+   so it's safe to use on a <h2> element even in pages that style h2 globally. */
+.ea-chat-header__title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: var(--chat-header-title-fs);
+  font-weight: var(--chat-header-title-fw);
+  color: var(--color-fg-h1);
+  text-transform: none;
+  letter-spacing: 0;
+  pointer-events: none;   /* clicks pass through to elements beneath */
+}

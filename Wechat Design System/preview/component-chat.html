@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat AI Agent — Component Preview</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../lists.css">
+<link rel="stylesheet" href="../chat-shell.css">
+<link rel="stylesheet" href="../chat-cards.css">
+<style>
+/* ── Preview shell ─────────────────────────────────────────── */
+html, body {
+  margin: 0; padding: 0;
+  background: #F8F8F8;
+  font-family: var(--font-cn);
+  color: var(--fg-default);
+}
+
+.preview-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+h1 {
+  font-size: 22px; font-weight: 600; color: #000;
+  margin: 0 0 4px;
+}
+.preview-meta {
+  font-size: 13px; color: #999;
+  margin: 0 0 40px;
+}
+h2 {
+  font-size: 13px; font-weight: 600;
+  color: #999; letter-spacing: 0.06em; text-transform: uppercase;
+  margin: 48px 0 16px;
+  border-top: 1px solid #EEE;
+  padding-top: 24px;
+}
+h2:first-of-type { margin-top: 0; }
+
+.swatch-row {
+  display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start;
+}
+
+/* Phone frame — represents the full device screen.
+   Top area = the underlying WeChat page (not part of DS).
+   The chat shell sits at the BOTTOM, auto-height, capped at max-height.
+   A 30px gap above the shell is enforced (per --chat-shell-max-h rule). */
+.phone {
+  width: 375px;
+  height: 680px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* Underlying page bg (not part of DS — shown here for context only) */
+  background: #F2F4F7;
+}
+/* Simulated WeChat nav bar — NOT part of DS, shown for layout context only */
+.phone-nav {
+  height: 44px;
+  background: #fff;
+  border-bottom: 1px solid #EEE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 500;
+  color: #000;
+  flex: 0 0 44px;
+}
+/* Page content area behind the overlay */
+.phone-page {
+  flex: 1 1 auto;
+  position: relative;
+  overflow: hidden;
+}
+/* Chat shell anchored to bottom of page, auto-height, 30px gap from nav bottom */
+.phone-page .ea-chat {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: auto;
+  max-height: calc(100% - 30px);  /* 30px gap above sheet = nav clearance */
+  /* border-top-radius comes from ea-chat-header (14px) naturally */
+  overflow: hidden;
+}
+
+.label {
+  font-size: 12px; color: #999; margin-bottom: 6px;
+}
+
+/* FAB + Hint positioning demo */
+.fab-scene {
+  position: relative;
+  width: 375px;
+  height: 200px;
+  background: #F8F8F8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.fab-scene .ea-chat-fab {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+}
+.fab-scene .ea-chat-hint {
+  position: absolute;
+  right: 16px;
+  bottom: calc(16px + 42px + 8px);
+}
+
+/* Annotation boxes */
+.note {
+  font-size: 12px; color: #888;
+  background: #FFF8E6;
+  border-left: 3px solid #F7981D;
+  padding: 8px 12px;
+  border-radius: 0 4px 4px 0;
+  margin-top: 12px;
+  line-height: 18px;
+}
+.note code { font-family: monospace; font-size: 11px; color: #555; }
+
+/* ── Preview-only: supply --icon for the close button mask ─── */
+.preview-close-btn {
+  --icon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'><line x1='2' y1='2' x2='14' y2='14'/><line x1='14' y1='2' x2='2' y2='14'/></svg>");
+  background-color: var(--color-fg-h2);
+}
+
+/* ── Event card ─────────────────────────────────────────────── */
+.ea-event-card {
+  width: 311px;
+  border: 1px solid var(--color-border-base);
+  border-radius: 8px;
+  background: var(--color-bg-white);
+  padding: 12px;
+  position: relative;
+}
+.ea-event-card__badge {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 12px;
+  color: var(--color-brand-veeva);
+}
+.ea-event-card__head {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.ea-event-card__ico {
+  width: 28px; height: 28px;
+  border-radius: 4px;
+  background: #EFF3FC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ea-event-card__title {
+  font-size: 16px;
+  font-weight: var(--fw-medium);
+  color: var(--fg-default);
+  line-height: 20px;
+}
+.ea-event-card__meta {
+  font-size: 14px;
+  color: var(--fg-muted);
+  line-height: 22px;
+}
+</style>
+</head>
+<body>
+<div class="preview-page">
+
+  <h1>Chat AI Agent</h1>
+  <p class="preview-meta">chat-shell.css · chat-cards.css &nbsp;·&nbsp; Figma: 320:5481 / 320:6089 / 320:6797</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       0. CHAT HEADER  (.ea-chat-header)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>0. Chat header — bottom-sheet / overlay panel</h2>
+  <div class="swatch-row">
+    <div style="width:375px;">
+      <div class="label">ea-chat-header (X close + centered title)</div>
+      <header class="ea-chat-header" style="border-radius:14px;box-shadow:var(--shadow-lighter);">
+        <!-- Mask-only pattern (matches PCP): button IS the icon, no SVG child -->
+        <button class="ea-chat-header__close preview-close-btn" aria-label="关闭"></button>
+        <h2 class="ea-chat-header__title">Veeva AI</h2>
+      </header>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       1. FULL CHAT SHELL (phone preview) — PreCallPlanner style
+       ═══════════════════════════════════════════════════════ -->
+  <h2>1. Chat shell — pre-call planner overlay example</h2>
+  <!--
+    Layout: .phone = full device screen
+    Top:   .phone-nav  = native WeChat nav bar (NOT part of DS — context only)
+    Below: .phone-page = the underlying page content area
+           .ea-chat    = chat shell overlay, anchored to bottom of .phone-page
+                         height is auto (content-driven), max-height = page - 30px gap
+  -->
+  <div class="phone">
+
+    <!-- Native WeChat nav bar — shown for layout context ONLY, not part of DS -->
+    <div class="phone-nav">拜访规划</div>
+
+    <!-- Underlying page area (not DS) — chat overlay sits inside this -->
+    <div class="phone-page">
+
+      <!-- ✅ ea-chat: the actual DS overlay — height auto, bottom-anchored -->
+      <div class="ea-chat">
+
+        <!-- ea-chat-header — top of the sheet -->
+        <header class="ea-chat-header">
+          <button class="ea-chat-header__close preview-close-btn" aria-label="关闭"></button>
+          <h2 class="ea-chat-header__title">Veeva AI</h2>
+        </header>
+
+        <!-- Conversation canvas -->
+        <div class="ea-chat__canvas">
+
+          <!-- User bubble — gradient teal→blue, white text, 18px radius -->
+          <div class="ea-chat-msg ea-chat-msg--user">
+            <div class="ea-chat-msg__bubble">帮我规划下次拜访</div>
+          </div>
+
+          <!-- Plain AI text — no card bubble -->
+          <div class="ea-chat-msg ea-chat-msg--ai ea-chat-msg--ai-plain">
+            <div class="ea-chat-msg__bubble">
+              <p class="ea-chat-msg__text">李伟 医生为 V 级医生，市场部的策略为：</p>
+            </div>
+          </div>
+
+          <!-- Strategy card -->
+          <article class="ea-card ea-card--strategy">
+            <div class="ea-card-strategy__row">
+              <span class="ea-card-strategy__icon" style="background-color: var(--color-brand-veeva);">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+              </span>
+              <div class="ea-card-strategy__body">
+                <div class="ea-card-strategy__label">市场产品策略</div>
+                <div class="ea-card-strategy__heading">聚焦"深度缓解，超长生存"</div>
+              </div>
+              <button type="button" class="ea-card-strategy__expand">
+                展开
+                <span class="ea-card-strategy__expand-icon"
+                      style="--icon: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22M2 4l4 4 4-4%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>')">
+                </span>
+              </button>
+            </div>
+          </article>
+
+          <!-- Another plain AI text -->
+          <div class="ea-chat-msg ea-chat-msg--ai ea-chat-msg--ai-plain">
+            <div class="ea-chat-msg__bubble">
+              <p class="ea-chat-msg__text">建议本次拜访的目标如下，您也可以点击【都不合适】告诉我你想讨论的话题~</p>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="ea-chat-actions" style="flex-wrap:wrap;gap:8px;">
+            <button class="ea-chat-action-btn ea-chat-action-btn--primary">确定，去生成拜访计划</button>
+            <button class="ea-chat-action-btn ea-chat-action-btn--secondary">都不合适</button>
+            <button class="ea-chat-action-btn ea-chat-action-btn--secondary">取消规划</button>
+          </div>
+
+        </div><!-- /.ea-chat__canvas -->
+
+        <!-- Input bar — pill style (按住说话) -->
+        <div class="ea-chat-input">
+          <div class="ea-chat-input__bar">
+            <div class="ea-chat-input__inner">
+              <button class="ea-chat-input__pill" aria-label="按住说话">
+                <span class="ea-chat-input__mode">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="color:var(--color-fg-h2);">
+                    <path d="M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 5H5v-2h2v2zm10 0H9v-2h8v2zm0-3h-2v-2h2v2zm0-3h-2V8h2v2zm-4 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>
+                  </svg>
+                </span>
+                <span class="ea-chat-input__label">按住说话</span>
+                <span class="ea-chat-input__phantom" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+          <div class="ea-chat-ai-mark">内容由 AI 生成</div>
+          <div class="ea-chat-input__home"></div>
+        </div>
+
+      </div><!-- /.ea-chat -->
+
+    </div><!-- /.phone-page -->
+
+  </div><!-- /.phone -->
+
+  <!-- ═══════════════════════════════════════════════════════
+       2. MARKDOWN CONTENT ELEMENTS
+       ═══════════════════════════════════════════════════════ -->
+  <h2>2. Markdown content elements</h2>
+  <div class="swatch-row">
+
+    <!-- Text samples -->
+    <div style="width:320px;">
+      <div class="label">Headings + body + muted</div>
+      <div class="ea-chat-msg__bubble" style="background:#fff;box-shadow:var(--shadow-lighter);border-radius:8px;padding:12px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h2">今日拜访摘要</p>
+            <p class="ea-chat-msg__h3">心血管科 · 李伟医生</p>
+            <p class="ea-chat-msg__text">根据近期互动数据，建议重点沟通 X 产品的最新临床研究结果。</p>
+            <p class="ea-chat-msg__muted">上次拜访：2025-04-28</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bullet list -->
+    <div style="width:320px;">
+      <div class="label">Bullet list (L1 + L2)</div>
+      <div class="ea-chat-msg__bubble" style="background:#fff;box-shadow:var(--shadow-lighter);border-radius:8px;padding:12px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__text">建议沟通要点：</p>
+            <ul class="ea-chat-msg__ul">
+              <li class="ea-chat-msg__li">X 产品最新适应症扩展</li>
+              <li class="ea-chat-msg__li">临床研究数据分享
+                <ul class="ea-chat-msg__ul" style="margin-top:4px;">
+                  <li class="ea-chat-msg__li ea-chat-msg__li--l2">REDUCE-IT 亚组分析</li>
+                  <li class="ea-chat-msg__li ea-chat-msg__li--l2">真实世界安全性数据</li>
+                </ul>
+              </li>
+              <li class="ea-chat-msg__li">科室会邀请跟进</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div style="width:380px; overflow:hidden;">
+      <div class="label">Comparison table</div>
+      <div class="ea-chat-msg__bubble" style="background:#fff;box-shadow:var(--shadow-lighter);border-radius:8px;padding:12px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <table class="ea-chat-msg__table">
+              <thead>
+                <tr><th>医生</th><th>科室</th><th>近期互动</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>李伟</td><td>心血管科</td><td>3 次</td></tr>
+                <tr><td>张梅</td><td>内分泌科</td><td>1 次</td></tr>
+                <tr><td>王磊</td><td>神经内科</td><td>5 次</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3. ACTION BUTTONS  (white bg · blue text · no border)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>3. Action buttons — white pill, blue text, no border</h2>
+  <div class="swatch-row">
+    <div>
+      <div class="label">Primary — main response CTA</div>
+      <div class="ea-chat-actions" style="background:var(--chat-canvas-bg);padding:12px;border-radius:8px;">
+        <button class="ea-chat-action-btn ea-chat-action-btn--primary">确定，去生成拜访计划</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--primary">安排拜访</button>
+      </div>
+    </div>
+    <div>
+      <div class="label">Secondary — suggested questions (same look)</div>
+      <div class="ea-chat-actions" style="background:var(--chat-canvas-bg);padding:12px;border-radius:8px;">
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">都不合适</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">取消规划</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">查看科室会记录</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       4. THINKING STREAM  (Figma 7570:31169)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>4. Thinking / status stream</h2>
+
+  <style>
+  /* star SVG inline fill trick for preview */
+  .thinking-star { display:inline-flex; width:16px; height:16px; }
+  </style>
+
+  <div class="swatch-row">
+    <div>
+      <div class="label">In progress (2 done · 1 active) — dot indicator only, no star</div>
+      <div class="ea-chat-thinking">
+        <div class="ea-chat-thinking__row ea-chat-thinking__row--done">
+          <span class="ea-chat-thinking__label">已完成用户的需求理解</span>
+        </div>
+        <div class="ea-chat-thinking__row ea-chat-thinking__row--done">
+          <span class="ea-chat-thinking__label">数据查询中</span>
+        </div>
+        <div class="ea-chat-thinking__row">
+          <span class="ea-chat-thinking__label">答案组织中</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="label">Stop notice</div>
+      <div class="ea-chat-stop-notice">你已让系统停止这条回答</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       5. INPUT BAR — 按住说话 pill (full-radius, phantom spacer)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>5. Input bar — 按住说话 default</h2>
+  <div style="width:375px;background:var(--chat-canvas-bg);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
+    <div class="ea-chat-input">
+      <div class="ea-chat-input__bar">
+        <div class="ea-chat-input__inner">
+          <!-- Full-pill, phantom spacer pattern -->
+          <button class="ea-chat-input__pill">
+            <span class="ea-chat-input__mode">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="color:var(--color-fg-h2);">
+                <path d="M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 5H5v-2h2v2zm10 0H9v-2h8v2zm0-3h-2v-2h2v2zm0-3h-2V8h2v2zm-4 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>
+              </svg>
+            </span>
+            <span class="ea-chat-input__label">按住说话</span>
+            <!-- Phantom spacer — same width as mode icon, keeps label centered -->
+            <span class="ea-chat-input__phantom" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+      <!-- External AI mark — outside the pill, inside the input wrapper -->
+      <div class="ea-chat-ai-mark">内容由 AI 生成</div>
+      <div class="ea-chat-input__home"></div>
+    </div>
+  </div>
+  <div class="note" style="width:375px;">
+    <code>.ea-chat-input__phantom</code> — invisible 24×24 spacer mirrors the left icon, keeping "按住说话" truly centered. <code>.ea-chat-ai-mark</code> — standalone AI attribution label, placed outside the pill between bar and home indicator.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       5b. BOT ENTRY — FAB + HINT BUBBLE
+       ═══════════════════════════════════════════════════════ -->
+  <h2>5b. Bot entry — FAB + hint bubble (Figma 320:6797)</h2>
+  <div class="swatch-row">
+
+    <!-- Scene with both -->
+    <div class="fab-scene">
+      <div style="position:absolute;left:12px;top:12px;font-size:12px;color:#CCC;">
+        列表/详情页
+      </div>
+      <!-- Hint bubble -->
+      <div class="ea-chat-hint">
+        <div class="ea-chat-hint__row">
+          <span class="ea-chat-hint__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="currentColor" width="16" height="16">
+              <path d="M22.956 22.956C20.754 21.221 19.103 20.012 17.668 19.318 16.215 21.409 15.632 24.66 15 30c-.632-5.34-1.215-8.591-2.668-10.682C10.898 20.012 9.246 21.219 7.044 22.956 8.781 20.754 9.988 19.103 10.682 17.668 8.591 16.215 5.34 15.632 0 15c5.34-.632 8.591-1.215 10.682-2.668C9.988 10.898 8.781 9.246 7.044 7.044c2.202 1.737 3.854 2.944 5.288 3.638C13.785 8.591 14.368 5.34 15 0c.632 5.34 1.215 8.591 2.668 10.682 1.435-.694 3.086-1.901 5.288-3.638-1.735 2.202-2.944 3.854-3.638 5.288C21.409 13.785 24.66 14.368 30 15c-5.34.632-8.591 1.215-10.682 2.668.694 1.435 1.901 3.086 3.638 5.288z"/>
+            </svg>
+          </span>
+          <span class="ea-chat-hint__text">您有一个医学问询尚未提交</span>
+        </div>
+        <div class="ea-chat-hint__footer">
+          <span class="ea-chat-hint__dismiss">忽略</span>
+        </div>
+      </div>
+      <!-- FAB -->
+      <button class="ea-chat-fab" aria-label="AI 助手">
+        <span class="ea-chat-fab__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="white" width="28" height="28" style="filter:drop-shadow(0 1px 2px rgba(230,81,0,0.8))">
+            <path d="M22.956 22.956C20.754 21.221 19.103 20.012 17.668 19.318 16.215 21.409 15.632 24.66 15 30c-.632-5.34-1.215-8.591-2.668-10.682C10.898 20.012 9.246 21.219 7.044 22.956 8.781 20.754 9.988 19.103 10.682 17.668 8.591 16.215 5.34 15.632 0 15c5.34-.632 8.591-1.215 10.682-2.668C9.988 10.898 8.781 9.246 7.044 7.044c2.202 1.737 3.854 2.944 5.288 3.638C13.785 8.591 14.368 5.34 15 0c.632 5.34 1.215 8.591 2.668 10.682 1.435-.694 3.086-1.901 5.288-3.638-1.735 2.202-2.944 3.854-3.638 5.288C21.409 13.785 24.66 14.368 30 15c-5.34.632-8.591 1.215-10.682 2.668.694 1.435 1.901 3.086 3.638 5.288z"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- FAB alone -->
+    <div>
+      <div class="label">FAB only</div>
+      <button class="ea-chat-fab">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="white" width="28" height="28" style="filter:drop-shadow(0 1px 2px rgba(230,81,0,0.8))">
+          <path d="M22.956 22.956C20.754 21.221 19.103 20.012 17.668 19.318 16.215 21.409 15.632 24.66 15 30c-.632-5.34-1.215-8.591-2.668-10.682C10.898 20.012 9.246 21.219 7.044 22.956 8.781 20.754 9.988 19.103 10.682 17.668 8.591 16.215 5.34 15.632 0 15c5.34-.632 8.591-1.215 10.682-2.668C9.988 10.898 8.781 9.246 7.044 7.044c2.202 1.737 3.854 2.944 5.288 3.638C13.785 8.591 14.368 5.34 15 0c.632 5.34 1.215 8.591 2.668 10.682 1.435-.694 3.086-1.901 5.288-3.638-1.735 2.202-2.944 3.854-3.638 5.288C21.409 13.785 24.66 14.368 30 15c-5.34.632-8.591 1.215-10.682 2.668.694 1.435 1.901 3.086 3.638 5.288z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hint bubble alone -->
+    <div>
+      <div class="label">Hint bubble only</div>
+      <div class="ea-chat-hint" style="position:relative;">
+        <div class="ea-chat-hint__row">
+          <span class="ea-chat-hint__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="currentColor" width="16" height="16">
+              <path d="M22.956 22.956C20.754 21.221 19.103 20.012 17.668 19.318 16.215 21.409 15.632 24.66 15 30c-.632-5.34-1.215-8.591-2.668-10.682C10.898 20.012 9.246 21.219 7.044 22.956 8.781 20.754 9.988 19.103 10.682 17.668 8.591 16.215 5.34 15.632 0 15c5.34-.632 8.591-1.215 10.682-2.668C9.988 10.898 8.781 9.246 7.044 7.044c2.202 1.737 3.854 2.944 5.288 3.638C13.785 8.591 14.368 5.34 15 0c.632 5.34 1.215 8.591 2.668 10.682 1.435-.694 3.086-1.901 5.288-3.638-1.735 2.202-2.944 3.854-3.638 5.288C21.409 13.785 24.66 14.368 30 15c-5.34.632-8.591 1.215-10.682 2.668.694 1.435 1.901 3.086 3.638 5.288z"/>
+            </svg>
+          </span>
+          <span class="ea-chat-hint__text">您有一个医学问询尚未提交</span>
+        </div>
+        <div class="ea-chat-hint__footer">
+          <span class="ea-chat-hint__dismiss">忽略</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       6. STRATEGY CARD  (.ea-card--strategy)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>6. Strategy card — orange frame + white inner row</h2>
+  <div class="swatch-row">
+    <div style="max-width:343px;">
+      <div class="label">ea-card--strategy (pre-call planner market strategy)</div>
+      <article class="ea-card ea-card--strategy">
+        <div class="ea-card-strategy__row">
+          <span class="ea-card-strategy__icon"
+                style="color: var(--color-brand-veeva);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          </span>
+          <div class="ea-card-strategy__body">
+            <div class="ea-card-strategy__label">市场产品策略</div>
+            <div class="ea-card-strategy__heading">聚焦"深度缓解，超长生存"</div>
+          </div>
+          <button type="button" class="ea-card-strategy__expand">
+            展开
+            <span class="ea-card-strategy__expand-icon"
+                  style="--icon: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22M2 4l4 4 4-4%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>')">
+            </span>
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <div style="max-width:343px;">
+      <div class="label">ea-card--strategy — alternate content</div>
+      <article class="ea-card ea-card--strategy">
+        <div class="ea-card-strategy__row">
+          <span class="ea-card-strategy__icon"
+                style="color: var(--color-brand-veeva);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H8v-2h4v2zm4-4H8v-2h8v2zm0-4H8V7h8v2z"/></svg>
+          </span>
+          <div class="ea-card-strategy__body">
+            <div class="ea-card-strategy__label">医生拜访行为目标</div>
+            <div class="ea-card-strategy__heading">聚焦"赢一线"行为目标</div>
+          </div>
+          <button type="button" class="ea-card-strategy__expand">
+            展开
+            <span class="ea-card-strategy__expand-icon"
+                  style="--icon: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22M2 4l4 4 4-4%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%221.5%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>')">
+            </span>
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       7. STRUCTURED CARDS  (node 866-23155)
+       ═══════════════════════════════════════════════════════ -->
+  <h2>7. Structured cards</h2>
+  <!--
+    Single white card container; items divided by #EEE hairlines.
+    Each ea-card__item: icon (20px circular blue-tint) + body (title + fields) + "查看" button.
+  -->
+
+  <!-- Single card, 3 items (matches Figma node exactly) -->
+  <div style="width:343px;">
+    <div class="label">ea-card — 3 items (会议列表)</div>
+    <div class="ea-card ea-card--shadow">
+
+      <div class="ea-card__item">
+        <div class="ea-card__item-head">
+          <span class="ea-card__item-icon">
+            <!-- Activity icon: calendar/event SVG, 14×14, #007AFF -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+            </svg>
+          </span>
+          <div class="ea-card__body">
+            <p class="ea-card__title">维我替尼产品研讨会</p>
+            <p class="ea-card__field">会议开始时间：2025-05-10</p>
+            <p class="ea-card__field">会议类型：科室会</p>
+          </div>
+        </div>
+        <div class="ea-card__item-footer">
+          <button class="ea-card__view-btn">查看</button>
+        </div>
+      </div>
+
+      <div class="ea-card__item">
+        <div class="ea-card__item-head">
+          <span class="ea-card__item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+            </svg>
+          </span>
+          <div class="ea-card__body">
+            <p class="ea-card__title">维我替尼产品研讨会</p>
+            <p class="ea-card__field">会议开始时间：2025-05-10</p>
+            <p class="ea-card__field">会议类型：科室会</p>
+          </div>
+        </div>
+        <div class="ea-card__item-footer">
+          <button class="ea-card__view-btn">查看</button>
+        </div>
+      </div>
+
+      <div class="ea-card__item">
+        <div class="ea-card__item-head">
+          <span class="ea-card__item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+            </svg>
+          </span>
+          <div class="ea-card__body">
+            <p class="ea-card__title">维我替尼产品研讨会</p>
+            <p class="ea-card__field">会议开始时间：2025-05-10</p>
+            <p class="ea-card__field">会议类型：科室会</p>
+          </div>
+        </div>
+        <div class="ea-card__item-footer">
+          <button class="ea-card__view-btn">查看</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Single-item card (HCP record) -->
+  <div style="width:343px; margin-top:16px;">
+    <div class="label">ea-card — 1 item (HCP 记录)</div>
+    <div class="ea-card ea-card--shadow">
+      <div class="ea-card__item">
+        <div class="ea-card__item-head">
+          <span class="ea-card__item-icon">
+            <!-- Person/HCP icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </span>
+          <div class="ea-card__body">
+            <p class="ea-card__title">李伟</p>
+            <p class="ea-card__field">医院：协和医院</p>
+            <p class="ea-card__field">科室：心血管内科</p>
+            <p class="ea-card__field">职称：主任医师</p>
+          </div>
+        </div>
+        <div class="ea-card__item-footer">
+          <button class="ea-card__view-btn">查看</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card with "查看更多" trigger -->
+  <div style="width:343px; margin-top:16px;">
+    <div class="label">ea-card + ea-card-list__more</div>
+    <div class="ea-card ea-card--shadow">
+
+      <div class="ea-card__item">
+        <div class="ea-card__item-head">
+          <span class="ea-card__item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </span>
+          <div class="ea-card__body">
+            <p class="ea-card__title">张梅</p>
+            <p class="ea-card__field">科室：内分泌科</p>
+          </div>
+        </div>
+        <div class="ea-card__item-footer">
+          <button class="ea-card__view-btn">查看</button>
+        </div>
+      </div>
+
+      <div class="ea-card__item">
+        <div class="ea-card__item-head">
+          <span class="ea-card__item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </span>
+          <div class="ea-card__body">
+            <p class="ea-card__title">王芳</p>
+            <p class="ea-card__field">科室：肿瘤科</p>
+          </div>
+        </div>
+        <div class="ea-card__item-footer">
+          <button class="ea-card__view-btn">查看</button>
+        </div>
+      </div>
+
+    </div>
+    <!-- "查看更多" sits outside the card, full-width -->
+    <button class="ea-card-list__more" style="margin-top:8px;">查看更多 3 条 ›</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       8. HITL FORM
+       ═══════════════════════════════════════════════════════ -->
+  <h2>8. HITL form</h2>
+  <div class="swatch-row">
+
+    <!-- Full form example -->
+    <div style="width:320px;">
+      <div class="label">Form with text field + selection + group</div>
+      <div class="ea-hitl">
+        <div class="ea-hitl__label">李伟医生拜访计划</div>
+        <div class="ea-hitl__desc">请确认以下拜访计划内容，可直接修改后保存。</div>
+        <div class="ea-hitl__body">
+
+          <!-- Group field -->
+          <div class="ea-hitl-group">
+            <div class="ea-hitl-group__title">核心目标</div>
+            <!-- Text field — read-only -->
+            <div class="ea-hitl-field">
+              <div class="ea-hitl-field__label">拜访目标</div>
+              <div class="ea-hitl-field__text">推广 X 产品在高风险心血管患者群体中的适应症认知</div>
+            </div>
+          </div>
+
+          <!-- Text field — editable -->
+          <div class="ea-hitl-field ea-hitl-field--editing">
+            <div class="ea-hitl-field__label">沟通要点</div>
+            <textarea class="ea-hitl-field__textarea" rows="3">分享 REDUCE-IT 亚组分析数据，重点介绍中国真实世界安全性数据。</textarea>
+          </div>
+
+          <!-- Text field — violation -->
+          <div class="ea-hitl-field ea-hitl-field--violation">
+            <div class="ea-hitl-field__label">推荐理由</div>
+            <textarea class="ea-hitl-field__textarea" rows="2">X 产品是<mark class="ea-hitl-field__mark">最好的</mark>选择，具有无可比拟的优势。</textarea>
+            <div class="ea-hitl-field__violation">⚠️ 包含违规词：「最好的」「无可比拟」</div>
+          </div>
+
+          <!-- Selection field -->
+          <div class="ea-hitl-sel">
+            <div class="ea-hitl-sel__label">推荐随访资料</div>
+            <div class="ea-hitl-sel__options">
+              <label class="ea-hitl-sel__option">
+                <span class="ea-hitl-sel__checkbox ea-hitl-sel__checkbox--checked"></span>
+                <span class="ea-hitl-sel__opt-text">X 产品临床探索报告（2025）</span>
+              </label>
+              <label class="ea-hitl-sel__option">
+                <span class="ea-hitl-sel__checkbox ea-hitl-sel__checkbox--checked"></span>
+                <span class="ea-hitl-sel__opt-text">REDUCE-IT 亚组分析摘要</span>
+              </label>
+              <label class="ea-hitl-sel__option">
+                <span class="ea-hitl-sel__checkbox"></span>
+                <span class="ea-hitl-sel__opt-text">患者教育手册</span>
+              </label>
+            </div>
+          </div>
+
+        </div><!-- /.ea-hitl__body -->
+        <div class="ea-hitl__footer">
+          <button class="ea-chat-action-btn ea-chat-action-btn--primary" style="width:100%;justify-content:center;">保存为拜访计划</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       9. EVENT CARD
+       ═══════════════════════════════════════════════════════ -->
+  <h2>9. Event card</h2>
+  <div class="swatch-row">
+
+    <!-- Default: approved status -->
+    <div>
+      <div class="label">审批通过</div>
+      <div class="ea-event-card">
+        <div class="ea-event-card__badge">审批通过</div>
+        <div class="ea-event-card__head">
+          <div class="ea-event-card__ico">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.371 21.029" width="18" height="18" fill="currentColor">
+              <path d="M 3.063 8.417 C 3.246 11.524 5.669 14.03 8.686 14.03 C 11.703 14.03 14.126 11.524 14.309 8.418 C 12.425 8.225 10.533 8.125 8.64 8.117 C 6.583 8.117 4.526 8.266 3.063 8.418 L 3.063 8.417 Z M 11.749 14.58 C 11.063 14.58 8.686 17.838 8.686 17.838 C 8.686 17.838 6.446 14.581 5.623 14.581 C 2.743 14.581 0 17.787 0 20.494 C 0 21.697 3.703 20.494 8.96 20.494 C 14.171 20.494 17.371 21.697 17.371 20.494 C 17.371 17.888 14.171 14.581 11.749 14.581 L 11.749 14.58 Z M 14.811 7.565 L 13.806 1.101 C 13.806 1.101 12.023 0 8.686 0 C 5.349 0 3.566 1.102 3.566 1.102 L 2.56 7.567 C 2.56 7.567 5.989 7.016 8.869 7.016 C 11.611 7.016 14.811 7.567 14.811 7.567 L 14.811 7.565 Z M 8.229 5.612 L 8.229 4.108 L 6.811 4.108 C 6.537 4.108 6.354 3.908 6.354 3.607 C 6.354 3.307 6.583 3.105 6.811 3.105 L 8.229 3.105 L 8.229 1.603 C 8.229 1.327 8.434 1.102 8.686 1.102 C 8.937 1.102 9.143 1.326 9.143 1.604 L 9.143 3.108 L 10.56 3.108 C 10.834 3.108 11.017 3.307 11.017 3.609 C 11.017 3.885 10.811 4.109 10.56 4.109 L 9.143 4.109 L 9.143 5.613 C 9.143 5.889 8.937 6.114 8.686 6.114 C 8.434 6.114 8.229 5.89 8.229 5.613 L 8.229 5.612 Z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="ea-event-card__title">维我替尼产品研讨会</div>
+            <div class="ea-event-card__meta">会议开始时间：2025-05-10</div>
+            <div class="ea-event-card__meta">会议类型：科室会</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending review -->
+    <div>
+      <div class="label">待审批</div>
+      <div class="ea-event-card">
+        <div class="ea-event-card__badge" style="color:var(--fg-subtle);">待审批</div>
+        <div class="ea-event-card__head">
+          <div class="ea-event-card__ico">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.371 21.029" width="18" height="18" fill="currentColor">
+              <path d="M 3.063 8.417 C 3.246 11.524 5.669 14.03 8.686 14.03 C 11.703 14.03 14.126 11.524 14.309 8.418 C 12.425 8.225 10.533 8.125 8.64 8.117 C 6.583 8.117 4.526 8.266 3.063 8.418 L 3.063 8.417 Z M 11.749 14.58 C 11.063 14.58 8.686 17.838 8.686 17.838 C 8.686 17.838 6.446 14.581 5.623 14.581 C 2.743 14.581 0 17.787 0 20.494 C 0 21.697 3.703 20.494 8.96 20.494 C 14.171 20.494 17.371 21.697 17.371 20.494 C 17.371 17.888 14.171 14.581 11.749 14.581 L 11.749 14.58 Z M 14.811 7.565 L 13.806 1.101 C 13.806 1.101 12.023 0 8.686 0 C 5.349 0 3.566 1.102 3.566 1.102 L 2.56 7.567 C 2.56 7.567 5.989 7.016 8.869 7.016 C 11.611 7.016 14.811 7.567 14.811 7.567 L 14.811 7.565 Z M 8.229 5.612 L 8.229 4.108 L 6.811 4.108 C 6.537 4.108 6.354 3.908 6.354 3.607 C 6.354 3.307 6.583 3.105 6.811 3.105 L 8.229 3.105 L 8.229 1.603 C 8.229 1.327 8.434 1.102 8.686 1.102 C 8.937 1.102 9.143 1.326 9.143 1.604 L 9.143 3.108 L 10.56 3.108 C 10.834 3.108 11.017 3.307 11.017 3.609 C 11.017 3.885 10.811 4.109 10.56 4.109 L 9.143 4.109 L 9.143 5.613 C 9.143 5.889 8.937 6.114 8.686 6.114 C 8.434 6.114 8.229 5.89 8.229 5.613 L 8.229 5.612 Z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="ea-event-card__title">Q3 区域学术会议</div>
+            <div class="ea-event-card__meta">会议开始时间：2025-08-22</div>
+            <div class="ea-event-card__meta">会议类型：区域会</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /.preview-page -->
+</body>
+</html>

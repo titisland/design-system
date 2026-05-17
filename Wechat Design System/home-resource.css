@@ -1,0 +1,107 @@
+/* WeChat Design System — Home Resource Navigation (资源导航)
+   --------------------------------------------------------
+   Source: Figma 首页_WeChat (JO8xVSc8EDUiyPWZizfGsu) node 6:2026.
+
+   A secondary entry-grid section that hosts less-frequently-used
+   resources (临床实验 / 讲者 / 医学协会 / 药事会 …). Visually
+   it's a titled card with a 4-col tile grid inside. Tiles are
+   smaller than the main entry grid above.
+
+   Spec（与功能入口保持一致）：
+     • Card         — 白底，左右 margin 16px，圆角 8px
+                       box-shadow: 0 4px 8px rgba(0,0,0,0.05)
+     • Title row    — 14 / 500 / #000 + optional "全部 >" link
+     • Tile grid    — 4 cols, 16px row-gap
+     • Tile icon    — 40×40 Homepage business icon
+     • Tile label   — 12 / 400 / #333（与功能入口一致）
+
+   ── Icon rule ─────────────────────────────────────────────
+   Same as functional grid: icons MUST come from
+   assets/icons/Homepage/. No 线性 / 面性 here. */
+
+:root {
+  --hr-card-pad-y:   16px;
+  --hr-card-pad-x:   8px;
+  --hr-card-bg:      var(--color-bg-white);
+  --hr-title-fs:     14px;
+  --hr-title-fw:     var(--fw-medium);
+  --hr-title-color:  var(--color-fg-h1);          /* #000 */
+  --hr-link-fs:      12px;
+  --hr-link-color:   var(--color-fg-h4);          /* #999 */
+  --hr-cols:         4;
+  --hr-row-gap:      16px;
+  --hr-icon-size:    40px;
+  --hr-label-fs:     var(--fs-caption);            /* 12 */
+  --hr-label-color:  var(--color-fg-h2);           /* #333 */
+  --hr-label-mt:     8px;
+}
+
+.ea-home-resource {
+  margin: 0 16px;
+  background: var(--hr-card-bg);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.10);
+  padding: var(--hr-card-pad-y) var(--hr-card-pad-x);
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+}
+
+.ea-home-resource__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 4px 0 8px;
+}
+.ea-home-resource__title {
+  font-size: var(--hr-title-fs);
+  font-weight: var(--hr-title-fw);
+  color: var(--hr-title-color);
+}
+.ea-home-resource__link {
+  font-size: var(--hr-link-fs);
+  color: var(--hr-link-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ea-home-resource__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--hr-cols), minmax(0, 1fr));
+  row-gap: var(--hr-row-gap);
+  column-gap: 0;
+}
+
+.ea-home-resource__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--hr-label-mt);
+  background: transparent;
+  border: 0;
+  padding: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  color: inherit;
+}
+.ea-home-resource__tile:active { opacity: 0.6; }
+
+.ea-home-resource__icon {
+  width: var(--hr-icon-size);
+  height: var(--hr-icon-size);
+  display: block;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.ea-home-resource__label {
+  font-size: var(--hr-label-fs);
+  line-height: 16px;
+  color: var(--hr-label-color);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}

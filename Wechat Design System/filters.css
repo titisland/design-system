@@ -1,0 +1,508 @@
+/* Event Agent — External Filter Bar + Filter Sheets
+   Source: /page3 (Text / Number / Date / Lookup / Picklist)
+
+   Composition
+   ─────────────────────────────────────────────────────────────
+   .ea-filterbar         pill row at the top of a list page
+     .ea-fb__chip          quick filter ("排序", field name, "下属数据")
+        .ea-fb__chip-label  text — #333 / #F7981D when active
+        .ea-fb__chip-caret  ▼ ▲ in a 14×14 round well (gray dot when
+                            inactive, soft orange when active)
+     .ea-fb__divider       1px #EEE between groups (left of trailing tools)
+     .ea-fb__tools         16×16 filter glyph + view-toggle glyph
+                           shadow popover w/ rounded right corner
+
+   .ea-fs                 filter sheet — drops down below filterbar
+     .ea-fs__body          white panel that hosts the per-type body
+        .ea-fs--text        single rounded input + "仅看空值" toggle
+        .ea-fs--number      min/max inputs (stacked w/ tiny separator)
+        .ea-fs--date        start/end inputs w/ calendar trigger
+        .ea-fs--lookup      "已选择(N) / 清空" + bordered search bar
+                            + "请尽量提供详细查询信息" hint
+        .ea-fs--picklist    side rail (140) + options list (right)
+     .ea-fs__nullonly       仅看空值 + 20×40 toggle, right-aligned
+     .ea-fs__sidebar        140-col gray (#F5F5F5) field list
+        .ea-fs__sb-item     32 tall, padding 16, color #333
+        .ea-fs__sb-item--active  white bg, 4px left orange bar
+     .ea-fs__option         row in the right column for picklist/lookup
+                             checkbox 16, hairline #EEE
+     .ea-fs__footer         3-button bar 取消 / 重置 / 确定
+                             confirm = #F7981D 14/500
+*/
+
+:root {
+  /* widths used by all filter-sheet bodies — match figma 375 frame */
+  --fs-side-w: 140px;
+  --fs-row-h: 32px;
+  --fs-radius: 20px;
+  --fs-page-bg: #F8F8F8;
+}
+
+/* ──────────────────────────────────────────────────────────
+   FILTER BAR (always visible, sits below the search row)
+   ────────────────────────────────────────────────────────── */
+
+.ea-filterbar {
+  position: relative;
+  height: 40px;
+  flex: 0 0 40px;   /* lock height in flex-column page shells — prevents compression */
+  background: var(--bg-surface);
+  /* Edges:
+     - TOP   : soft shadow above the bar (separates it from the search row)
+     - BOTTOM: 1px #EEE hairline divider (separates it from the list rows) */
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--color-border-base);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Scrollable chip strip — flex-grows, takes remaining width, scrolls
+   horizontally if chips overflow. Tools stay pinned at the right.
+
+   ⚠️ Layout rule:
+     • Up to 4 external chips fit at standard widths (e.g. 375 mobile).
+     • If chip text is long enough that some are hidden behind the
+       trailing tools cluster, the strip becomes horizontally
+       swipeable (overflow-x: auto, scrollbar hidden).
+     • Tools (.ea-fb__tools) ALWAYS stay visible — they are flex:0 0
+       and pinned right with a vertical hairline divider on their
+       left edge. */
+.ea-fb__chips {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.ea-fb__chips::-webkit-scrollbar { display: none; }
+
+.ea-fb__chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ea-fb__chip-label {
+  font-size: var(--fs-body);
+  line-height: 22px;
+  color: var(--color-fg-h2);
+  white-space: nowrap;
+}
+.ea-fb__chip--active .ea-fb__chip-label {
+  color: var(--color-brand-veeva);
+  font-weight: var(--fw-medium);
+}
+
+/* Caret well — 14×14 circle behind the triangle.
+   Triangle is the library's 面性-Popover向下/向上箭头.svg (NOT inline). */
+.ea-fb__chip-caret {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-fb__chip-caret::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  display: block;
+  background-color: var(--color-fg-placeholder);   /* gray triangle when idle */
+  -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2248%22%20height%3D%2214%22%20viewBox%3D%220%200%2048%2014%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M0%200.00209812C1.74891%200.00209812%203.49731%20-0.00704475%205.24629%200.012841C6.92017%200.0322695%208.79366%200.0596981%2010.4226%200.707527C12.1822%201.40764%2013.3472%202.6317%2014.5193%204.07227C15.3631%205.10838%2017.0206%207.31901%2017.8277%208.38638C18.4883%209.26147%2019.7813%2010.9912%2020.4874%2011.8281C21.3761%2012.8809%2022.4747%2014%2024.0005%2014C25.5263%2014%2026.6244%2012.881%2027.5127%2011.8292C28.2187%2010.9928%2029.5117%209.26204%2030.1728%208.38747C30.9789%207.3201%2032.6364%205.10947%2033.4807%204.07336C34.6549%202.63278%2035.8178%201.40873%2037.5769%200.708612C39.2063%200.0623839%2041.0803%200.0332981%2042.7532%200.0139267C44.5027%20-0.00601617%2046.2511%200.00318383%2048%200.00318383%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E");
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2248%22%20height%3D%2214%22%20viewBox%3D%220%200%2048%2014%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M0%200.00209812C1.74891%200.00209812%203.49731%20-0.00704475%205.24629%200.012841C6.92017%200.0322695%208.79366%200.0596981%2010.4226%200.707527C12.1822%201.40764%2013.3472%202.6317%2014.5193%204.07227C15.3631%205.10838%2017.0206%207.31901%2017.8277%208.38638C18.4883%209.26147%2019.7813%2010.9912%2020.4874%2011.8281C21.3761%2012.8809%2022.4747%2014%2024.0005%2014C25.5263%2014%2026.6244%2012.881%2027.5127%2011.8292C28.2187%2010.9928%2029.5117%209.26204%2030.1728%208.38747C30.9789%207.3201%2032.6364%205.10947%2033.4807%204.07336C34.6549%202.63278%2035.8178%201.40873%2037.5769%200.708612C39.2063%200.0623839%2041.0803%200.0332981%2042.7532%200.0139267C44.5027%20-0.00601617%2046.2511%200.00318383%2048%200.00318383%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E");
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+.ea-fb__chip--active .ea-fb__chip-caret {
+  background: var(--color-brand-veeva-light-2);
+}
+.ea-fb__chip--active .ea-fb__chip-caret::before {
+  background-color: var(--color-brand-veeva);
+  /* arrow points UP when chip is active (sheet open) */
+  -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2248%22%20height%3D%2214%22%20viewBox%3D%220%200%2048%2014%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M48%2013.9979C46.2511%2013.9979%2044.5027%2014.007%2042.7537%2013.9872C41.0798%2013.9677%2039.2063%2013.9403%2037.5774%2013.2925C35.8178%2012.5924%2034.6528%2011.3683%2033.4807%209.92773C32.6369%208.89162%2030.9794%206.68099%2030.1723%205.61362C29.5117%204.73853%2028.2187%203.00876%2027.5126%202.1719C26.6239%201.1191%2025.5253%201.52588e-05%2023.9995%201.52588e-05C22.4737%201.52588e-05%2021.3756%201.11904%2020.4873%202.17081C19.7813%203.00716%2018.4883%204.73796%2017.8272%205.61253C17.0211%206.6799%2015.3636%208.89053%2014.5193%209.92664C13.3451%2011.3672%2012.1822%2012.5913%2010.4231%2013.2914C8.79366%2013.9376%206.91965%2013.9667%205.2468%2013.9861C3.49731%2014.006%201.74891%2013.9968%200%2013.9968%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E");
+          mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2248%22%20height%3D%2214%22%20viewBox%3D%220%200%2048%2014%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M48%2013.9979C46.2511%2013.9979%2044.5027%2014.007%2042.7537%2013.9872C41.0798%2013.9677%2039.2063%2013.9403%2037.5774%2013.2925C35.8178%2012.5924%2034.6528%2011.3683%2033.4807%209.92773C32.6369%208.89162%2030.9794%206.68099%2030.1723%205.61362C29.5117%204.73853%2028.2187%203.00876%2027.5126%202.1719C26.6239%201.1191%2025.5253%201.52588e-05%2023.9995%201.52588e-05C22.4737%201.52588e-05%2021.3756%201.11904%2020.4873%202.17081C19.7813%203.00716%2018.4883%204.73796%2017.8272%205.61253C17.0211%206.6799%2015.3636%208.89053%2014.5193%209.92664C13.3451%2011.3672%2012.1822%2012.5913%2010.4231%2013.2914C8.79366%2013.9376%206.91965%2013.9667%205.2468%2013.9861C3.49731%2014.006%201.74891%2013.9968%200%2013.9968%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E");
+}
+
+/* Trailing icon cluster — pinned right. Always visible regardless of
+   how many chips precede it. Vertical hairline on its left edge. */
+.ea-fb__tools {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  padding: 0 16px 0 12px;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--color-border-base);
+  position: relative;
+}
+
+/* Trailing tool icon — mask-driven via --icon CSS var.
+   Caller sets `style="--icon: url(.../线性-筛选.svg)"`.
+
+   IMPORTANT: `background-color` here is the FILL of the masked icon
+   (the mask clips the box to the icon's shape, so only the icon glyph
+   shows in this color — no rectangle is rendered). Idle = #666 gray;
+   Active = brand-veeva orange. The button bg itself stays transparent. */
+.ea-fb__tool {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background-color: var(--color-fg-h3);    /* idle icon color #666 */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+/* Active: ONLY the icon glyph turns orange. No background rectangle —
+   the masked region is the same icon shape, just recolored. */
+.ea-fb__tool--active,
+.ea-fb__tool[aria-pressed="true"] {
+  background-color: var(--color-brand-veeva);
+}
+
+/* ──────────────────────────────────────────────────────────
+   FILTER SHEET — drops out the bottom edge of .ea-filterbar
+   ────────────────────────────────────────────────────────── */
+
+.ea-fs {
+  background: var(--bg-surface);
+  font-family: var(--font-cn);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* "仅看空值" right-aligned switch row — used by all single-column
+   bodies (text / number / date)                                   */
+.ea-fs__nullonly {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  font-size: var(--fs-caption);
+  line-height: 20px;
+  color: var(--color-fg-2);
+}
+.ea-fs__switch {
+  width: 40px;
+  height: 20px;
+  border-radius: 100px;
+  background: var(--color-bg-input);
+  position: relative;
+  flex: 0 0 40px;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+.ea-fs__switch::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  transition: transform 160ms ease;
+}
+.ea-fs__switch[aria-checked="true"] {
+  background: var(--color-brand-veeva);
+}
+.ea-fs__switch[aria-checked="true"]::after {
+  transform: translateX(20px);
+}
+
+/* shared rounded text input */
+.ea-fs__input {
+  width: 100%;
+  height: var(--fs-row-h);
+  border: 1px solid var(--color-line-1);
+  border-radius: var(--fs-radius);
+  background: #fff;
+  padding: 0 16px;
+  font-family: inherit;
+  font-size: var(--fs-body-sm);
+  line-height: 20px;
+  color: var(--color-fg-2);
+  box-sizing: border-box;
+  outline: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ea-fs__input::placeholder { color: var(--color-fg-placeholder); }
+
+/* clear (✕) glyph used inside text input */
+.ea-fs__inline-clear {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgb(181,181,181);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  cursor: pointer;
+}
+.ea-fs__inline-clear::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' fill='none' stroke='white' stroke-width='1.4' stroke-linecap='round'><path d='M1 1l6 6M7 1l-6 6'/></svg>")
+    no-repeat center / contain;
+}
+
+/* ── BODY: TEXT / NUMBER / DATE (single column) ──────────── */
+
+.ea-fs__body {
+  background: #fff;
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.ea-fs--text .ea-fs__field { padding-bottom: 8px; }
+
+/* number / date have a stacked pair w/ a tiny separator */
+.ea-fs__pair {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.ea-fs__pair-sep {
+  position: relative;
+  margin: 0 auto;
+  width: 12px;
+  height: 1px;
+  border-radius: 100px;
+  background: var(--color-line-1);
+}
+
+/* date input has a calendar glyph on the right */
+.ea-fs__field--date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ea-fs__cal {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--color-fg-3);
+  flex: 0 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-fs__cal svg { width: 100%; height: 100%; }
+
+/* ── BODY: LOOKUP (single column, search + hint) ─────────── */
+
+.ea-fs--lookup .ea-fs__body { gap: 8px; }
+.ea-fs__selected {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  padding: 4px 0;
+  font-size: var(--fs-body);
+  line-height: 22px;
+}
+.ea-fs__selected-count { color: var(--color-fg-4); }
+.ea-fs__selected-count--has { color: var(--color-brand-veeva); }
+.ea-fs__selected-clear {
+  color: var(--color-brand-veeva);
+  background: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+.ea-fs__lookup-search {
+  width: 100%;
+  height: 36px;
+  border-radius: var(--r-circle);
+  border: 1px solid var(--color-line-1);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+.ea-fs__lookup-search--focus { border-color: var(--color-brand-veeva); }
+.ea-fs__lookup-search input {
+  flex: 1; min-width: 0;
+  border: 0; outline: 0; background: transparent;
+  font: inherit;
+  font-size: var(--fs-body-sm);
+  color: var(--color-fg-2);
+}
+.ea-fs__lookup-search input::placeholder { color: var(--color-fg-placeholder); }
+.ea-fs__lookup-hint {
+  font-size: var(--fs-caption);
+  line-height: 17px;
+  color: var(--color-fg-5);
+  padding: 4px 16px 8px;
+}
+
+/* ── BODY: PICKLIST (sidebar + options) ──────────────────── */
+
+.ea-fs--picklist .ea-fs__body,
+.ea-fs--picklist-search .ea-fs__body {
+  flex-direction: row;
+  padding: 0;
+  height: 340px;
+  overflow: hidden;
+}
+.ea-fs__sidebar {
+  flex: 0 0 var(--fs-side-w);
+  width: var(--fs-side-w);
+  background: var(--color-bg-input);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.ea-fs__sb-item {
+  position: relative;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: var(--fs-body);
+  line-height: 22px;
+  color: var(--color-fg-2);
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+.ea-fs__sb-item--active {
+  background: #fff;
+  color: var(--color-brand-veeva);
+  font-weight: var(--fw-medium);
+}
+.ea-fs__sb-item--active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--color-brand-veeva);
+}
+
+.ea-fs__options {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 0 16px;
+}
+.ea-fs__options-search {
+  padding: 8px 0;
+  flex: 0 0 auto;
+}
+.ea-fs__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 40px;
+  border-bottom: 1px solid var(--color-line-1);
+  font-size: var(--fs-body);
+  line-height: 22px;
+  color: var(--color-fg-2);
+}
+.ea-fs__option--checked { color: var(--color-brand-veeva); }
+.ea-fs__option:last-child { border-bottom: 0; }
+.ea-fs__option-label { flex: 1; min-width: 0; }
+.ea-fs__check {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--color-line-2);
+  border-radius: 3px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-fs__option--checked .ea-fs__check {
+  border-color: var(--color-brand-veeva);
+}
+.ea-fs__option--checked .ea-fs__check::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%23F7981D' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M2 5.4l2 2 4-4'/></svg>")
+    no-repeat center / contain;
+}
+
+/* ── FOOTER: 取消 / 重置 / 确定 ───────────────────────────── */
+
+.ea-fs__footer {
+  display: flex;
+  height: 47px;
+  background: var(--color-bg-input);
+  font-size: var(--fs-title);
+  align-items: center;
+  border-top: 1px solid var(--color-line-1);
+}
+.ea-fs__footer button {
+  flex: 1;
+  height: 100%;
+  background: 0;
+  border: 0;
+  font-family: inherit;
+  font-size: var(--fs-title);
+  cursor: pointer;
+  color: var(--color-fg-2);
+}
+.ea-fs__footer button.ea-fs__confirm {
+  color: var(--color-brand-veeva);
+  font-weight: var(--fw-medium);
+}
+
+/* dim layer for the rest of the page when sheet is open */
+.ea-fs__scrim {
+  position: absolute;
+  left: 0; right: 0; bottom: 0; top: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 0;
+}

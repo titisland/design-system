@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat shell — Chat AI Agent</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../chat-shell.css">
+<style>
+html, body { margin:0; padding:0; background:#F0F0F0; font-family:var(--font-cn); }
+.preview-page { max-width:920px; margin:0 auto; padding:32px 24px 80px; }
+
+.section-title {
+  font-size:11px; font-weight:600; color:#999; letter-spacing:0.08em;
+  text-transform:uppercase; margin:48px 0 16px;
+  border-top:1px solid #DDD; padding-top:24px;
+}
+.section-title:first-of-type { margin-top:0; border-top:none; padding-top:0; }
+.sub-label { font-size:11px; color:#AAA; margin-bottom:8px; }
+.note {
+  font-size:12px; color:#888; background:#FFF8E6;
+  border-left:3px solid #F7981D; padding:8px 12px;
+  border-radius:0 4px 4px 0; line-height:18px;
+}
+.note code { font-family:monospace; font-size:11px; color:#555; }
+
+.sample-canvas {
+  background: linear-gradient(180deg, #DDF1FF 0%, #F8FAFE 100%);
+  border-radius:8px; padding:16px 12px;
+  display:flex; flex-direction:column; gap:12px;
+  font-family:var(--font-cn);
+}
+</style>
+</head>
+<body>
+<div class="preview-page">
+
+  <!-- ══════════════════════════════════════════════
+       §1  CHAT HEADER
+       ══════════════════════════════════════════════ -->
+  <div class="section-title">1 · Chat header — .ea-chat-header</div>
+  <div class="note">
+    52 px white bar, 14 px top radius. X close (mask icon) on the left;
+    title <code>position:absolute</code> so it stays centred regardless of left/right content.
+  </div>
+
+  <div style="margin-top:16px;">
+    <div class="sub-label">Default — Veeva AI title</div>
+    <div style="width:375px;">
+      <header class="ea-chat-header" style="border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+        <button class="ea-chat-header__close" aria-label="关闭"
+                style="--icon:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22 fill=%22none%22 stroke=%22%23333%22 stroke-width=%221.8%22 stroke-linecap=%22round%22><line x1=%222%22 y1=%222%22 x2=%2214%22 y2=%2214%22/><line x1=%2214%22 y1=%222%22 x2=%222%22 y2=%2214%22/></svg>');
+                       background-color:var(--color-fg-h2);">
+        </button>
+        <h2 class="ea-chat-header__title">Veeva AI</h2>
+      </header>
+    </div>
+
+    <div class="sub-label" style="margin-top:16px;">Pre-Call Planner title variant</div>
+    <div style="width:375px;">
+      <header class="ea-chat-header" style="border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+        <button class="ea-chat-header__close" aria-label="关闭"
+                style="--icon:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22 fill=%22none%22 stroke=%22%23333%22 stroke-width=%221.8%22 stroke-linecap=%22round%22><line x1=%222%22 y1=%222%22 x2=%2214%22 y2=%2214%22/><line x1=%2214%22 y1=%222%22 x2=%222%22 y2=%2214%22/></svg>');
+                       background-color:var(--color-fg-h2);">
+        </button>
+        <h2 class="ea-chat-header__title">拜访前规划</h2>
+      </header>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       §2  HELLO MESSAGE (入场引导)
+       ══════════════════════════════════════════════ -->
+  <div class="section-title">2 · Hello message — .ea-chat-hello</div>
+  <div class="note">First component rendered in the canvas before any exchange. Brand greeting + quick-start actions.</div>
+
+  <div style="width:375px; margin-top:16px;">
+    <div class="sample-canvas">
+      <div class="ea-chat-hello">
+        <span class="ea-chat-hello__icon"
+              style="--icon:url('../assets/icons/ai-sparkle.svg');
+                     background-color:var(--color-brand-veeva);
+                     width:48px; height:48px;"></span>
+        <p class="ea-chat-hello__title">你好，我是 Veeva AI</p>
+        <p class="ea-chat-hello__sub">我可以帮你规划拜访、分析医生档案，并给出个性化建议。</p>
+      </div>
+      <div class="ea-chat-actions" style="justify-content:center; flex-wrap:wrap; gap:8px;">
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">规划今日拜访</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">查看重点医生</button>
+        <button class="ea-chat-action-btn ea-chat-action-btn--secondary">会议准备</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

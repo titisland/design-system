@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Search — 列表搜索</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=1">
+<link rel="stylesheet" href="../search.css?v=1">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8F8F8; font-family: var(--font-cn); }
+  .stage { padding: 24px; display: flex; flex-direction: column; gap: 28px; max-width: 960px; margin: 0 auto; }
+  h2.section { font-size: 28px; font-weight: 600; margin: 0 0 4px; color: #000; letter-spacing: 0.01em; }
+  .lede { font-size: 13px; color: #666; max-width: 60ch; margin: 0 0 4px; line-height: 1.55; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 24px 20px; }
+  .col-title {
+    font-size: 16px; font-weight: 500; margin: 0 0 8px; color: #000;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .col-title small { font-size: 11px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 400; }
+  .frame {
+    border: 1px dashed rgb(151,71,255);
+    border-radius: 5px;
+    background: #fff;
+    width: 440px;
+  }
+  .frame .ea-search + .ea-search {
+    border-top: 1px solid var(--color-line-1);
+  }
+  .legend { font-size: 12px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    line-height: 1.7; padding: 0 4px; }
+  .legend code { background: #ECECEC; padding: 1px 5px; border-radius: 3px; color: #333; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div>
+    <h2 class="section">Search</h2>
+    <p class="lede">列表搜索框 — 出现在所有列表页顶部，前后端两种检索模式。前端是即时过滤；后端需要触发请求，所以有个 <strong>搜索</strong> 触发按钮。</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- ============= Front-end search ============= -->
+    <div>
+      <div class="col-title">前端搜索 <small>·  即时过滤 · 无 trigger</small></div>
+      <div class="frame">
+
+        <!-- empty / blurred -->
+        <div class="ea-search">
+          <div class="ea-search__pill">
+            <span class="ea-search__icon">
+              <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64 0-6.43-5.21-11.64-11.64-11.64-6.43 0-11.64 5.21-11.64 11.64 0 6.43 5.21 11.64 11.64 11.64z"/></svg>
+            </span>
+            <input class="ea-search__input" placeholder="请输入要查找的名称">
+            <button class="ea-search__clear" aria-label="清空"></button>
+          </div>
+        </div>
+
+        <!-- focused empty -->
+        <div class="ea-search ea-search--focus">
+          <div class="ea-search__pill">
+            <span class="ea-search__icon">
+              <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64 0-6.43-5.21-11.64-11.64-11.64-6.43 0-11.64 5.21-11.64 11.64 0 6.43 5.21 11.64 11.64 11.64z"/></svg>
+            </span>
+            <input class="ea-search__input" placeholder="请输入" autofocus>
+            <button class="ea-search__clear" aria-label="清空"></button>
+          </div>
+        </div>
+
+        <!-- with value -->
+        <div class="ea-search ea-search--focus ea-search--has-value">
+          <div class="ea-search__pill">
+            <span class="ea-search__icon">
+              <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64 0-6.43-5.21-11.64-11.64-11.64-6.43 0-11.64 5.21-11.64 11.64 0 6.43 5.21 11.64 11.64 11.64z"/></svg>
+            </span>
+            <input class="ea-search__input" value="李大魁">
+            <button class="ea-search__clear" aria-label="清空"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= Back-end search ============= -->
+    <div>
+      <div class="col-title">后端搜索 <small>· 需触发 · trailing 搜索 button</small></div>
+      <div class="frame">
+
+        <div class="ea-search ea-search--with-action">
+          <div class="ea-search__pill">
+            <span class="ea-search__icon">
+              <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64 0-6.43-5.21-11.64-11.64-11.64-6.43 0-11.64 5.21-11.64 11.64 0 6.43 5.21 11.64 11.64 11.64z"/></svg>
+            </span>
+            <input class="ea-search__input" placeholder="请输入">
+            <button class="ea-search__clear" aria-label="清空"></button>
+          </div>
+          <button class="ea-search__action">搜索</button>
+        </div>
+
+        <div class="ea-search ea-search--with-action ea-search--focus">
+          <div class="ea-search__pill">
+            <span class="ea-search__icon">
+              <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64 0-6.43-5.21-11.64-11.64-11.64-6.43 0-11.64 5.21-11.64 11.64 0 6.43 5.21 11.64 11.64 11.64z"/></svg>
+            </span>
+            <input class="ea-search__input" placeholder="请输入">
+            <button class="ea-search__clear" aria-label="清空"></button>
+          </div>
+          <button class="ea-search__action">搜索</button>
+        </div>
+
+        <div class="ea-search ea-search--with-action ea-search--focus ea-search--has-value">
+          <div class="ea-search__pill">
+            <span class="ea-search__icon">
+              <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64 0-6.43-5.21-11.64-11.64-11.64-6.43 0-11.64 5.21-11.64 11.64 0 6.43 5.21 11.64 11.64 11.64z"/></svg>
+            </span>
+            <input class="ea-search__input" value="北京协和医院">
+            <button class="ea-search__clear" aria-label="清空"></button>
+          </div>
+          <button class="ea-search__action">搜索</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <div>container <code>60</code> tall · pill <code>36</code>·radius <code>100</code> · border <code>1px #EEE</code> · focus <code>1px #F7981D</code></div>
+    <div>icon <code>14×14 #999</code> · input <code>13/20 #333</code> · placeholder <code>#CCC</code> · clear <code>16 ✕ rgb(181,181,181)</code></div>
+    <div>action 搜索 <code>14/500 #F7981D</code> · gap <code>16</code> w/ action, <code>8</code> without</div>
+  </div>
+
+</div>
+
+<script>
+  // tiny: typing in any input flips --has-value, focus flips --focus
+  document.querySelectorAll('.ea-search').forEach(s => {
+    const input = s.querySelector('.ea-search__input');
+    const clear = s.querySelector('.ea-search__clear');
+    const sync = () => s.classList.toggle('ea-search--has-value', input.value.length > 0);
+    input.addEventListener('input', sync);
+    input.addEventListener('focus', () => s.classList.add('ea-search--focus'));
+    input.addEventListener('blur',  () => { if (!input.value) s.classList.remove('ea-search--focus'); });
+    clear.addEventListener('click', () => { input.value=''; sync(); input.focus(); });
+    sync();
+  });
+</script>
+</body>
+</html>

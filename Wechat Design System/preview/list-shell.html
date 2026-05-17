@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>List Shell — 列表壳</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../list-shell.css">
+<link rel="stylesheet" href="../navbar.css">
+<link rel="stylesheet" href="../search.css">
+<link rel="stylesheet" href="../filters.css">
+<link rel="stylesheet" href="../actions.css">
+<link rel="stylesheet" href="../prompts.css">
+<link rel="stylesheet" href="../lists.css">
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family: var(--font-cn); }
+  .stage { padding:24px; max-width:1100px; margin:0 auto; }
+  .group { background:var(--bg-surface); border:var(--border-default);
+            border-radius:12px; padding:18px 20px 22px; margin-bottom:20px; }
+  .group__title { font-size:16px; font-weight:500; color:#000; margin:0 0 4px; }
+  .group__sub { font-size:12px; color:#999; margin:0 0 14px;
+                 font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .label { font-size:11px; color:#999; margin:0 0 6px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .col-2 { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; }
+  .col-3 { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:16px; }
+
+  /* Phone canvas to host complete page demos */
+  .phone { width:440px; background:#fff; border:1px solid var(--color-border-base);
+            border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+  .phone__nav { height:88px; background:var(--color-brand-blue); color:#fff;
+                 display:flex; align-items:flex-end; padding:0 16px 12px; gap:14px;
+                 font-size:17px; font-weight:500; }
+  .phone__nav .nav-back, .phone__nav .nav-more {
+    width:24px; height:24px; background-color:currentColor;
+    -webkit-mask-position:center; -webkit-mask-size:contain; -webkit-mask-repeat:no-repeat;
+            mask-position:center;        mask-size:contain;        mask-repeat:no-repeat;
+  }
+  .phone__nav .nav-title { flex:1; text-align:center; font-size:17px; }
+
+  .phone__home { height:34px; background:#fff; display:flex; align-items:flex-start;
+                  justify-content:center; padding-top:21px; }
+  .phone__home::after { content:""; width:134px; height:5px; border-radius:3px;
+                         background:#000; opacity:0.85; }
+
+  .frame { background:#fff; padding:14px; border-radius:8px;
+            border:1px dashed #ddd; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ============== 1 · Full empty page (list-shell components) ============== -->
+  <div class="group">
+    <div class="group__title">1 · 列表-空占位 · 完整页面组合</div>
+    <div class="group__sub">NavBar + ea-list-tabs (overflow) + ea-list-empty + ea-list-count-bar + BAB + home indicator</div>
+
+    <div class="phone">
+      <!-- NavBar (ea-navbar) -->
+      <header class="ea-navbar">
+        <div class="ea-navbar__status">
+          <span class="ea-navbar__status-time">11:31</span>
+          <div class="ea-navbar__status-icons">
+            <div class="si-signal"><span></span><span></span><span></span><span></span></div>
+            <span>5G</span>
+            <div class="si-batt"><div class="si-batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="ea-navbar__row">
+          <div class="ea-navbar__leading">
+            <button type="button" class="ea-navbar__icon" aria-label="返回"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_126%29%22%3E%20%3Cpath%20d%3D%22M7.00032%2015.0313C7.00282%2015.3202%207.11425%2015.6083%207.33469%2015.8288L21.1715%2029.6656C21.6174%2030.1115%2022.3403%2030.1115%2022.7863%2029.6656C23.2322%2029.2196%2023.2322%2028.4967%2022.7863%2028.0508L9.74811%2015.0127L22.8116%201.94918C23.2575%201.5033%2023.2575%200.78031%2022.8116%200.33443C22.3657%20-0.111487%2021.6427%20-0.111487%2021.1968%200.33443L7.33444%2014.1968C7.10458%2014.4267%206.99322%2014.7301%207.00032%2015.0313Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_126%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+          <h1 class="ea-navbar__title">页面名称</h1>
+          <div class="ea-navbar__trailing">
+            <button type="button" class="ea-navbar__icon" aria-label="更多"
+              style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M4.28571%2017.2857C5.39029%2017.2857%206.28571%2016.3903%206.28571%2015.2857C6.28571%2014.1811%205.39029%2013.2857%204.28571%2013.2857C3.18114%2013.2857%202.28571%2014.1811%202.28571%2015.2857C2.28571%2016.3903%203.18114%2017.2857%204.28571%2017.2857ZM4.28571%2019.5714C1.91879%2019.5714%200%2017.6526%200%2015.2857C0%2012.9188%201.91879%2011%204.28571%2011C6.65264%2011%208.57143%2012.9188%208.57143%2015.2857C8.57143%2017.6526%206.65264%2019.5714%204.28571%2019.5714ZM15%2017.2857C16.1046%2017.2857%2017%2016.3903%2017%2015.2857C17%2014.1811%2016.1046%2013.2857%2015%2013.2857C13.8954%2013.2857%2013%2014.1811%2013%2015.2857C13%2016.3903%2013.8954%2017.2857%2015%2017.2857ZM15%2019.5714C12.6331%2019.5714%2010.7143%2017.6526%2010.7143%2015.2857C10.7143%2012.9188%2012.6331%2011%2015%2011C17.3669%2011%2019.2857%2012.9188%2019.2857%2015.2857C19.2857%2017.6526%2017.3669%2019.5714%2015%2019.5714ZM25.7143%2017.2857C26.8189%2017.2857%2027.7143%2016.3903%2027.7143%2015.2857C27.7143%2014.1811%2026.8189%2013.2857%2025.7143%2013.2857C24.6097%2013.2857%2023.7143%2014.1811%2023.7143%2015.2857C23.7143%2016.3903%2024.6097%2017.2857%2025.7143%2017.2857ZM25.7143%2019.5714C23.3474%2019.5714%2021.4286%2017.6526%2021.4286%2015.2857C21.4286%2012.9188%2023.3474%2011%2025.7143%2011C28.0812%2011%2030%2012.9188%2030%2015.2857C30%2017.6526%2028.0812%2019.5714%2025.7143%2019.5714Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')"></button>
+          </div>
+        </div>
+      </header>
+
+      <!-- ea-list-tabs -->
+      <div class="ea-list-tabs">
+        <div class="ea-list-tabs__strip">
+          <button type="button" class="ea-list-tabs__item ea-list-tabs__item--active">列表名称1</button>
+          <button type="button" class="ea-list-tabs__item">列表名称2</button>
+          <button type="button" class="ea-list-tabs__item">列表名称3</button>
+        </div>
+        <button type="button" class="ea-list-tabs__overflow" aria-label="所有列表">
+          <span class="ea-list-tabs__overflow-icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M28.7143%204.57143H1.28571C0.582857%204.57143%200%203.98857%200%203.28571C0%202.58286%200.582857%202%201.28571%202H28.7143C29.4171%202%2030%202.58286%2030%203.28571C30%203.98857%2029.4171%204.57143%2028.7143%204.57143ZM28.7143%2016.2286H1.28571C0.582857%2016.2286%200%2015.6457%200%2014.9429C0%2014.24%200.582857%2013.6571%201.28571%2013.6571H28.7143C29.4171%2013.6571%2030%2014.24%2030%2014.9429C30%2015.6457%2029.4171%2016.2286%2028.7143%2016.2286ZM28.7143%2027.8857H1.28571C0.582857%2027.8857%200%2027.3029%200%2026.6C0%2025.8971%200.582857%2025.3143%201.28571%2025.3143H28.7143C29.4171%2025.3143%2030%2025.8971%2030%2026.6C30%2027.3029%2029.4171%2027.8857%2028.7143%2027.8857Z%22%20fill%3D%22%23333333%22%2F%3E%3C%2Fsvg%3E')"></span>
+        </button>
+      </div>
+
+      <!-- ea-list-empty -->
+      <div class="ea-list-empty" style="flex:1; padding:0; min-height:280px;">
+        <div class="ea-list-empty__art" style="background-image: url('../assets/empty-no-data.png')"></div>
+        <div class="ea-list-empty__title">没有更多数据</div>
+      </div>
+
+      <!-- ea-list-count-bar -->
+      <div class="ea-list-count-bar">共计 0 条</div>
+
+      <!-- BAB single button -->
+      <div class="ea-bab">
+        <button type="button" class="ea-bab__btn">
+          <span class="ea-bab__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M24.3929%200C27.4896%200%2030%202.51039%2030%205.60714V24.3929C30%2027.4896%2027.4896%2030%2024.3929%2030H5.60714C2.51039%2030%200%2027.4896%200%2024.3929V5.60714C0%202.51039%202.51039%200%205.60714%200H24.3929ZM24.3929%202.28571H5.60714C3.79111%202.28571%202.3155%203.74318%202.28614%205.55221L2.28571%205.60714V24.3929C2.28571%2026.2089%203.74318%2027.6845%205.55221%2027.7139L5.60714%2027.7143H24.3929C26.2089%2027.7143%2027.6845%2026.2568%2027.7139%2024.4478L27.7143%2024.3929V5.60714C27.7143%203.79111%2026.2568%202.3155%2024.4478%202.28614L24.3929%202.28571ZM22.4286%2013.8571C23.0597%2013.8571%2023.5714%2014.3688%2023.5714%2015C23.5714%2015.6249%2023.0699%2016.1326%2022.4475%2016.1427L22.4286%2016.1429H16.1429V22.4286C16.1429%2023.0598%2015.6312%2023.5714%2015%2023.5714C14.3751%2023.5714%2013.8674%2023.0699%2013.8573%2022.4475L13.8571%2022.4286V16.1429H7.57143C6.94025%2016.1429%206.42857%2015.6312%206.42857%2015C6.42857%2014.3751%206.93007%2013.8674%207.5525%2013.8573L7.57143%2013.8571H13.8571V7.57143C13.8571%206.94025%2014.3688%206.42858%2015%206.42858C15.6249%206.42858%2016.1326%206.93008%2016.1427%207.5525L16.1429%207.57143V13.8571H22.4286Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')"></span>
+          <span class="ea-bab__label">按钮名称</span>
+        </button>
+      </div>
+
+      <div class="phone__home"></div>
+    </div>
+  </div>
+
+  <!-- ============== 2 · Tabs variants (Figma 1:1202) ============== -->
+  <div class="group">
+    <div class="group__title">2 · List Tabs — 多列表切换 (Figma 1:1202)</div>
+    <div class="group__sub">.ea-list-tabs · 第一个 active (orange underline) · overflow → hamburger 打开 picker</div>
+
+    <div class="col-2">
+      <div class="frame">
+        <p class="label">2 个 tabs</p>
+        <div class="ea-list-tabs">
+          <div class="ea-list-tabs__strip">
+            <button type="button" class="ea-list-tabs__item ea-list-tabs__item--active">列表名称1</button>
+            <button type="button" class="ea-list-tabs__item">列表名称2</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame">
+        <p class="label">多个 tabs (溢出 → hamburger)</p>
+        <div class="ea-list-tabs">
+          <div class="ea-list-tabs__strip">
+            <button type="button" class="ea-list-tabs__item ea-list-tabs__item--active">列表名称1</button>
+            <button type="button" class="ea-list-tabs__item">列表名称2列表名称2</button>
+            <button type="button" class="ea-list-tabs__item">列表名称3</button>
+          </div>
+          <button type="button" class="ea-list-tabs__overflow" aria-label="所有列表">
+            <span class="ea-list-tabs__overflow-icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M28.7143%204.57143H1.28571C0.582857%204.57143%200%203.98857%200%203.28571C0%202.58286%200.582857%202%201.28571%202H28.7143C29.4171%202%2030%202.58286%2030%203.28571C30%203.98857%2029.4171%204.57143%2028.7143%204.57143ZM28.7143%2016.2286H1.28571C0.582857%2016.2286%200%2015.6457%200%2014.9429C0%2014.24%200.582857%2013.6571%201.28571%2013.6571H28.7143C29.4171%2013.6571%2030%2014.24%2030%2014.9429C30%2015.6457%2029.4171%2016.2286%2028.7143%2016.2286ZM28.7143%2027.8857H1.28571C0.582857%2027.8857%200%2027.3029%200%2026.6C0%2025.8971%200.582857%2025.3143%201.28571%2025.3143H28.7143C29.4171%2025.3143%2030%2025.8971%2030%2026.6C30%2027.3029%2029.4171%2027.8857%2028.7143%2027.8857Z%22%20fill%3D%22%23333333%22%2F%3E%3C%2Fsvg%3E')"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="label" style="margin-top:14px">Picker 展开（点击 hamburger 后）</p>
+    <div class="frame" style="max-width:440px">
+      <div class="ea-list-tabs">
+        <div class="ea-list-tabs__strip">
+          <button type="button" class="ea-list-tabs__item ea-list-tabs__item--active">列表名称1</button>
+          <button type="button" class="ea-list-tabs__item">列表名称2</button>
+          <button type="button" class="ea-list-tabs__item">列表名称3</button>
+        </div>
+        <button type="button" class="ea-list-tabs__overflow" aria-expanded="true">
+          <span class="ea-list-tabs__overflow-icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M28.7143%204.57143H1.28571C0.582857%204.57143%200%203.98857%200%203.28571C0%202.58286%200.582857%202%201.28571%202H28.7143C29.4171%202%2030%202.58286%2030%203.28571C30%203.98857%2029.4171%204.57143%2028.7143%204.57143ZM28.7143%2016.2286H1.28571C0.582857%2016.2286%200%2015.6457%200%2014.9429C0%2014.24%200.582857%2013.6571%201.28571%2013.6571H28.7143C29.4171%2013.6571%2030%2014.24%2030%2014.9429C30%2015.6457%2029.4171%2016.2286%2028.7143%2016.2286ZM28.7143%2027.8857H1.28571C0.582857%2027.8857%200%2027.3029%200%2026.6C0%2025.8971%200.582857%2025.3143%201.28571%2025.3143H28.7143C29.4171%2025.3143%2030%2025.8971%2030%2026.6C30%2027.3029%2029.4171%2027.8857%2028.7143%2027.8857Z%22%20fill%3D%22%23333333%22%2F%3E%3C%2Fsvg%3E')"></span>
+        </button>
+      </div>
+      <div class="ea-list-tabs-picker">
+        <div class="ea-list-tabs-picker__head">
+          <span class="ea-list-tabs-picker__title">请选择</span>
+          <button type="button" class="ea-list-tabs-picker__close">
+            <span class="ea-list-tabs-picker__close-icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20clip-path%3D%22url%28%23clip0_42_137%29%22%3E%3Cpath%20d%3D%22M15%2013.3818L28.0467%200.335187C28.4935%20-0.111669%2029.218%20-0.111669%2029.6649%200.335187C30.1117%200.782044%2030.1117%201.50651%2029.6649%201.9534L16.6181%2015L29.6648%2028.0467C30.1117%2028.4935%2030.1117%2029.218%2029.6648%2029.6649C29.218%2030.1117%2028.4935%2030.1117%2028.0466%2029.6649L15%2016.6181L1.95333%2029.6648C1.50647%2030.1117%200.782008%2030.1117%200.335116%2029.6648C-0.111705%2029.218%20-0.111705%2028.4935%200.335116%2028.0466L13.3819%2015L0.335152%201.95333C-0.111705%201.50647%20-0.111705%200.782008%200.335152%200.335116C0.782009%20-0.111705%201.50647%20-0.111705%201.95336%200.335116L15%2013.3819V13.3818Z%22%20fill%3D%22%23333333%22%2F%3E%3C%2Fg%3E%3Cdefs%3E%3CclipPath%20id%3D%22clip0_42_137%22%3E%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3C%2Fsvg%3E')"></span>
+          </button>
+        </div>
+        <div class="ea-list-tabs-picker__grid">
+          <button type="button" class="ea-list-tabs-picker__chip ea-list-tabs-picker__chip--active">列表名称1</button>
+          <button type="button" class="ea-list-tabs-picker__chip">列表名称2列表名称2</button>
+          <button type="button" class="ea-list-tabs-picker__chip">列表名称3</button>
+          <button type="button" class="ea-list-tabs-picker__chip">列表名称4</button>
+          <button type="button" class="ea-list-tabs-picker__chip">列表名称5</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 3 · Standalone bits ============== -->
+  <div class="group">
+    <div class="group__title">3 · 月份导航 / Count Bar / Empty (单元素)</div>
+
+    <p class="label">.ea-list-month-nav</p>
+    <div class="frame" style="max-width:440px;margin-bottom:14px">
+      <div class="ea-list-month-nav">
+        <button type="button" class="ea-list-month-nav__btn">
+          <span class="ea-list-month-nav__btn-icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_126%29%22%3E%20%3Cpath%20d%3D%22M7.00032%2015.0313C7.00282%2015.3202%207.11425%2015.6083%207.33469%2015.8288L21.1715%2029.6656C21.6174%2030.1115%2022.3403%2030.1115%2022.7863%2029.6656C23.2322%2029.2196%2023.2322%2028.4967%2022.7863%2028.0508L9.74811%2015.0127L22.8116%201.94918C23.2575%201.5033%2023.2575%200.78031%2022.8116%200.33443C22.3657%20-0.111487%2021.6427%20-0.111487%2021.1968%200.33443L7.33444%2014.1968C7.10458%2014.4267%206.99322%2014.7301%207.00032%2015.0313Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_126%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></span>
+        </button>
+        <span class="ea-list-month-nav__label">2022-04</span>
+        <button type="button" class="ea-list-month-nav__btn">
+          <span class="ea-list-month-nav__btn-icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_127%29%22%3E%20%3Cpath%20d%3D%22M23.1457%2015.0313C23.1432%2015.3202%2023.0318%2015.6083%2022.8113%2015.8288L8.97455%2029.6656C8.52864%2030.1115%207.80569%2030.1115%207.35977%2029.6656C6.91389%2029.2196%206.91389%2028.4967%207.35977%2028.0508L20.3979%2015.0127L7.33444%201.94918C6.88852%201.5033%206.88852%200.78031%207.33444%200.33443C7.78032%20-0.111487%208.5033%20-0.111487%208.94918%200.33443L22.8116%2014.1968C23.0414%2014.4267%2023.1528%2014.7301%2023.1457%2015.0313Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_127%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></span>
+        </button>
+      </div>
+    </div>
+
+    <p class="label">.ea-list-count-bar</p>
+    <div class="frame" style="max-width:440px;margin-bottom:14px">
+      <div class="ea-list-count-bar">共计 13 条</div>
+    </div>
+
+    <p class="label">.ea-list-empty</p>
+    <div class="frame" style="max-width:440px">
+      <div class="ea-list-empty">
+        <div class="ea-list-empty__art" style="background-image: url('../assets/empty-no-data.png')"></div>
+        <div class="ea-list-empty__title">没有更多数据</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

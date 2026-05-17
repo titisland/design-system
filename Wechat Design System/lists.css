@@ -1,0 +1,418 @@
+/* Event Agent Design System — Standard list rows
+   --------------------------------------------------------
+   Veeva-China-CRM-style list rows. Two layouts:
+     • 简洁视图 (concise) — one row per item; status tag right
+     • 复杂视图 (detail)  — title row + key/value field rows
+
+   Row anatomy (concise):
+     [ avatar 40 ] [ title (+ optional inline @wechat) | status ]
+                   [ secondary content / link / 未填写 ]
+
+   Row anatomy (detail):
+     [ avatar 40 ] [ title | status ]
+                   [ field-key | field-value ] × N
+                   [ inline link row ]
+
+   Five status colors: 灰 / 橙 / 红 / 绿 / 无指定.
+
+   ── Avatar icon inheritance rule (IMPORTANT) ─────────────
+   The glyph inside `.ea-avatar` is NOT freely chosen. List
+   rows always inherit their avatar icon from the Homepage
+   business-icon entry (assets/icons/Homepage/Homepage-*.svg)
+   that the user tapped to enter the list:
+
+       Homepage entry            →  list avatar glyph
+       Homepage-我的医生.svg     →  Homepage-我的医生.svg
+       Homepage-我的医院.svg     →  Homepage-我的医院.svg
+       Homepage-我的产品.svg     →  Homepage-我的产品.svg
+       …
+
+   Always reference the Homepage svg directly; do not
+   substitute a 面性 / 线性 icon "that looks similar". This
+   keeps the entry → list visual handoff legible.
+   Pair with colors_and_type.css.
+
+   ── Row interaction rule ──────────────────────────────────
+   Every list row supports two levels of interaction:
+
+     1. Tapping the ROW ITSELF  → navigates to the detail page
+        of that record. Implement as a <button> (or <a>) with
+        the .ea-list__row--btn modifier applied.
+
+     2. Tapping a ROW ACTION BUTTON (from list-actions.css,
+        .ea-actions)  → triggers an in-context operation on
+        that record (e.g. log a visit, send a document, tag
+        as target) without leaving the list.
+
+   The two touch targets must never overlap. Row action buttons
+   live at the trailing edge and receive their own tap area;
+   the rest of the row is the navigation target.
+   ─────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Status palette (label color · tint bg) ────────────── */
+  --status-gray-fg:    var(--color-fg-h3);          /* #666 */
+  --status-gray-bg:    rgba(0,0,0,0.05);
+
+  --status-orange-fg:  var(--color-brand-veeva);     /* #F7981D */
+  --status-orange-bg:  rgba(247,152,29,0.1);
+
+  --status-red-fg:     var(--color-error);         /* #FF5543 */
+  --status-red-bg:     rgba(255,85,67,0.1);
+
+  --status-green-fg:   #06AE56;                    /* WeChat green */
+  --status-green-bg:   rgba(6,174,86,0.1);
+
+  --status-none-fg:    var(--color-fg-h4);          /* #999 */
+  --status-none-bg:    var(--color-bg-f5);      /* #F5F5F5 */
+
+  /* ── List sizing ───────────────────────────────────────── */
+  --list-row-pad-y:   12px;
+  --list-row-pad-x:   16px;
+  --list-row-gap:     12px;     /* avatar ↔ content */
+  --list-content-gap: 4px;      /* title ↔ secondary */
+  --list-divider:     1px solid var(--color-border-base);
+
+  --list-avatar-size: 40px;
+  --list-badge-size:  16px;
+
+  --list-empty-fg:    var(--color-fg-placeholder); /* #CCC "未填写" */
+  --list-link-fg:     var(--color-fg-link);      /* #2069D6 */
+  --list-wechat-fg:   #06AE56;                     /* @wechat name */
+}
+
+/* ── Container ────────────────────────────────────────────── */
+
+.ea-list {
+  background: var(--bg-surface);
+  font-family: var(--font-cn);
+  color: var(--fg-default);
+}
+.ea-list--card {
+  border: var(--border-default);
+  border-radius: var(--r-base);
+  overflow: hidden;
+}
+
+.ea-list__row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--list-row-gap);
+  padding: var(--list-row-pad-y) var(--list-row-pad-x);
+  border-bottom: var(--list-divider);
+  align-items: flex-start;
+}
+.ea-list__row:last-child { border-bottom: 0; }
+.ea-list__row:active { background: var(--color-bg-f5); }
+
+/* ── Row as navigation target (<button> reset) ────────────
+   Apply when the entire row taps to the detail page.
+   Resets <button> chrome without affecting the flex layout
+   defined above. Pair with an @click / href on the element.
+
+   Usage:
+     <button class="ea-list__row ea-list__row--btn" @click="goDetail(id)">
+       …
+     </button>                                                */
+.ea-list__row--btn {
+  width: 100%;
+  background: var(--color-bg-white);
+  border: 0;
+  border-bottom: var(--list-divider);   /* restore — <button> drops inherited border */
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.ea-list__row--btn:last-child { border-bottom: 0; }
+.ea-list__row--btn:focus-visible {
+  outline: 2px solid var(--color-veeva-blue);
+  outline-offset: -2px;
+}
+.ea-list__row--btn:focus:not(:focus-visible) { outline: none; }
+
+.ea-list__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--list-content-gap);
+}
+
+/* ── Title row ────────────────────────────────────────────── */
+
+.ea-list__title-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.ea-list__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-title);    /* 16 */
+  font-weight: var(--fw-medium); /* 500 */
+  color: var(--fg-title);        /* #000 */
+  line-height: 24px;
+  /* Default: clamp to 2 lines. Override with --clamp on the row. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+.ea-list__title--single {
+  -webkit-line-clamp: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+}
+.ea-list__wechat {
+  font-size: var(--fs-caption); /* 12 */
+  line-height: 18px;
+  color: var(--list-wechat-fg);
+  font-weight: var(--fw-regular);
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+/* ── Secondary content ────────────────────────────────────── */
+
+.ea-list__sub {
+  font-size: var(--fs-body);
+  line-height: 22px;
+  color: var(--fg-default);   /* #333 */
+  word-break: break-word;
+}
+.ea-list__sub--link { color: var(--list-link-fg); cursor: pointer; }
+.ea-list__sub--link:hover { text-decoration: underline; }
+.ea-list__empty {
+  font-size: var(--fs-body);
+  line-height: 22px;
+  color: var(--list-empty-fg); /* 未填写 */
+}
+
+/* ── Detail key/value rows ────────────────────────────────── */
+
+.ea-list__fields {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 12px;
+  row-gap: 4px;
+  margin-top: 4px;
+}
+.ea-list__fkey {
+  font-size: var(--fs-body);
+  color: var(--fg-muted);     /* #666 */
+  line-height: 22px;
+  white-space: nowrap;
+}
+.ea-list__fval {
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  line-height: 22px;
+  word-break: break-word;
+}
+.ea-list__fval--link { color: var(--list-link-fg); cursor: pointer; }
+.ea-list__fval--empty { color: var(--list-empty-fg); }
+
+/* ── File field (Figma 1:4133, 1:4569) ────────────────────────
+   When a list field's value is one or more files, wrap the
+   value with .ea-list__file. Each file = .ea-list__file-item:
+   a colored file-type icon + a Veeva-blue file-name link.
+   Multiple files stack vertically inside the same field. */
+
+.ea-list__file {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ea-list__file-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-body);
+  line-height: 22px;
+  color: var(--color-veeva-blue);   /* #007AFF — file name link */
+  text-decoration: none;
+  cursor: pointer;
+  word-break: break-all;
+}
+.ea-list__file-item:hover .ea-list__file-name { text-decoration: underline; }
+
+.ea-list__file-icon {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--color-file-other);
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+/* Locked file-type colors. Pair each modifier with the matching
+   file-type icon library file (see README → File field section): */
+.ea-list__file-icon--pdf    { background-color: var(--color-file-pdf); }
+.ea-list__file-icon--ppt    { background-color: var(--color-file-ppt); }
+.ea-list__file-icon--excel  { background-color: var(--color-file-excel); }
+.ea-list__file-icon--word   { background-color: var(--color-file-word); }
+.ea-list__file-icon--zip    { background-color: var(--color-file-zip); }
+.ea-list__file-icon--video  { background-color: var(--color-file-video); }
+.ea-list__file-icon--audio  { background-color: var(--color-file-audio); }
+.ea-list__file-icon--email  { background-color: var(--color-file-email); }
+.ea-list__file-icon--image  { background-color: var(--color-file-image); }
+.ea-list__file-icon--other  { background-color: var(--color-file-other); }
+
+.ea-list__file-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Status tag ───────────────────────────────────────────── */
+
+.ea-tag {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: var(--fs-body);
+  line-height: 20px;
+  font-weight: var(--fw-regular);
+  max-width: 96px;
+  word-break: break-all;
+  /* tag color set via modifier */
+}
+.ea-tag--gray   { background: var(--status-gray-bg);   color: var(--status-gray-fg); }
+.ea-tag--orange { background: var(--status-orange-bg); color: var(--status-orange-fg); }
+.ea-tag--red    { background: var(--status-red-bg);    color: var(--status-red-fg); }
+.ea-tag--green  { background: var(--status-green-bg);  color: var(--status-green-fg); }
+.ea-tag--none   { background: var(--status-none-bg);   color: var(--status-none-fg); }
+
+/* When stacked vertically (state-display-mode = aside) */
+.ea-list__status-aside {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-end;
+  max-width: 88px;
+}
+
+/* ── Avatar / 标识 ────────────────────────────────────────── */
+
+.ea-avatar {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--list-avatar-size);
+  height: var(--list-avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(68,159,215);  /* default doctor blue */
+  color: #fff;
+}
+.ea-avatar--soft {
+  background: rgb(230,242,255); /* hospital tint */
+  color: rgb(0,122,255);
+}
+.ea-avatar--neutral {
+  background: var(--color-bg-f5);
+  color: var(--fg-muted);
+}
+/* Homepage multicolor SVGs — no tinted background circle, icon renders at
+   full colour. Always use <img src="Homepage-*.svg"> inside this modifier.
+   Inherits the avatar size & border-radius from .ea-avatar. */
+.ea-avatar--homepage {
+  background: transparent;
+}
+.ea-avatar--homepage img {
+  object-fit: contain;   /* preserve SVG aspect ratio (not cover) */
+}
+.ea-avatar img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.ea-avatar svg { width: 60%; height: 60%; display: block; }
+
+/* Glyph helper: <span class="ea-avatar__glyph" style="--icon: url(...)"></span>
+   Lets us reference an icon from the library while inheriting the avatar
+   wrapper's `color` (white on tinted bg, etc.). */
+.ea-avatar__glyph {
+  width: 60%; height: 60%; display: block;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+/* Avatar wraps to allow overflow badges (badge isn't clipped) */
+.ea-avatar-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--list-avatar-size);
+  height: var(--list-avatar-size);
+}
+
+/* Bottom-right 16×16 badge */
+.ea-avatar-badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: var(--list-badge-size);
+  height: var(--list-badge-size);
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #fff;
+  box-shadow: 0 0 4px rgba(0,0,0,0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-avatar-badge--wechat { background: rgb(40,196,69); color: #fff; }
+.ea-avatar-badge--target { background: #fff; color: var(--color-fg-link); }
+.ea-avatar-badge svg { width: 10px; height: 10px; display: block; }
+
+.ea-avatar-badge__glyph {
+  width: 10px; height: 10px; display: block;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+/* Stack two badges (target + wechat) — wechat on top, target underneath, slight x-offset */
+.ea-avatar-badge--stacked-target { right: 6px; }

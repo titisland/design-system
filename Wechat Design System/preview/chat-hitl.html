@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HITL form — Chat AI Agent</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../lists.css">
+<link rel="stylesheet" href="../chat-shell.css">
+<link rel="stylesheet" href="../chat-cards.css">
+<style>
+html, body { margin:0; padding:0; background:#F8F8F8; font-family:var(--font-cn); color:var(--fg-default); }
+.preview-page { max-width:860px; margin:0 auto; padding:32px 24px 80px; }
+h2 { font-size:13px; font-weight:600; color:#999; letter-spacing:0.06em; text-transform:uppercase;
+      margin:48px 0 16px; border-top:1px solid #EEE; padding-top:24px; }
+h2:first-of-type { margin-top:0; }
+.swatch-row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+.label { font-size:12px; color:#999; margin-bottom:6px; }
+.note { font-size:12px; color:#888; background:#FFF8E6; border-left:3px solid #F7981D;
+         padding:8px 12px; border-radius:0 4px 4px 0; margin-top:12px; line-height:18px; }
+.note code { font-family:monospace; font-size:11px; color:#555; }
+
+</style>
+</head>
+<body>
+<div class="preview-page">
+  <!-- ═══════════════════════════════════════════════════════
+       8. HITL FORM
+       ═══════════════════════════════════════════════════════ -->
+  <h2>8. HITL form</h2>
+  <div class="swatch-row">
+
+    <!-- Full form example -->
+    <div style="width:320px;">
+      <div class="label">Form with text field + selection + group</div>
+      <div class="ea-hitl">
+        <div class="ea-hitl__label">李伟医生拜访计划</div>
+        <div class="ea-hitl__desc">请确认以下拜访计划内容，可直接修改后保存。</div>
+        <div class="ea-hitl__body">
+
+          <!-- Group field -->
+          <div class="ea-hitl-group">
+            <div class="ea-hitl-group__title">核心目标</div>
+            <!-- Text field — read-only -->
+            <div class="ea-hitl-field">
+              <div class="ea-hitl-field__label">拜访目标</div>
+              <div class="ea-hitl-field__text">推广 X 产品在高风险心血管患者群体中的适应症认知</div>
+            </div>
+          </div>
+
+          <!-- Text field — editable -->
+          <div class="ea-hitl-field ea-hitl-field--editing">
+            <div class="ea-hitl-field__label">沟通要点</div>
+            <textarea class="ea-hitl-field__textarea" rows="3">分享 REDUCE-IT 亚组分析数据，重点介绍中国真实世界安全性数据。</textarea>
+          </div>
+
+          <!-- Text field — violation -->
+          <div class="ea-hitl-field ea-hitl-field--violation">
+            <div class="ea-hitl-field__label">推荐理由</div>
+            <textarea class="ea-hitl-field__textarea" rows="2">X 产品是<mark class="ea-hitl-field__mark">最好的</mark>选择，具有无可比拟的优势。</textarea>
+            <div class="ea-hitl-field__violation">⚠️ 包含违规词：「最好的」「无可比拟」</div>
+          </div>
+
+          <!-- Selection field -->
+          <div class="ea-hitl-sel">
+            <div class="ea-hitl-sel__label">推荐随访资料</div>
+            <div class="ea-hitl-sel__options">
+              <label class="ea-hitl-sel__option">
+                <span class="ea-hitl-sel__checkbox ea-hitl-sel__checkbox--checked"></span>
+                <span class="ea-hitl-sel__opt-text">X 产品临床探索报告（2025）</span>
+              </label>
+              <label class="ea-hitl-sel__option">
+                <span class="ea-hitl-sel__checkbox ea-hitl-sel__checkbox--checked"></span>
+                <span class="ea-hitl-sel__opt-text">REDUCE-IT 亚组分析摘要</span>
+              </label>
+              <label class="ea-hitl-sel__option">
+                <span class="ea-hitl-sel__checkbox"></span>
+                <span class="ea-hitl-sel__opt-text">患者教育手册</span>
+              </label>
+            </div>
+          </div>
+
+        </div><!-- /.ea-hitl__body -->
+        <div class="ea-hitl__footer">
+          <button class="ea-chat-action-btn ea-chat-action-btn--primary" style="width:100%;justify-content:center;">保存为拜访计划</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+</body>
+</html>

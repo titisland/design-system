@@ -1,0 +1,228 @@
+/* Event Agent Design System — List Item Actions
+   ──────────────────────────────────────────────
+   Source: /item-action (item-action / item-action-更多)
+
+   Anatomy
+   ─────────────────────────────────────────────────────────
+   List rows can carry trailing **action buttons** below the
+   primary content area (28-tall pill outline buttons). When
+   the action set overflows the row, a leading "更多" label
+   on the left opens a popover menu.
+
+   Containers
+     .ea-actions          ── the action strip below an item.
+                              right-aligned row, gap 10, height 28,
+                              divider hairline below.
+     .ea-actions__more    ── leading "更多" gray text label
+                              (12 / #999, line-height 18). Sits
+                              flush-left, replaces a chip.
+     .ea-action           ── pill outline button. 28 tall,
+                              radius 100, border #E2E2E2,
+                              text 12 / #333. Min-width 64, but
+                              auto-grows for longer Chinese labels.
+     .ea-action--inline   ── tighter padding for action rows
+                              that hold many chips (12px sides).
+     .ea-action[disabled] ── #999 label (kept for parity).
+
+   Popover (overflow menu)
+     .ea-popover          ── 110×auto card, radius 8,
+                              shadow 0 0 8px rgba(0,0,0,0.15),
+                              padding 0 8px (rows align flush
+                              with hairline dividers).
+     .ea-popover__row     ── 44 tall, 12 padding, 14/#333,
+                              hairline #EEE between rows.
+     .ea-popover__row--danger    red text variant
+     .ea-popover__row--leading-icon  reserved 12×12 leading slot
+
+   Spec sources
+     edit/更新 buttons     1:9907 (frame "矩形")
+     overflow row chips    1:10043 (Frame23)
+     popover menu          1:10188 (Frame1032)
+     更多 label            1:10043 — 12/18, color rgb(153,153,153)
+*/
+
+:root {
+  --action-h:           28px;
+  --action-pad-x:       20px;       /* default — single-row 编辑/更新 */
+  --action-pad-x-tight: 12px;       /* multi-button overflow row */
+  --action-gap:         10px;
+  --action-row-h:       40px;       /* container incl. hairline */
+  --action-fs:          12px;
+  --action-lh:          18px;
+
+  --more-fg:            var(--color-fg-3);   /* #666 */
+  --more-fg-muted:      var(--color-fg-4);   /* #999 in spec */
+
+  --popover-w:          110px;
+  --popover-r:          8px;
+  --popover-row-h:      44px;
+  --popover-row-pad:    12px;
+  --popover-shadow:     0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ──────────────────────────────────────────────────────────
+   ACTION STRIP — appears below a list item's content
+   Sits inside .ea-list__row's body column, or as its own
+   row at the bottom of an item card.
+   ────────────────────────────────────────────────────────── */
+
+.ea-actions {
+  position: relative;
+  height: var(--action-row-h);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--action-gap);
+  padding: 0;
+  border-bottom: 1px solid var(--color-line-1);
+}
+
+/* Right-align the buttons by default — "更多" leading label
+   pushes them right via margin-left:auto on the chip group. */
+.ea-actions > .ea-actions__more + .ea-actions__group,
+.ea-actions > .ea-actions__group {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  gap: var(--action-gap);
+  align-items: center;
+}
+
+/* Leading 更多 label */
+.ea-actions__more {
+  font-family: var(--font-cn);
+  font-size: var(--action-fs);
+  line-height: var(--action-lh);
+  color: var(--more-fg-muted);
+  font-weight: var(--fw-regular);
+  user-select: none;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.ea-actions__more:active { color: var(--color-fg-2); }
+
+/* ──────────────────────────────────────────────────────────
+   ACTION BUTTON — pill outline
+   ────────────────────────────────────────────────────────── */
+
+.ea-action {
+  height: var(--action-h);
+  min-width: 64px;
+  padding: 4px var(--action-pad-x);
+  border: 1px solid #E2E2E2;
+  border-radius: var(--r-circle);
+  background: var(--bg-surface);
+  font-family: var(--font-cn);
+  font-size: var(--action-fs);
+  line-height: var(--action-lh);
+  color: var(--color-fg-2);
+  text-align: center;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s ease;
+}
+.ea-action:active {
+  background: var(--color-bg-input);
+}
+.ea-action[disabled],
+.ea-action--disabled {
+  color: var(--color-fg-4);
+  cursor: default;
+}
+
+/* Tighter horizontal padding for overflow-mode rows
+   that have to fit 4+ chips on a 343 row. */
+.ea-action--tight {
+  min-width: 0;
+  padding: 4px var(--action-pad-x-tight);
+}
+
+/* Variant: primary AI orange (used sparingly — confirmed
+   actions like 跟进/确认 inside the row) */
+.ea-action--primary {
+  border-color: var(--color-brand-veeva-light-6);
+  color: var(--fg-ai);
+}
+.ea-action--primary:active {
+  background: var(--color-brand-veeva-light-2);
+}
+
+/* Variant: danger destructive */
+.ea-action--danger {
+  border-color: rgba(255, 85, 67, 0.4);
+  color: var(--fg-danger);
+}
+
+/* ──────────────────────────────────────────────────────────
+   POPOVER MENU (more-overflow)
+   ────────────────────────────────────────────────────────── */
+
+.ea-popover {
+  position: relative;
+  width: var(--popover-w);
+  background: var(--bg-surface);
+  border-radius: var(--popover-r);
+  box-shadow: var(--popover-shadow);
+  padding: 0 var(--sp-2);              /* 0 8 — rows are flush */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-cn);
+}
+
+.ea-popover__row {
+  height: var(--popover-row-h);
+  padding: var(--popover-row-pad);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-body);
+  color: var(--color-fg-2);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--color-line-1);
+  background: transparent;
+}
+.ea-popover__row:last-child { border-bottom: 0; }
+.ea-popover__row:active { background: var(--color-bg-input); }
+
+/* Leading icon slot — 12×12 to match figma */
+.ea-popover__icon {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-fg-2);
+}
+.ea-popover__icon svg { width: 100%; height: 100%; display: block; }
+
+.ea-popover__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ea-popover__row--danger { color: var(--fg-danger); }
+.ea-popover__row--danger .ea-popover__icon { color: var(--fg-danger); }
+
+.ea-popover__row--disabled {
+  color: var(--color-fg-4);
+  cursor: default;
+}
+
+/* Anchored variant — for live overlay positioning above a
+   list item. Designers can override left/top inline; this
+   just sets z-index and the safe absolute base. */
+.ea-popover--anchored {
+  position: absolute;
+  z-index: 30;
+}

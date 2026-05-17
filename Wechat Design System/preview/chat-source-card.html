@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; background: #F8F8F8; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card {
+    background: rgba(255,255,255,0.9);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex; gap: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  }
+  .thumb {
+    width: 48px; height: 48px; border-radius: 4px; flex-shrink: 0;
+    background: url("../assets/sample-doctor.jpg") center/cover no-repeat #ddd;
+  }
+  .body { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+  .ttl { font: 400 14px/22px var(--font-han); color: #333;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .meta-row { display: flex; gap: 8px; align-items: center; font: 400 14px/18px var(--font-roman); color: #666; }
+  .footer { display: flex; gap: 8px; align-items: center; justify-content: flex-end; margin-top: auto; }
+  .pg { font: 400 12px/18px var(--font-roman); color: #999; }
+  .btn-blue {
+    background: rgba(0,122,255,0.15);
+    color: #007AFF;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font: 500 13px/16px var(--font-han);
+  }
+</style></head><body>
+  <div class="grid">
+    <div class="card">
+      <div class="thumb"></div>
+      <div class="body">
+        <div class="ttl">老年高血压患者使用克洛凯添加治疗的健康资源使用和费用分析</div>
+        <div class="meta-row"><span>2024年发布</span></div>
+        <div class="footer"><span class="pg">第 15 页</span><span class="btn-blue">查看原文</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="thumb"></div>
+      <div class="body">
+        <div class="ttl">维我替尼一线治疗晚期胃癌患者的长期获益数据综述</div>
+        <div class="meta-row"><span>2025年发布</span></div>
+        <div class="footer"><span class="pg">第 3 页</span><span class="btn-blue">查看原文</span></div>
+      </div>
+    </div>
+  </div>
+</body></html>

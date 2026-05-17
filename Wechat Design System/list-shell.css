@@ -1,0 +1,313 @@
+/* WeChat Design System — List Shell (residuals)
+   --------------------------------------------------------
+   Source: Figma "WeChat_列表、搜索、筛选" (XAOwZ67DO4lykc3lfB0pjR)
+   nodes 1:1202, 1:1836, 1:3557.
+
+   This file holds list-shell pieces that aren't covered by
+   the dedicated component files:
+
+     • .ea-list-tabs           — multi-list switcher (Figma 1:1202)
+     • .ea-list-tabs-picker    — full-bleed picker sheet
+     • .ea-list-month-nav      — `< 2022-04 >` period selector
+     • .ea-list-count-bar      — bottom "共计 13 条" gray strip
+     • .ea-list-empty          — empty state placeholder
+
+   The other list-shell concerns each live in their own files:
+     • Search pill         → search.css (.ea-search)
+     • Filter bar + sheets → filters.css (.ea-filterbar, .ea-fs)
+     • Item-level actions  → list-actions.css (.ea-actions)
+     • Page-level actions  → actions.css (.ea-bab — single button = bottom add)
+     • Data scope picker   → data-scope.css (.ea-ds)
+     • File-type fields    → lists.css (.ea-list__file)
+
+   ── Icon source (HARD) ─────────────────────────────────
+   All icons here come from `assets/icons/线性/线性-*.svg`
+   (rendered via the CSS mask pattern, color from currentColor).
+   No 面性 / Homepage / emoji.
+   ─────────────────────────────────────────────────────── */
+
+:root {
+  /* List Tabs */
+  --lt-h:            44px;
+  --lt-active-fg:    var(--color-brand-veeva);     /* orange — active label */
+  --lt-active-bar:   var(--color-brand-veeva);     /* underline */
+  --lt-idle-fg:      var(--fg-muted);              /* #666 */
+  --lt-bar-h:        2px;
+
+  /* Tab picker */
+  --ltp-bg:          var(--color-bg-white);
+  --ltp-shadow:      0 12px 24px rgba(0, 0, 0, 0.08);
+  --ltp-pad:         16px;
+
+  /* Count bar / add bar */
+  --lcb-bg:          var(--color-bg-f5);
+  --lcb-fg:          var(--fg-subtle);             /* #999 */
+  --lcb-h:           28px;
+  --lcb-fs:          var(--fs-caption);            /* 12 */
+}
+
+
+/* ============================================================
+   1. LIST TABS                                  (Figma 1:1202)
+   ============================================================ */
+
+.ea-list-tabs {
+  display: flex;
+  align-items: stretch;
+  height: var(--lt-h);
+  background: var(--color-bg-white);
+  border-bottom: 1px solid var(--color-border-base);
+  font-family: var(--font-cn);
+  position: relative;
+}
+
+.ea-list-tabs__strip {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ea-list-tabs__strip::-webkit-scrollbar { display: none; }
+
+.ea-list-tabs__item {
+  flex: 0 0 auto;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  font-size: var(--fs-body);
+  color: var(--lt-idle-fg);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ea-list-tabs__item--active {
+  color: var(--lt-active-fg);
+  font-weight: var(--fw-medium);
+}
+.ea-list-tabs__item--active::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  height: var(--lt-bar-h);
+  background: var(--lt-active-bar);
+  border-radius: var(--r-base) var(--r-base) 0 0;
+}
+
+/* Hamburger button at the right edge — opens the picker
+   Icon: assets/icons/线性/线性-更多2.svg (三横线 ≡) */
+.ea-list-tabs__overflow {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 100%;
+  background: var(--color-bg-white);
+  border: 0;
+  border-left: 1px solid var(--color-border-base);
+  cursor: pointer;
+  color: var(--fg-default);
+}
+.ea-list-tabs__overflow-icon {
+  width: 12px;
+  height: 12px;
+  background-color: #333;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+
+/* ============================================================
+   2. LIST TABS PICKER                            (Figma 1:1202)
+   ============================================================
+   Slides down under the tabs. Header with "请选择" + close X,
+   then a chip grid of all tabs. Active chip in brand-veeva. */
+
+.ea-list-tabs-picker {
+  background: var(--ltp-bg);
+  border-bottom-left-radius: var(--r-round);
+  border-bottom-right-radius: var(--r-round);
+  box-shadow: var(--ltp-shadow);
+  padding: var(--ltp-pad);
+  font-family: var(--font-cn);
+}
+
+.ea-list-tabs-picker__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.ea-list-tabs-picker__title {
+  font-size: var(--fs-title);
+  font-weight: var(--fw-medium);
+  color: var(--fg-title);
+}
+/* Icon: assets/icons/线性/线性-取消.svg (× 叉) */
+.ea-list-tabs-picker__close {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--fg-muted);
+}
+.ea-list-tabs-picker__close-icon {
+  width: 12px;
+  height: 12px;
+  display: block;
+  background-color: #333;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+/* Chip grid of tabs */
+.ea-list-tabs-picker__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ea-list-tabs-picker__chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--r-circle);
+  background: var(--color-bg-f5);
+  color: var(--fg-default);
+  font-size: var(--fs-body);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.ea-list-tabs-picker__chip--active {
+  background: var(--color-brand-veeva-light-2);
+  color: var(--color-brand-veeva);
+  border-color: var(--color-brand-veeva);
+}
+
+
+/* ============================================================
+   3. MONTH / PERIOD NAV                          (Figma 1:1836)
+   ============================================================
+   `< 2022-04 >` centered selector above the list. */
+
+.ea-list-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 44px;
+  background: var(--color-bg-white);
+  border-bottom: 1px solid var(--color-border-base);
+  font-family: var(--font-cn);
+}
+.ea-list-month-nav__btn {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--fg-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-list-month-nav__btn-icon {
+  width: 16px;
+  height: 16px;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+.ea-list-month-nav__label {
+  font-size: var(--fs-title);
+  font-weight: var(--fw-medium);
+  color: var(--fg-title);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ============================================================
+   4. COUNT BAR                                   (Figma 1:1836)
+   ============================================================
+   Thin gray strip after the last list row, "共计 13 条". */
+
+.ea-list-count-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--lcb-h);
+  background: var(--lcb-bg);
+  color: var(--lcb-fg);
+  font-size: var(--lcb-fs);
+  font-family: var(--font-cn);
+}
+
+
+/* ============================================================
+   5. EMPTY STATE                                 (Figma 1:3557)
+   ============================================================
+   "没有更多数据" with an icon-library illustration.
+
+   IMPORTANT — empty-state art comes from the icon library too:
+     • Default: 面性/面性-空文件.svg (filled empty-file glyph)
+     • Other valid choices in the same family: 面性/面性-其他文件.svg,
+       面性/面性-文件夹.svg
+   Do NOT inline a hand-drawn <svg> here — render the chosen
+   library icon via the same mask pattern as everywhere else. */
+
+.ea-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  font-family: var(--font-cn);
+  color: var(--fg-subtle);
+}
+.ea-list-empty__art {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 16px;
+  /* PNG illustration — assets/empty-no-data.png (set via background-image, not mask) */
+  background-image: var(--empty-art, none);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.ea-list-empty__title {
+  font-size: var(--fs-body);
+  color: var(--fg-subtle);
+}

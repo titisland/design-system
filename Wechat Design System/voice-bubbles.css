@@ -1,0 +1,118 @@
+/* =========================================================
+   Voice Call Voice Agent — Chat Bubbles
+   voice-bubbles.css
+   ─────────────────────────────────────────────────────────
+   Left-side agent bubbles + right-side user (voice) bubbles.
+   The cyan→mint gradient on user bubbles is the product's
+   single strongest visual signature.
+
+   Depends on: colors_and_type.css
+   ========================================================= */
+
+/* ── Shared bubble base ── */
+.vc-bubble-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.vc-bubble-row--user {
+  flex-direction: row-reverse;
+}
+
+/* ── Mascot avatar (28×28, pill) ── */
+.vc-bubble-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--vc-r-pill);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+/* ── Agent text bubble (left, soft gray) ── */
+.vc-bubble {
+  max-width: 88%;
+  background: var(--color-bg-f8);   /* #F8F8F8 */
+  border-radius: var(--vc-r-bubble);
+  padding: 16px;
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  line-height: 20px;
+  color: var(--fg-default);
+}
+
+/* ── User voice bubble (right, cyan→mint gradient) ──
+   ⚠️ Always use the 3-stop --vc-voice-gradient.
+      Never simplify to 2 stops or invent new stops. ── */
+.vc-bubble--user {
+  background: var(--vc-voice-gradient);
+  color: var(--fg-default);  /* #333 — dark text on light gradient */
+}
+
+/* ── Agent info card variant (wider, no avatar) ── */
+.vc-bubble--card {
+  max-width: 100%;
+  background: var(--color-bg-f8);
+}
+
+/* ── Onboarding greeting card ── */
+.vc-bubble--onboarding {
+  background: var(--color-bg-f8);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.vc-bubble-onboarding__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vc-bubble-onboarding__mascot {
+  /* 52×52 mascot + halo ring */
+  width: 52px;
+  height: 52px;
+  border-radius: var(--vc-r-pill);
+  background: var(--vc-voice-halo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.vc-bubble-onboarding__mascot img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.vc-bubble-onboarding__greeting {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--fg-default);
+  line-height: 20px;
+}
+
+/* ── "Creating report" hero bubble (gradient, centered) ── */
+.vc-bubble--creating {
+  background: var(--vc-voice-gradient);
+  border-radius: var(--vc-r-bubble);
+  padding: 20px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+}
+.vc-bubble-creating__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--vc-r-pill);
+  background: var(--vc-voice-halo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.vc-bubble-creating__text {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  line-height: 20px;
+}

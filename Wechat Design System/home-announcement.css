@@ -1,0 +1,97 @@
+/* WeChat Design System — Home Announcement (公告条)
+   --------------------------------------------------------
+   Source: Figma 首页_WeChat (JO8xVSc8EDUiyPWZizfGsu) node 6:2026.
+
+   Single-line scrolling notice strip with a leading speaker
+   icon and a trailing chevron link. Sits between the entry
+   grid and the resource navigation.
+
+   Spec:
+     • Height       — 32px
+     • Background   — light orange tint (15% Brand-Veeva wash)
+     • Speaker icon — 16×16, brand-veeva color, mask-driven
+                       (assets/icons/面性/面性-公告.svg)
+     • Body text    — 13 / 400 / #333, single line, ellipsis
+                       (or marquee scroll if app supports)
+     • Trailing     — chevron right (面性/面性-Popover向上箭头.svg
+                       rotated 90° via CSS, OR a separate icon
+                       like 线性/线性-向右方向.svg)
+
+   ── Icon rule ─────────────────────────────────────────────
+   Speaker — assets/icons/面性/面性-公告.svg
+   Chevron — assets/icons/线性/线性-向右方向.svg
+   ────────────────────────────────────────────────────────── */
+
+:root {
+  --ha-h:            32px;
+  --ha-pad-x:        12px;
+  --ha-bg:           var(--color-brand-veeva-light-2);  /* 15% orange */
+  --ha-fg:           var(--color-fg-h2);                /* #333 */
+  --ha-icon-color:   var(--color-brand-veeva);
+  --ha-icon-size:    16px;
+  --ha-chevron-size: 12px;
+  --ha-chevron-fg:   var(--color-fg-h4);                /* #999 */
+}
+
+.ea-home-announcement {
+  width: 100%;
+  height: var(--ha-h);
+  padding: 0 var(--ha-pad-x);
+  background: var(--ha-bg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);
+  color: var(--ha-fg);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ea-home-announcement__icon {
+  flex: 0 0 var(--ha-icon-size);
+  width: var(--ha-icon-size);
+  height: var(--ha-icon-size);
+  background-color: var(--ha-icon-color);
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+.ea-home-announcement__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 18px;
+}
+
+/* Inline link to the announcement detail (e.g. "查看") */
+.ea-home-announcement__link {
+  flex: 0 0 auto;
+  color: var(--color-veeva-blue);
+  text-decoration: none;
+  font-size: var(--fs-body-sm);
+  cursor: pointer;
+}
+
+.ea-home-announcement__chevron {
+  flex: 0 0 var(--ha-chevron-size);
+  width: var(--ha-chevron-size);
+  height: var(--ha-chevron-size);
+  background-color: var(--ha-chevron-fg);
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}

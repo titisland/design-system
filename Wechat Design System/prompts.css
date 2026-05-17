@@ -1,0 +1,412 @@
+/* Event Agent Design System — Prompts (提示)
+   --------------------------------------------------------
+   Five feedback / alert components, sourced from the Figma
+   "提示" file (node-ids 2:24, 2:54, 2:160, 2:178, 2:195):
+
+     1. Toast              — lightweight global feedback
+     2. Dialog             — standard interrupting dialog (confirm / alert / custom-message / prompt)
+     3. Fixed bottom hint  — pinned info bar above a form / list
+     4. Field-level hint   — inline / pop-inline help under a field
+     5. Inpage soft reminder — multi-line warning card inside a tab
+
+   All icons MUST come from assets/icons/ and are rendered via
+   the CSS mask pattern so color is driven by `currentColor`.
+   Pair with colors_and_type.css. */
+
+:root {
+  /* ── Status palette specific to prompts ──────────────── */
+  /* All status colors come from the global tokens in
+     colors_and_type.css; only the tinted backgrounds (rgba) are
+     defined locally because they're component-specific. */
+  --pr-success-fg:   var(--color-success);        /* #00DF93 */
+  --pr-success-bg:   rgba(0, 223, 147, 0.18);
+
+  --pr-fail-fg:      var(--color-error);          /* #FF5543 */
+  --pr-fail-bg:      rgba(255, 85, 67, 0.18);
+
+  --pr-warning-fg:   var(--color-warning);          /* #FFCC00 — yellow per new spec */
+  --pr-warning-bg:   var(--color-warning-light-2);  /* 15% yellow tint */
+
+  --pr-hint-fg:      #7788a2;                     /* slate body text (Toast hint only) */
+  --pr-hint-icon:    var(--color-fg-placeholder);   /* matches Modal Confirm icon */
+  --pr-hint-bg:      rgba(119, 136, 162, 0.14);
+
+  /* Bottom-fixed prompt fills */
+  --pr-bottom-gray:  var(--color-fg-placeholder);
+  --pr-bottom-warn:  var(--color-warning);
+  --pr-bottom-fail:  var(--color-error);
+
+  /* Modal */
+  --pr-dialog-w:      300px;
+  --pr-dialog-radius: var(--r-round);     /* 20px — large card surface in new scale */
+  --pr-dialog-pad-x:  20px;
+  --pr-dialog-pad-y:  18px;
+  --pr-dialog-divider: 1px solid var(--color-border-base);
+  --pr-dialog-bg:     var(--color-bg-white);
+  --pr-dialog-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+
+  /* Field-level pop-inline tint (light blue wash) */
+  --pr-pop-bg:       var(--color-bg-extra-blue-2);   /* 5% #007AFF wash */
+  --pr-pop-fg:       var(--color-blue);
+
+  /* Inpage reminder */
+  --pr-reminder-bg:  var(--color-bg-f5);
+  --pr-reminder-title: var(--color-brand-veeva);
+  --pr-reminder-body:  var(--color-fg-h3);
+  --pr-reminder-dot:   var(--color-brand-veeva);
+}
+
+
+/* ============================================================
+   1. TOAST                                          (Figma 2:24)
+   ============================================================
+   Anatomy: 16px/16 icon · 8 gap · text · 12/16 padding · radius 6
+   Width:   default 375 (mobile column); wraps at content. */
+
+.ea-toast {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 200px;
+  max-width: 375px;
+  padding: 12px 16px;
+  border-radius: var(--r-base);    /* 4px — was 6, snapped to scale */
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);       /* 14px */
+  line-height: 22px;
+  color: var(--fg-default);
+}
+
+.ea-toast__icon {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;               /* optical align with first text line */
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+.ea-toast__text { flex: 1 1 auto; min-width: 0; word-break: break-word; }
+
+.ea-toast--success {
+  background: var(--pr-success-bg);
+  color: var(--pr-success-fg);
+}
+.ea-toast--success .ea-toast__text { color: var(--fg-default); }
+
+.ea-toast--fail {
+  background: var(--pr-fail-bg);
+  color: var(--pr-fail-fg);
+}
+.ea-toast--fail .ea-toast__text { color: var(--fg-default); }
+
+.ea-toast--warning {
+  background: var(--pr-warning-bg);
+  color: var(--pr-warning-fg);
+}
+.ea-toast--warning .ea-toast__text { color: var(--fg-default); }
+
+.ea-toast--hint {
+  background: var(--pr-hint-bg);
+  color: var(--pr-hint-icon);
+}
+.ea-toast--hint .ea-toast__text { color: var(--pr-hint-fg); }
+
+
+/* ============================================================
+   2. DIALOG                                         (Figma 2:54
+                                                    & 158:276)
+   ============================================================
+   Standard interrupting dialog. Three canonical Figma variants:
+
+     • confirm         — gray ! icon + title + (optional desc)
+                          + side-by-side [取消][主按钮名称]
+     • alert           — red ! icon  + title + (optional desc)
+                          + single full-width [主按钮名称]
+     • custom-message  — gray ! icon + title + desc
+                          + stacked primary buttons, then 取消
+
+     (• prompt — title + .ea-dialog__input + actions; kept as a
+        utility variant beyond the 3 canonical Figma ones.)
+
+   Shell: 300px wide, white card, --r-round (20px) radius,
+   --shadow-base elevation, hairline divider above actions,
+   actions row split 1:1 by a vertical hairline. */
+
+.ea-dialog {
+  width: var(--pr-dialog-w);
+  background: var(--pr-dialog-bg);
+  border-radius: var(--pr-dialog-radius);
+  box-shadow: var(--pr-dialog-shadow);
+  font-family: var(--font-cn);
+  overflow: hidden;
+}
+
+.ea-dialog__body {
+  padding: 24px var(--pr-dialog-pad-x) var(--pr-dialog-pad-y);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+/* Icon = filled solid circle with cut-out glyph. Color is LOCKED by
+   category — see the 4 canonical variants below. The icon shape itself
+   comes from the icon library and is applied via CSS mask, so the
+   `background-color` (= the locked category color) becomes the visible
+   filled-circle color, and the carved-out glyph (check / cross / !)
+   shows the parent dialog's background through (= white). */
+.ea-dialog__icon {
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-fg-placeholder);   /* default = confirm gray */
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+/* ── 4 canonical Dialog message categories (Figma 94:48) ──
+   These are the ONLY locked color/icon pairings. Pair each
+   category modifier with the matching icon library file:
+
+     .ea-dialog__icon--confirm   →  面性/面性-警示-实色.svg
+     .ea-dialog__icon--alert     →  面性/面性-警示-实色.svg
+     .ea-dialog__icon--error     →  面性/面性-Toast-报错.svg
+     .ea-dialog__icon--success   →  面性/面性-Toast-成功.svg
+*/
+.ea-dialog__icon--confirm { background-color: var(--color-fg-placeholder); }   /* #B5B5B5 */
+.ea-dialog__icon--alert   { background-color: var(--color-error); }            /* #FF5543 */
+.ea-dialog__icon--error   { background-color: var(--color-error); }            /* #FF5543 */
+.ea-dialog__icon--success { background-color: var(--color-success); }          /* #00DF93 */
+
+.ea-dialog__title {
+  font-size: var(--fs-body);            /* 14px (Figma) */
+  font-weight: var(--fw-medium);
+  color: var(--fg-default);
+  line-height: 22px;
+  margin: 0;
+}
+
+.ea-dialog__desc {
+  font-size: var(--fs-caption);         /* 12px */
+  color: var(--fg-subtle);              /* #999 */
+  line-height: 18px;
+  margin: -2px 0 0;
+}
+
+/* Prompt-variant header (different layout: left-aligned title + input) */
+.ea-dialog__header {
+  width: 100%;
+  text-align: left;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--fg-default);
+  line-height: 22px;
+  margin-bottom: 4px;
+}
+.ea-dialog__input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  background: var(--color-bg-f5);
+  border: var(--border-default);
+  border-radius: var(--r-base);
+  font-family: inherit;
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  outline: none;
+}
+.ea-dialog__input::placeholder { color: var(--fg-subtle); }
+.ea-dialog__input:focus { border-color: var(--color-border-e2); }
+
+/* Actions row */
+.ea-dialog__actions {
+  display: flex;
+  border-top: var(--pr-dialog-divider);
+}
+.ea-dialog__btn {
+  flex: 1 1 0;
+  background: transparent;
+  border: 0;
+  font-family: inherit;
+  font-size: var(--fs-title);           /* 16px */
+  line-height: 1;
+  padding: 14px 0;
+  color: var(--fg-default);
+  cursor: pointer;
+}
+.ea-dialog__btn + .ea-dialog__btn { border-left: var(--pr-dialog-divider); }
+.ea-dialog__btn--primary { color: var(--color-brand-veeva); }
+.ea-dialog__btn--danger  { color: var(--color-error); }
+
+/* Stacked actions (多个按钮): each on its own row, divided */
+.ea-dialog__actions--stack { flex-direction: column; }
+.ea-dialog__actions--stack .ea-dialog__btn + .ea-dialog__btn {
+  border-left: 0;
+  border-top: var(--pr-dialog-divider);
+}
+
+/* Backdrop helper for previews / mocks */
+.ea-dialog-backdrop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: var(--r-base);
+}
+
+
+/* ============================================================
+   3. FIXED BOTTOM PROMPT                            (Figma 2:160)
+   ============================================================
+   A short, single-line, full-bleed pill pinned above a form or
+   list footer. Gray = neutral info, yellow = warning,
+   red = error. White text, 12-13px, ~25px tall. */
+
+.ea-fixed-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 25px;
+  padding: 4px 16px;
+  font-family: var(--font-cn);
+  font-size: var(--fs-body-sm);          /* 13px */
+  line-height: 1;
+  color: var(--color-white);
+  text-align: center;
+}
+.ea-fixed-prompt--gray  { background: var(--pr-bottom-gray); }
+.ea-fixed-prompt--warn  { background: var(--pr-bottom-warn); }
+.ea-fixed-prompt--fail  { background: var(--pr-bottom-fail); }
+
+
+/* ============================================================
+   4. FIELD-LEVEL PROMPT                             (Figma 2:178)
+   ============================================================
+   Sits directly under a form field. Two variants:
+     • inline      — small ⓘ + helper text (#999 12-13px)
+     • pop-inline  — link-style text on a soft blue tint;
+                     opens a popup or external link */
+
+.ea-field-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-cn);
+  font-size: var(--fs-caption);          /* 12px */
+  line-height: 18px;
+}
+
+.ea-field-prompt__icon {
+  flex: 0 0 12px;
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+.ea-field-prompt--inline { color: var(--color-veeva-blue); }   /* #007AFF */
+
+.ea-field-prompt--pop {
+  padding: 2px 8px;
+  border-radius: var(--r-base);
+  background: var(--pr-pop-bg);
+  color: var(--pr-pop-fg);
+  cursor: pointer;
+  text-decoration: none;
+}
+.ea-field-prompt--pop:hover { background: var(--color-bg-extra-blue-1); }
+
+
+/* ============================================================
+   5. INPAGE SOFT REMINDER                           (Figma 2:195)
+   ============================================================
+   Card-style multi-line reminder block placed inside a tab or
+   section. Orange "提示" title above a bullet list of warnings;
+   bullets are 6px solid orange dots, body text muted gray. */
+
+.ea-reminder {
+  background: var(--pr-reminder-bg);
+  border-radius: var(--r-base);
+  padding: 8px 12px 12px;
+  font-family: var(--font-cn);
+}
+
+.ea-reminder__title {
+  font-size: var(--fs-caption);          /* 12px */
+  font-weight: var(--fw-medium);
+  color: var(--pr-reminder-title);
+  line-height: 1;
+  margin: 0 0 8px;
+}
+
+.ea-reminder__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ea-reminder__item {
+  position: relative;
+  padding-left: 14px;
+  font-size: var(--fs-body-sm);          /* 13px */
+  color: var(--pr-reminder-body);
+  line-height: 18px;
+}
+.ea-reminder__item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pr-reminder-dot);
+}

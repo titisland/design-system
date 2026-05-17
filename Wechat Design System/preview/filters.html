@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Filters — 列表筛选</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=1">
+<link rel="stylesheet" href="../filters.css?v=1">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8F8F8; font-family: var(--font-cn); }
+  .stage { padding: 24px; display: flex; flex-direction: column; gap: 36px; max-width: 1400px; margin: 0 auto; }
+  h2.section { font-size: 28px; font-weight: 600; margin: 0 0 4px; color: #000; letter-spacing: 0.01em; }
+  .lede { font-size: 13px; color: #666; max-width: 64ch; margin: 0 0 4px; line-height: 1.55; }
+  .col-title { font-size: 16px; font-weight: 500; margin: 0 0 8px; color: #000;
+    display: flex; align-items: baseline; gap: 8px; }
+  .col-title small { font-size: 11px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 400; }
+  .frames { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 24px; align-items: start; }
+  .frame {
+    border: 1px dashed rgb(151,71,255);
+    border-radius: 5px;
+    background: #F8F8F8;
+    width: 440px;
+    overflow: hidden;
+    /* small page-like canvas so the bar/sheet sit on a tinted bg */
+    padding-top: 12px;
+  }
+  .frame > .ea-filterbar { margin: 0 12px; }
+  .frame > .ea-fs { border-top: 1px solid var(--color-line-1); }
+  .legend { font-size: 12px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    line-height: 1.7; padding: 0 4px; }
+  .legend code { background: #ECECEC; padding: 1px 5px; border-radius: 3px; color: #333; }
+  .frame-cap { font-size: 11px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    padding: 6px 14px 0; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ============= FILTER BAR ============= -->
+  <div>
+    <h2 class="section">Filter bar</h2>
+    <p class="lede">列表页顶部的筛选栏 — 排序 chip + 字段 chip + 视图工具。Chip caret 在收起时灰色 ▼，激活时橙色 ▲ 并填橙色底。</p>
+
+    <div class="frames">
+      <div>
+        <div class="col-title">默认 <small>· 全部 chip 收起</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">下属数据</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+<span class="ea-fb__tools">
+              <button class="ea-fb__tool" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_116%29%22%3E%20%3Cpath%20d%3D%22M7.57143%2014.4762L0.826107%205.48243C0.299428%204.87243%200%204.10143%200%203.28571C0%201.47107%201.47107%200%203.28571%200C3.33314%200%203.38054%200.00100004%203.42779%200.00303575L22.4764%200C22.4845%200%2022.4926%207.14174e-05%2022.5714%200C24.3861%200%2025.8571%201.47107%2025.8571%203.28571C25.8571%204.09679%2025.5607%204.86436%2025.0354%205.45943L18.2857%2014.4752V28.8571C18.2857%2029.4883%2017.774%2030%2017.1429%2030C16.5117%2030%2016%2029.4883%2016%2028.8571V14.1786C15.9997%2013.9801%2016.0513%2013.7851%2016.1497%2013.6127C16.1885%2013.4956%2016.2461%2013.3855%2016.3201%2013.2868L23.2361%204.04882C23.2589%204.01844%2023.2831%203.98922%2023.3088%203.96125C23.4773%203.7775%2023.5714%203.54046%2023.5714%203.28571C23.5714%202.73343%2023.1237%202.28571%2022.5482%202.28582C22.5208%202.28613%2022.4934%202.2861%2022.466%202.28571L3.401%202.28875C3.38082%202.28875%203.36061%202.28821%203.28571%202.28571C2.73343%202.28571%202.28571%202.73343%202.28571%203.28571C2.28571%203.54661%202.385%203.79643%202.56832%204.0025C2.58951%204.02631%202.6097%204.051%202.62882%204.0765L9.55986%2013.3179C9.65761%2013.4479%209.72639%2013.5973%209.76157%2013.7561C9.82481%2013.9005%209.85735%2014.0566%209.85714%2014.2143V24.5714C9.85714%2025.2026%209.34546%2025.7143%208.71428%2025.7143C8.08311%2025.7143%207.57143%2025.2026%207.57143%2024.5714V14.4762ZM28.8524%2013.8571C29.4862%2013.8571%2030%2014.3688%2030%2015C30%2015.6312%2029.4862%2016.1429%2028.8524%2016.1429H22.5762C21.9424%2016.1429%2021.4286%2015.6312%2021.4286%2015C21.4286%2014.3688%2021.9424%2013.8571%2022.5762%2013.8571H28.8524ZM28.8524%2018.6429C29.4862%2018.6429%2030%2019.1545%2030%2019.7857C30%2020.4169%2029.4862%2020.9286%2028.8524%2020.9286H22.5762C21.9424%2020.9286%2021.4286%2020.4169%2021.4286%2019.7857C21.4286%2019.1545%2021.9424%2018.6429%2022.5762%2018.6429H28.8524ZM28.8524%2023.4286C29.4862%2023.4286%2030%2023.9402%2030%2024.5714C30%2025.2026%2029.4862%2025.7143%2028.8524%2025.7143H22.5762C21.9424%2025.7143%2021.4286%2025.2026%2021.4286%2024.5714C21.4286%2023.9402%2021.9424%2023.4286%2022.5762%2023.4286H28.8524Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_116%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-label="筛选"></button>
+              <button class="ea-fb__tool" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_110%29%22%3E%20%3Cpath%20d%3D%22M9.28571%2016.4286C11.6526%2016.4286%2013.5714%2018.3474%2013.5714%2020.7143V25.7143C13.5714%2028.0812%2011.6526%2030%209.28571%2030H4.28571C1.91879%2030%200%2028.0812%200%2025.7143V20.7143C0%2018.3474%201.91879%2016.4286%204.28571%2016.4286H9.28571ZM9.20879%2018.7143H4.36264C3.21557%2018.7143%202.28571%2019.6441%202.28571%2020.7912V25.6374C2.28571%2026.7844%203.21557%2027.7143%204.36264%2027.7143H9.20879C10.3559%2027.7143%2011.2857%2026.7844%2011.2857%2025.6374V20.7912C11.2857%2019.6441%2010.3559%2018.7143%209.20879%2018.7143ZM28.8571%2024.75C29.4883%2024.75%2030%2025.2617%2030%2025.8929C30%2026.524%2029.4883%2027.0357%2028.8571%2027.0357H18.2857C17.6545%2027.0357%2017.1429%2026.524%2017.1429%2025.8929C17.1429%2025.2617%2017.6545%2024.75%2018.2857%2024.75H28.8571ZM28.8571%2019.3929C29.4883%2019.3929%2030%2019.9045%2030%2020.5357C30%2021.1669%2029.4883%2021.6786%2028.8571%2021.6786H18.2857C17.6545%2021.6786%2017.1429%2021.1669%2017.1429%2020.5357C17.1429%2019.9045%2017.6545%2019.3929%2018.2857%2019.3929H28.8571ZM9.28571%200C11.6526%200%2013.5714%201.91879%2013.5714%204.28571V9.28571C13.5714%2011.6526%2011.6526%2013.5714%209.28571%2013.5714H4.28571C1.91879%2013.5714%200%2011.6526%200%209.28571V4.28571C0%201.91879%201.91879%200%204.28571%200H9.28571ZM9.20879%202.28571H4.36264C3.21557%202.28571%202.28571%203.21557%202.28571%204.36264V9.20879C2.28571%2010.3559%203.21557%2011.2857%204.36264%2011.2857H9.20879C10.3559%2011.2857%2011.2857%2010.3559%2011.2857%209.20879V4.36264C11.2857%203.21557%2010.3559%202.28571%209.20879%202.28571ZM28.8571%208.32143C29.4883%208.32143%2030%208.83311%2030%209.46428C30%2010.0955%2029.4883%2010.6071%2028.8571%2010.6071H18.2857C17.6545%2010.6071%2017.1429%2010.0955%2017.1429%209.46428C17.1429%208.83311%2017.6545%208.32143%2018.2857%208.32143H28.8571ZM28.8571%202.96429C29.4883%202.96429%2030%203.47596%2030%204.10714C30%204.73832%2029.4883%205.25%2028.8571%205.25H18.2857C17.6545%205.25%2017.1429%204.73832%2017.1429%204.10714C17.1429%203.47596%2017.6545%202.96429%2018.2857%202.96429H28.8571Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_110%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-label="视图"></button>
+            </span>
+</div>
+          <div class="frame-cap">3 字段 · 排序 + 数据范围 + 视图工具</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="col-title">字段栏 <small>· 多类型 picklist</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Text</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Number</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Date</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+<span class="ea-fb__tools">
+              <button class="ea-fb__tool" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_116%29%22%3E%20%3Cpath%20d%3D%22M7.57143%2014.4762L0.826107%205.48243C0.299428%204.87243%200%204.10143%200%203.28571C0%201.47107%201.47107%200%203.28571%200C3.33314%200%203.38054%200.00100004%203.42779%200.00303575L22.4764%200C22.4845%200%2022.4926%207.14174e-05%2022.5714%200C24.3861%200%2025.8571%201.47107%2025.8571%203.28571C25.8571%204.09679%2025.5607%204.86436%2025.0354%205.45943L18.2857%2014.4752V28.8571C18.2857%2029.4883%2017.774%2030%2017.1429%2030C16.5117%2030%2016%2029.4883%2016%2028.8571V14.1786C15.9997%2013.9801%2016.0513%2013.7851%2016.1497%2013.6127C16.1885%2013.4956%2016.2461%2013.3855%2016.3201%2013.2868L23.2361%204.04882C23.2589%204.01844%2023.2831%203.98922%2023.3088%203.96125C23.4773%203.7775%2023.5714%203.54046%2023.5714%203.28571C23.5714%202.73343%2023.1237%202.28571%2022.5482%202.28582C22.5208%202.28613%2022.4934%202.2861%2022.466%202.28571L3.401%202.28875C3.38082%202.28875%203.36061%202.28821%203.28571%202.28571C2.73343%202.28571%202.28571%202.73343%202.28571%203.28571C2.28571%203.54661%202.385%203.79643%202.56832%204.0025C2.58951%204.02631%202.6097%204.051%202.62882%204.0765L9.55986%2013.3179C9.65761%2013.4479%209.72639%2013.5973%209.76157%2013.7561C9.82481%2013.9005%209.85735%2014.0566%209.85714%2014.2143V24.5714C9.85714%2025.2026%209.34546%2025.7143%208.71428%2025.7143C8.08311%2025.7143%207.57143%2025.2026%207.57143%2024.5714V14.4762ZM28.8524%2013.8571C29.4862%2013.8571%2030%2014.3688%2030%2015C30%2015.6312%2029.4862%2016.1429%2028.8524%2016.1429H22.5762C21.9424%2016.1429%2021.4286%2015.6312%2021.4286%2015C21.4286%2014.3688%2021.9424%2013.8571%2022.5762%2013.8571H28.8524ZM28.8524%2018.6429C29.4862%2018.6429%2030%2019.1545%2030%2019.7857C30%2020.4169%2029.4862%2020.9286%2028.8524%2020.9286H22.5762C21.9424%2020.9286%2021.4286%2020.4169%2021.4286%2019.7857C21.4286%2019.1545%2021.9424%2018.6429%2022.5762%2018.6429H28.8524ZM28.8524%2023.4286C29.4862%2023.4286%2030%2023.9402%2030%2024.5714C30%2025.2026%2029.4862%2025.7143%2028.8524%2025.7143H22.5762C21.9424%2025.7143%2021.4286%2025.2026%2021.4286%2024.5714C21.4286%2023.9402%2021.9424%2023.4286%2022.5762%2023.4286H28.8524Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_116%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-label="筛选"></button>
+              <button class="ea-fb__tool" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_110%29%22%3E%20%3Cpath%20d%3D%22M9.28571%2016.4286C11.6526%2016.4286%2013.5714%2018.3474%2013.5714%2020.7143V25.7143C13.5714%2028.0812%2011.6526%2030%209.28571%2030H4.28571C1.91879%2030%200%2028.0812%200%2025.7143V20.7143C0%2018.3474%201.91879%2016.4286%204.28571%2016.4286H9.28571ZM9.20879%2018.7143H4.36264C3.21557%2018.7143%202.28571%2019.6441%202.28571%2020.7912V25.6374C2.28571%2026.7844%203.21557%2027.7143%204.36264%2027.7143H9.20879C10.3559%2027.7143%2011.2857%2026.7844%2011.2857%2025.6374V20.7912C11.2857%2019.6441%2010.3559%2018.7143%209.20879%2018.7143ZM28.8571%2024.75C29.4883%2024.75%2030%2025.2617%2030%2025.8929C30%2026.524%2029.4883%2027.0357%2028.8571%2027.0357H18.2857C17.6545%2027.0357%2017.1429%2026.524%2017.1429%2025.8929C17.1429%2025.2617%2017.6545%2024.75%2018.2857%2024.75H28.8571ZM28.8571%2019.3929C29.4883%2019.3929%2030%2019.9045%2030%2020.5357C30%2021.1669%2029.4883%2021.6786%2028.8571%2021.6786H18.2857C17.6545%2021.6786%2017.1429%2021.1669%2017.1429%2020.5357C17.1429%2019.9045%2017.6545%2019.3929%2018.2857%2019.3929H28.8571ZM9.28571%200C11.6526%200%2013.5714%201.91879%2013.5714%204.28571V9.28571C13.5714%2011.6526%2011.6526%2013.5714%209.28571%2013.5714H4.28571C1.91879%2013.5714%200%2011.6526%200%209.28571V4.28571C0%201.91879%201.91879%200%204.28571%200H9.28571ZM9.20879%202.28571H4.36264C3.21557%202.28571%202.28571%203.21557%202.28571%204.36264V9.20879C2.28571%2010.3559%203.21557%2011.2857%204.36264%2011.2857H9.20879C10.3559%2011.2857%2011.2857%2010.3559%2011.2857%209.20879V4.36264C11.2857%203.21557%2010.3559%202.28571%209.20879%202.28571ZM28.8571%208.32143C29.4883%208.32143%2030%208.83311%2030%209.46428C30%2010.0955%2029.4883%2010.6071%2028.8571%2010.6071H18.2857C17.6545%2010.6071%2017.1429%2010.0955%2017.1429%209.46428C17.1429%208.83311%2017.6545%208.32143%2018.2857%208.32143H28.8571ZM28.8571%202.96429C29.4883%202.96429%2030%203.47596%2030%204.10714C30%204.73832%2029.4883%205.25%2028.8571%205.25H18.2857C17.6545%205.25%2017.1429%204.73832%2017.1429%204.10714C17.1429%203.47596%2017.6545%202.96429%2018.2857%202.96429H28.8571Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_110%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-label="视图"></button>
+            </span>
+</div>
+          <div class="frame-cap">4 chips · trailing tools 居右 · 1px #EEE 分隔</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="col-title">激活态 <small>· chip caret 翻橙</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip ea-fb__chip--active"><span class="ea-fb__chip-label">Text</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Number</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Date</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+<span class="ea-fb__tools">
+              <button class="ea-fb__tool ea-fb__tool--active" aria-label="筛选">
+                <svg viewBox="0 0 30 30" fill="currentColor"><path d="M7.57 14.48 0.83 5.48C0.3 4.87 0 4.1 0 3.29 0 1.47 1.47 0 3.29 0L22.57 0c1.82 0 3.29 1.47 3.29 3.29 0 .81-.3 1.58-.82 2.17L18.29 14.48 18.29 28.86C18.29 29.49 17.77 30 17.14 30c-.63 0-1.14-.51-1.14-1.14L16 14.18c0-.39.18-.74.47-.97L23.24 4.05c.22-.21.33-.5.33-.81 0-.55-.45-1-1.02-1l-19.18 0c-.55 0-1 .45-1 1 0 .26.1.51.28.72L9.56 13.32c.2.27.3.59.3.92L9.86 24.57C9.86 25.2 9.34 25.71 8.71 25.71c-.63 0-1.14-.51-1.14-1.14L7.57 14.48Z"/></svg>
+              </button>
+              <button class="ea-fb__tool" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_110%29%22%3E%20%3Cpath%20d%3D%22M9.28571%2016.4286C11.6526%2016.4286%2013.5714%2018.3474%2013.5714%2020.7143V25.7143C13.5714%2028.0812%2011.6526%2030%209.28571%2030H4.28571C1.91879%2030%200%2028.0812%200%2025.7143V20.7143C0%2018.3474%201.91879%2016.4286%204.28571%2016.4286H9.28571ZM9.20879%2018.7143H4.36264C3.21557%2018.7143%202.28571%2019.6441%202.28571%2020.7912V25.6374C2.28571%2026.7844%203.21557%2027.7143%204.36264%2027.7143H9.20879C10.3559%2027.7143%2011.2857%2026.7844%2011.2857%2025.6374V20.7912C11.2857%2019.6441%2010.3559%2018.7143%209.20879%2018.7143ZM28.8571%2024.75C29.4883%2024.75%2030%2025.2617%2030%2025.8929C30%2026.524%2029.4883%2027.0357%2028.8571%2027.0357H18.2857C17.6545%2027.0357%2017.1429%2026.524%2017.1429%2025.8929C17.1429%2025.2617%2017.6545%2024.75%2018.2857%2024.75H28.8571ZM28.8571%2019.3929C29.4883%2019.3929%2030%2019.9045%2030%2020.5357C30%2021.1669%2029.4883%2021.6786%2028.8571%2021.6786H18.2857C17.6545%2021.6786%2017.1429%2021.1669%2017.1429%2020.5357C17.1429%2019.9045%2017.6545%2019.3929%2018.2857%2019.3929H28.8571ZM9.28571%200C11.6526%200%2013.5714%201.91879%2013.5714%204.28571V9.28571C13.5714%2011.6526%2011.6526%2013.5714%209.28571%2013.5714H4.28571C1.91879%2013.5714%200%2011.6526%200%209.28571V4.28571C0%201.91879%201.91879%200%204.28571%200H9.28571ZM9.20879%202.28571H4.36264C3.21557%202.28571%202.28571%203.21557%202.28571%204.36264V9.20879C2.28571%2010.3559%203.21557%2011.2857%204.36264%2011.2857H9.20879C10.3559%2011.2857%2011.2857%2010.3559%2011.2857%209.20879V4.36264C11.2857%203.21557%2010.3559%202.28571%209.20879%202.28571ZM28.8571%208.32143C29.4883%208.32143%2030%208.83311%2030%209.46428C30%2010.0955%2029.4883%2010.6071%2028.8571%2010.6071H18.2857C17.6545%2010.6071%2017.1429%2010.0955%2017.1429%209.46428C17.1429%208.83311%2017.6545%208.32143%2018.2857%208.32143H28.8571ZM28.8571%202.96429C29.4883%202.96429%2030%203.47596%2030%204.10714C30%204.73832%2029.4883%205.25%2028.8571%205.25H18.2857C17.6545%205.25%2017.1429%204.73832%2017.1429%204.10714C17.1429%203.47596%2017.6545%202.96429%2018.2857%202.96429H28.8571Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_110%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-label="视图"></button>
+            </span>
+</div>
+          <div class="frame-cap">Text 激活 + filter tool 激活 ⇒ 橙</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============= FILTER SHEETS ============= -->
+  <div>
+    <h2 class="section">Filter sheets</h2>
+    <p class="lede">点击 chip 后从筛选栏底部展开的面板。每种字段类型有自己的 body，但 footer (取消 / 重置 / 确定) 一致。</p>
+
+    <div class="frames">
+
+      <!-- Text -->
+      <div>
+        <div class="col-title">Text <small>· 单行 + 仅看空值</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip ea-fb__chip--active"><span class="ea-fb__chip-label">Text</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Number</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Date</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+</div>
+          <div class="ea-fs ea-fs--text">
+            <div class="ea-fs__nullonly">
+              <span>仅看空值</span>
+              <span class="ea-fs__switch" role="switch" aria-checked="false"></span>
+            </div>
+            <div class="ea-fs__body">
+              <div class="ea-fs__field">
+                <div class="ea-fs__input">
+                  <span style="flex:1">输入一串字符</span>
+                  <span class="ea-fs__inline-clear"></span>
+                </div>
+              </div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Number -->
+      <div>
+        <div class="col-title">Number <small>· min / max 区间</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Text</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip ea-fb__chip--active"><span class="ea-fb__chip-label">Number</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Date</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+</div>
+          <div class="ea-fs ea-fs--number">
+            <div class="ea-fs__nullonly">
+              <span>仅看空值</span>
+              <span class="ea-fs__switch" role="switch" aria-checked="false"></span>
+            </div>
+            <div class="ea-fs__body">
+              <div class="ea-fs__pair">
+                <div class="ea-fs__input"><span style="color:var(--color-fg-placeholder);flex:1">最小值</span></div>
+                <div class="ea-fs__pair-sep"></div>
+                <div class="ea-fs__input"><span style="color:var(--color-fg-placeholder);flex:1">最大值</span></div>
+              </div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date -->
+      <div>
+        <div class="col-title">Date <small>· 起 / 止 + calendar</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Text</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Number</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip ea-fb__chip--active"><span class="ea-fb__chip-label">Date</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+</div>
+          <div class="ea-fs ea-fs--date">
+            <div class="ea-fs__nullonly">
+              <span>仅看空值</span>
+              <span class="ea-fs__switch" role="switch" aria-checked="false"></span>
+            </div>
+            <div class="ea-fs__body">
+              <div class="ea-fs__pair">
+                <div class="ea-fs__input ea-fs__field--date">
+                  <span style="color:var(--color-fg-placeholder);flex:1">开始</span>
+                  <span class="ea-fs__cal">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3.5" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 2v3M10.5 2v3" stroke-linecap="round"/></svg>
+                  </span>
+                </div>
+                <div class="ea-fs__pair-sep"></div>
+                <div class="ea-fs__input ea-fs__field--date">
+                  <span style="color:var(--color-fg-placeholder);flex:1">结束</span>
+                  <span class="ea-fs__cal">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3.5" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 2v3M10.5 2v3" stroke-linecap="round"/></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lookup -->
+      <div>
+        <div class="col-title">Lookup <small>· 单字段 · 关键词搜</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip ea-fb__chip--active"><span class="ea-fb__chip-label">Lookup</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Number</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Date</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+</div>
+          <div class="ea-fs ea-fs--lookup">
+            <div class="ea-fs__body">
+              <div class="ea-fs__selected">
+                <span class="ea-fs__selected-count ea-fs__selected-count--has">已选择（1）</span>
+                <button class="ea-fs__selected-clear">清空</button>
+              </div>
+              <div class="ea-fs__lookup-search ea-fs__lookup-search--focus">
+                <span class="ea-search__icon" style="width:14px;height:14px;color:#999">
+                  <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64S20.36 2.29 13.93 2.29 2.29 7.5 2.29 13.93s5.21 11.64 11.64 11.64z"/></svg>
+                </span>
+                <input value="关键词1" />
+                <span class="ea-fs__inline-clear" style="margin-left:0"></span>
+              </div>
+              <div style="margin-top:4px">
+                <div class="ea-fs__option"><span class="ea-fs__option-label">全选</span><span class="ea-fs__check"></span></div>
+                <div class="ea-fs__option ea-fs__option--checked"><span class="ea-fs__option-label">关键词1</span><span class="ea-fs__check"></span></div>
+                <div class="ea-fs__option"><span class="ea-fs__option-label">关键词2</span><span class="ea-fs__check"></span></div>
+                <div class="ea-fs__option"><span class="ea-fs__option-label">关键词3</span><span class="ea-fs__check"></span></div>
+              </div>
+              <div class="ea-fs__lookup-hint">请尽量提供详细查询信息</div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Picklist -->
+      <div>
+        <div class="col-title">Picklist <small>· 字段切换 + 多选</small></div>
+        <div class="frame">
+          <div class="ea-filterbar">
+<div class="ea-fb__chips">
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">排序</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Text</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip ea-fb__chip--active"><span class="ea-fb__chip-label">Picklist</span><span class="ea-fb__chip-caret"></span></button>
+  <button class="ea-fb__chip"><span class="ea-fb__chip-label">Date</span><span class="ea-fb__chip-caret"></span></button>
+</div>
+</div>
+          <div class="ea-fs ea-fs--picklist">
+            <div class="ea-fs__body">
+              <div class="ea-fs__sidebar">
+                <button class="ea-fs__sb-item">字段名</button>
+                <button class="ea-fs__sb-item ea-fs__sb-item--active">Picklist</button>
+                <button class="ea-fs__sb-item">字段名</button>
+                <button class="ea-fs__sb-item">字段名</button>
+                <button class="ea-fs__sb-item">字段名</button>
+                <button class="ea-fs__sb-item">字段名</button>
+                <button class="ea-fs__sb-item">字段名</button>
+              </div>
+              <div class="ea-fs__options">
+                <div class="ea-fs__options-search">
+                  <div class="ea-fs__lookup-search" style="height:32px">
+                    <span class="ea-search__icon" style="width:14px;height:14px;color:#999">
+                      <svg viewBox="0 0 30 30" fill="currentColor"><path d="M22.94 24.55C20.51 26.61 17.36 27.86 13.93 27.86 6.24 27.86 0 21.62 0 13.93 0 6.24 6.24 0 13.93 0c7.69 0 13.93 6.24 13.93 13.93 0 3.43-1.24 6.58-3.31 9.01l5.12 5.12c.45.44.45 1.16 0 1.61-.44.44-1.17.44-1.61 0l-5.12-5.12zm-9.01 1.02c6.43 0 11.64-5.21 11.64-11.64S20.36 2.29 13.93 2.29 2.29 7.5 2.29 13.93s5.21 11.64 11.64 11.64z"/></svg>
+                    </span>
+                    <input placeholder="请输入" />
+                  </div>
+                </div>
+                <div class="ea-fs__option"><span class="ea-fs__option-label">全选</span><span class="ea-fs__check"></span></div>
+                <div class="ea-fs__option ea-fs__option--checked"><span class="ea-fs__option-label">多选选项</span><span class="ea-fs__check"></span></div>
+                <div class="ea-fs__option"><span class="ea-fs__option-label">多选选项</span><span class="ea-fs__check"></span></div>
+                <div class="ea-fs__option"><span class="ea-fs__option-label">多选选项</span><span class="ea-fs__check"></span></div>
+                <div class="ea-fs__option"><span class="ea-fs__option-label">多选选项</span><span class="ea-fs__check"></span></div>
+              </div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="legend">
+    <div>filterbar <code>40 tall</code> · radius <code>20 20 10 10</code> · gap <code>16</code> · chip caret well <code>14×14</code></div>
+    <div>sheet body <code>0 16 16</code> · pair sep <code>12×1 #EEE</code> · sidebar <code>140 #F5F5F5</code> · active item <code>3px 橙 left bar</code></div>
+    <div>option row <code>40 tall · 1px #EEE</code> · check <code>16</code> · footer <code>47 #F5F5F5</code> · 确定 <code>16/500 #F7981D</code></div>
+  </div>
+
+</div>
+</body>
+</html>

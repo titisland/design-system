@@ -1,0 +1,236 @@
+/* Event Agent Design System — Data Scope Sheet (岗位数据切换)
+   ─────────────────────────────────────────────────────────────
+   Source: /page5 (列表-by user · 列表-by position)
+
+   When a user opens the "下属数据" filter chip, this sheet drops
+   down with two scope-picker variants:
+
+     1. by-user      ── flat list of subordinate users.
+                        Each row: email + 岗位 list.
+                        Indented sub-rows for sub-position drill.
+                        Drill chevron ">" on indented rows.
+     2. by-position  ── header "返回" row + a position tree.
+                        Selected position = orange text.
+                        Drill ">" sits inline as 16×16 list icon.
+
+   Both share:
+     • 仅查看被选中…数据 toggle row at top
+     • Stacked rows w/ 1px hairline #EEE
+     • Indented children (left-pad 20)
+     • 取消 / 重置 / 确定 footer (uses .ea-fs__footer from filters.css)
+
+   Composition
+     .ea-ds                    sheet — drops below filter bar
+     .ea-ds__nullonly          仅查看被选中…数据 + 20×40 toggle
+     .ea-ds__list              vertical stack of rows, hairlines
+     .ea-ds__row               46-tall flat row (1-line user)
+     .ea-ds__row--two-line     50-tall row (email + 岗位 sub)
+     .ea-ds__row--child        indented (left-pad 20)
+     .ea-ds__row--active       orange text (selected)
+     .ea-ds__row--back         "返回" header (12 leading icon)
+     .ea-ds__primary           14/#333 (or orange when active)
+     .ea-ds__sub               11/#999 (or orange when active)
+     .ea-ds__trail             trailing 12×12 icon (chevron)
+
+   Tokens come from colors_and_type.css and filters.css.
+*/
+
+:root {
+  --ds-row-h:           50px;
+  --ds-row-h-flat:      46px;
+  --ds-row-h-back:      40px;
+  --ds-pad-x:           0px;
+  --ds-child-indent:    20px;
+  --ds-gap-text:        2px;     /* email ↔ 岗位 */
+  --ds-trail-size:      12px;
+  --ds-trail-size-lg:   16px;
+}
+
+/* ──────────────────────────────────────────────────────────
+   SHEET — sits inside the same drop-down stack as ea-fs.
+   Reuses ea-fs__nullonly + ea-fs__footer from filters.css.
+   ────────────────────────────────────────────────────────── */
+
+.ea-ds {
+  background: var(--bg-surface);
+  font-family: var(--font-cn);
+  color: var(--fg-default);
+}
+
+/* Toggle row at the top — re-uses .ea-fs__nullonly visual
+   but the label here says "仅查看被选中用户数据" / "…岗位数据". */
+.ea-ds__nullonly {
+  height: 40px;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.ea-ds__nullonly-label {
+  font-size: var(--fs-caption);
+  line-height: 20px;
+  color: var(--color-fg-2);
+}
+.ea-ds__toggle {
+  width: 40px;
+  height: 20px;
+  border-radius: 100px;
+  background: var(--color-bg-input);
+  position: relative;
+  flex: 0 0 40px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.ea-ds__toggle::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+  transition: left 0.15s ease;
+}
+.ea-ds__toggle--on {
+  background: var(--color-brand-veeva);
+}
+.ea-ds__toggle--on::after {
+  left: 21px;
+}
+
+/* ──────────────────────────────────────────────────────────
+   LIST + ROWS
+   ────────────────────────────────────────────────────────── */
+
+.ea-ds__list {
+  margin: 0 16px 16px;
+  border: 1px solid var(--color-line-1);
+  display: flex;
+  flex-direction: column;
+}
+
+.ea-ds__row {
+  position: relative;
+  min-height: var(--ds-row-h);
+  border-bottom: 1px solid var(--color-line-1);
+  padding: 4px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sp-1);
+  background: transparent;
+  cursor: pointer;
+}
+.ea-ds__row:last-child { border-bottom: 0; }
+.ea-ds__row:active { background: var(--color-bg-input); }
+
+/* The text column. Email + 岗位 stack with 2px gap. */
+.ea-ds__col {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-gap-text);
+  justify-content: center;
+}
+.ea-ds__primary {
+  font-size: var(--fs-body);
+  line-height: 20px;
+  color: var(--color-fg-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ea-ds__sub {
+  font-size: 11px;
+  line-height: 16px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* spec uses 153 (#999) and 181 (#B5B5B5); the latter for
+   secondary lines under inactive rows in by-position */
+.ea-ds__sub--quieter { color: #B5B5B5; }
+
+/* The 兼 marker for shared positions — small blue link */
+.ea-ds__sub-tag {
+  color: var(--color-link-blue);
+  margin-left: 4px;
+}
+
+/* Trailing chevron / list-icon slot */
+.ea-ds__trail {
+  flex: 0 0 auto;
+  width: var(--ds-trail-size-lg);
+  height: var(--ds-trail-size-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-fg-4);
+}
+.ea-ds__trail svg { width: 100%; height: 100%; display: block; }
+
+/* ── Variants ─────────────────────────────────────────── */
+
+/* Two-line user row (email + 岗位 list) */
+.ea-ds__row--two-line {
+  min-height: var(--ds-row-h);
+}
+
+/* Indented child (sub-rows under a parent in by-user, and
+   the body of by-position under "返回") */
+.ea-ds__row--child {
+  padding-left: 40px;        /* 20 base + 20 indent */
+}
+
+/* Active (selected) row — orange text everywhere */
+.ea-ds__row--active .ea-ds__primary,
+.ea-ds__row--active .ea-ds__sub {
+  color: var(--color-brand-veeva);
+}
+.ea-ds__row--active .ea-ds__trail {
+  color: var(--color-brand-veeva);
+}
+
+/* Disabled (the dimmed "by-user2" 4th row state) */
+.ea-ds__row--disabled .ea-ds__primary,
+.ea-ds__row--disabled .ea-ds__sub {
+  color: var(--color-fg-4);
+}
+
+/* "返回" header row — leading 12×12 icon, no sub line */
+.ea-ds__row--back {
+  min-height: var(--ds-row-h-back);
+  padding: 10px 20px;
+  cursor: pointer;
+  gap: var(--sp-1);
+}
+.ea-ds__row--back .ea-ds__back-icon {
+  flex: 0 0 12px;
+  width: 12px;
+  height: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-fg-2);
+}
+.ea-ds__row--back .ea-ds__back-icon svg { width: 100%; height: 100%; display: block; }
+.ea-ds__row--back .ea-ds__back-label {
+  font-size: var(--fs-body);
+  line-height: 20px;
+  color: var(--color-fg-2);
+}
+
+/* Single-line variant (used in by-position drill child rows
+   that have no sub line) */
+.ea-ds__row--flat {
+  min-height: var(--ds-row-h-flat);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.ea-ds__row--flat .ea-ds__col { gap: 0; }

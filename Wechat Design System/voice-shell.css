@@ -1,0 +1,118 @@
+/* =========================================================
+   Voice Call Voice Agent — Chat Shell
+   voice-shell.css
+   ─────────────────────────────────────────────────────────
+   The outer scaffolding of the Voice Call conversation panel:
+     1. WeChat-blue NavBar chrome (shared with WeChat DS)
+     2. Orange sub-header band (Voice Call brand strip)
+     3. Scrollable chat body
+     4. iOS home indicator spacer
+
+   Depends on: colors_and_type.css
+   Canvas: 393 × 852 (var(--vc-device-width/height))
+   ========================================================= */
+
+/* ── Page shell ── */
+.vc-shell {
+  width: var(--vc-device-width);
+  min-height: var(--vc-device-height);
+  background: var(--color-bg-white);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── WeChat-blue NavBar (88px = 44 status + 44 nav)
+   Uses the same .ea-navbar component from navbar.css.
+   If navbar.css is not loaded, this fallback applies. ── */
+.vc-navbar {
+  height: 88px;
+  background: var(--vc-wechat-blue);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+.vc-navbar__status {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.vc-navbar__status-time {
+  font-family: var(--font-en);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+.vc-navbar__row {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+.vc-navbar__title {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-cn);
+  font-size: var(--fs-navbar);
+  font-weight: var(--fw-medium);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vc-navbar__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background-color: #fff;
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
+/* ── Orange sub-header band (40px)
+   The ONLY Voice Call-branded chrome element.
+   Contains the page sub-title in white.
+   ⚠️ This band is voice-agent only — do NOT add it to
+   standard Veeva CRM list/detail pages. ── */
+.vc-subheader {
+  height: 40px;
+  background: var(--vc-orange);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+.vc-subheader__title {
+  font-family: var(--font-cn);
+  font-size: var(--fs-navbar);
+  font-weight: var(--fw-regular);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Scrollable chat body ── */
+.vc-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* leave room for the floating voice dock (194px) + home indicator (34px) */
+  padding-bottom: calc(194px + 34px + 16px);
+}
+
+/* ── iOS home indicator spacer (rendered below the dock) ── */
+.vc-home-indicator {
+  height: 34px;
+  flex-shrink: 0;
+}

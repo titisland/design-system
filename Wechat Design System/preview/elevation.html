@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>Shadow — elevation</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;padding:32px;background:#F8F8F8;font-family:var(--font-cn)}
+  h2{font-size:16px;font-weight:500;margin:0 0 20px}
+  .row{display:flex;gap:32px;flex-wrap:wrap;align-items:flex-end}
+  .box{width:160px;text-align:left}
+  .c{width:160px;height:90px;background:#fff;border-radius:var(--r-base);
+     display:flex;align-items:center;justify-content:flex-start;padding:0 14px;
+     font-size:13px;font-weight:500;color:#000}
+  .l{font-size:11px;color:#888;padding-top:14px}
+  .l b{display:block;color:#222;font-weight:500;margin-bottom:2px;font-size:12px}
+</style></head>
+<body>
+<h2>Shadow — 2026 spec (4 档电梯)</h2>
+<div class="row">
+  <div class="box">
+    <div class="c" style="box-shadow:var(--shadow-lighter)">Lighter</div>
+    <div class="l"><b>--shadow-lighter</b>0 0 6px / .12</div>
+  </div>
+  <div class="box">
+    <div class="c" style="box-shadow:var(--shadow-light)">Light</div>
+    <div class="l"><b>--shadow-light</b>0 0 12px / .12</div>
+  </div>
+  <div class="box">
+    <div class="c" style="box-shadow:var(--shadow-base)">Base</div>
+    <div class="l"><b>--shadow-base</b>2 层 drop · 模态/弹层默认</div>
+  </div>
+  <div class="box">
+    <div class="c" style="box-shadow:var(--shadow-dark)">Dark</div>
+    <div class="l"><b>--shadow-dark</b>3 层 drop · FAB / 重弹层</div>
+  </div>
+</div>
+</body></html>

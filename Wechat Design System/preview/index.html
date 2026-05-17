@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>WeChat CRM Design System</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange:   #F7981D;
+    --blue:     #3975C6;
+    --fg1:      #000;
+    --fg2:      #333;
+    --fg3:      #666;
+    --fg4:      #999;
+    --border:   #EEEEEE;
+    --bg-page:  #F5F5F5;
+    --bg-card:  #FFFFFF;
+    --sidebar-w: 220px;
+    --header-h:  52px;
+  }
+
+  body {
+    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--fg2);
+    background: var(--bg-page);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Top header ── */
+  .header {
+    height: var(--header-h);
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .header__title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  .header__tag {
+    font-size: 11px;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2px 8px;
+    letter-spacing: 0.3px;
+  }
+  .header__tab-bar {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+  }
+  .header__tab {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: background 120ms, color 120ms;
+    white-space: nowrap;
+  }
+  .header__tab:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .header__tab.active { background: rgba(255,255,255,0.22); color: #fff; font-weight: 500; }
+  .header__tab.ai.active { background: var(--orange); }
+
+  /* ── Body layout ── */
+  .layout {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    flex-shrink: 0;
+    padding: 12px 0 24px;
+  }
+  .sidebar__group {
+    margin-bottom: 4px;
+  }
+  .sidebar__group-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--fg4);
+    padding: 10px 16px 4px;
+  }
+  .sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    cursor: pointer;
+    color: var(--fg3);
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: background 80ms, color 80ms, border-color 80ms;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar__item:hover { background: #F8F8F8; color: var(--fg2); }
+  .sidebar__item.active {
+    color: var(--orange);
+    border-left-color: var(--orange);
+    background: rgba(247,152,29,0.06);
+    font-weight: 500;
+  }
+  .sidebar__item.active.voice { color: var(--orange); border-left-color: var(--orange); }
+  .sidebar__dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+  .sidebar__item.active .sidebar__dot { opacity: 1; }
+
+  /* ── Preview pane ── */
+  .preview-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg-page);
+  }
+  .preview-toolbar {
+    height: 40px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .preview-toolbar__name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg2);
+  }
+  .preview-toolbar__file {
+    font-size: 11px;
+    color: var(--fg4);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+  .preview-toolbar__open {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--orange);
+    text-decoration: none;
+    padding: 3px 10px;
+    border: 1px solid var(--orange);
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 100ms;
+  }
+  .preview-toolbar__open:hover { background: rgba(247,152,29,0.08); }
+
+  .preview-frame-wrap {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+  .preview-frame-wrap iframe {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+    background: #fff;
+    width: 100%;
+    max-width: 860px;
+    height: 100%;
+    min-height: 400px;
+  }
+
+  /* ── Agent badge ── */
+  .badge {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  .badge-ea  { background: rgba(57,117,198,0.12); color: var(--blue); }
+  .badge-vc  { background: rgba(247,152,29,0.12); color: var(--orange); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <span class="header__title">WeChat CRM Design System</span>
+  <span class="header__tag">2026</span>
+  <nav class="header__tab-bar">
+    <button class="header__tab active" onclick="switchAgent('wf', this)">WeChat Framework</button>
+    <button class="header__tab ai"     onclick="switchAgent('ai', this)">AI Agent</button>
+  </nav>
+</header>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <!-- Preview pane -->
+  <main class="preview-pane">
+    <div class="preview-toolbar">
+      <span class="preview-toolbar__name" id="previewName">选择左侧组件预览</span>
+      <span class="preview-toolbar__file" id="previewFile"></span>
+      <a class="preview-toolbar__open" id="previewOpen" href="#" target="_blank" style="display:none">在新标签页打开 ↗</a>
+    </div>
+    <div class="preview-frame-wrap">
+      <iframe id="previewFrame" src="about:blank" title="Component preview"></iframe>
+    </div>
+  </main>
+</div>
+
+<script>
+const ITEMS = {
+  wf: [
+    { group: "基础 Foundations" },
+    { name: "Color tokens",   file: "colors.html" },
+    { name: "Type scale",     file: "type-scale.html" },
+    { name: "Type weights",   file: "type-weights.html" },
+    { name: "Spacing",        file: "spacing.html" },
+    { name: "Radii",          file: "radii.html" },
+    { name: "Elevation",      file: "elevation.html" },
+    { name: "Iconography",    file: "icons.html" },
+
+    { group: "组件 Components" },
+    { name: "Navbar",         file: "component-navbar.html" },
+    { name: "Buttons",        file: "buttons.html" },
+    { name: "Badges",         file: "badges.html" },
+    { name: "Prompts / Toast",file: "prompts.html" },
+    { name: "Lists",          file: "lists.html" },
+    { name: "List actions",   file: "list-actions.html" },
+    { name: "List shell",     file: "list-shell.html" },
+    { name: "Search",         file: "search.html" },
+    { name: "Filters",        file: "filters.html" },
+    { name: "Forms (edit)",   file: "forms-edit.html" },
+    { name: "Data scope",     file: "data-scope.html" },
+    { name: "Bottom actions", file: "bottom-actions.html" },
+
+    { group: "页面 Pages" },
+    { name: "Homepage",       file: "home.html" },
+    { name: "Detail page",    file: "detail.html" },
+    { name: "Hospital list",  file: "demo-hospital-list.html" },
+  ],
+
+  ai: [
+    { group: "Voice" },
+    { name: "Voice gradient", file: "voice-gradient.html" },
+    { name: "Chat bubbles",   file: "voice-bubbles.html" },
+    { name: "Loading toasts", file: "voice-loading-toasts.html" },
+    { name: "Option rows",    file: "voice-option-rows.html" },
+    { name: "Progress bar",   file: "voice-progress-bar.html" },
+    { name: "Buttons & links", file: "voice-buttons.html" },
+    { name: "Tags & chips",   file: "voice-tags-chips.html" },
+    { name: "Voice dock",     file: "voice-input-dock.html" },
+    { name: "Visit report card", file: "voice-card-report.html" },
+    { name: "AI 追问 sheet",  file: "voice-modal-sheet.html" },
+    { name: "Logo & mascot",  file: "voice-logo-mascot.html" },
+
+    { group: "Chat" },
+    { name: "FAB",                     file: "chat-fab.html" },
+    { name: "AI composer",             file: "chat-composer.html" },
+    { name: "Suggestion chips",        file: "chat-suggestion-chips.html" },
+    { name: "Bot reply structure",     file: "chat-bot-reply.html" },
+    { name: "Thinking stream",         file: "chat-thinking-stream.html" },
+    { name: "Info banners",            file: "chat-info-banners.html" },
+    { name: "Content voice",           file: "chat-content-voice.html" },
+    { name: "Pre-Call Planning",       file: "chat-pre-call-plan.html" },
+    { name: "Chat shell",              file: "chat-shell.html" },
+    { name: "Messages",                file: "chat-messages.html" },
+    { name: "Input & FAB",             file: "chat-input.html" },
+    { name: "Cards",                   file: "chat-cards.html" },
+
+    { group: "Insight" },
+    { name: "HCP insights",   file: "component-hcp-insights.html" },
+  ],
+};
+
+let currentAgent = 'ea';
+let currentFile  = null;
+
+function buildSidebar(agent) {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.innerHTML = '';
+  ITEMS[agent].forEach(item => {
+    if (item.group) {
+      const g = document.createElement('div');
+      g.className = 'sidebar__group';
+      g.innerHTML = `<div class="sidebar__group-label">${item.group}</div>`;
+      sidebar.appendChild(g);
+    } else {
+      const el = document.createElement('div');
+      el.className = 'sidebar__item' + (item.file === currentFile ? ' active' : '');
+      el.dataset.file = item.file;
+      el.dataset.name = item.name;
+      el.innerHTML = `<span class="sidebar__dot"></span>${item.name}`;
+      el.onclick = () => loadPreview(item.file, item.name, el);
+      sidebar.appendChild(el);
+    }
+  });
+}
+
+function loadPreview(file, name, el) {
+  currentFile = file;
+  document.querySelectorAll('.sidebar__item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+
+  document.getElementById('previewName').textContent = name;
+  document.getElementById('previewFile').textContent = file;
+  const openLink = document.getElementById('previewOpen');
+  openLink.href = file;
+  openLink.style.display = '';
+  document.getElementById('previewFrame').src = file;
+
+  // Persist to URL hash so refresh restores position
+  location.hash = currentAgent + '/' + file;
+}
+
+function switchAgent(agent, btn) {
+  currentAgent = agent;
+  currentFile  = null;
+  document.querySelectorAll('.header__tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('previewName').textContent = '选择左侧组件预览';
+  document.getElementById('previewFile').textContent = '';
+  document.getElementById('previewOpen').style.display = 'none';
+  document.getElementById('previewFrame').src = 'about:blank';
+  buildSidebar(agent);
+  // Auto-select first item in the new tab
+  const first = ITEMS[agent].find(i => i.file);
+  if (first) {
+    setTimeout(() => {
+      const el = document.querySelector(`.sidebar__item[data-file="${first.file}"]`);
+      if (el) el.click();
+    }, 0);
+  }
+}
+
+// Init — restore from URL hash if present, otherwise default to first item
+(function init() {
+  const hash = location.hash.slice(1);          // e.g. "wf/colors.html"
+  const [hashAgent, hashFile] = hash.split('/');
+
+  const agent = ITEMS[hashAgent] ? hashAgent : 'wf';
+
+  // Activate the correct tab button
+  document.querySelectorAll('.header__tab').forEach(btn => {
+    const onclick = btn.getAttribute('onclick') || '';
+    if (onclick.includes(`'${agent}'`)) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+  currentAgent = agent;
+  buildSidebar(agent);
+
+  // Select the target file, or fall back to first item
+  const target = hashFile && ITEMS[agent].find(i => i.file === hashFile)
+    ? hashFile
+    : (ITEMS[agent].find(i => i.file) || {}).file;
+
+  if (target) {
+    setTimeout(() => {
+      const el = document.querySelector(`.sidebar__item[data-file="${target}"]`);
+      if (el) el.click();
+    }, 0);
+  }
+})();
+</script>
+</body>
+</html>

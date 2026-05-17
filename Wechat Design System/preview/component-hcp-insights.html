@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>HCP Insights — 医生要览 (AI 洞察卡)</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../hcp-insights.css">
+<style>
+  html, body { margin:0; padding:0; background:var(--color-bg-f8); font-family:var(--font-cn); color:var(--color-fg-h2); }
+  .stage { padding:32px; max-width:900px; margin:0 auto; }
+  .group { background:var(--color-bg-white); border:1px solid var(--color-border-base);
+            border-radius:12px; padding:20px; margin-bottom:24px; }
+  .group__title { font-size:16px; font-weight:500; color:#000; margin:0 0 4px; }
+  .group__sub { font-size:12px; color:var(--color-fg-h4); margin:0 0 16px;
+                 font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .label { font-size:11px; color:var(--color-fg-h4); margin:14px 0 6px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  /* Phone frame to host the card on a white page, matching detail page chrome */
+  .phone { width:100%; max-width:420px; background:var(--color-bg-white);
+            border:1px solid var(--color-border-base); border-radius:14px; overflow:hidden;
+            box-shadow:var(--shadow-light); margin-bottom:14px; padding:12px 0; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="group">
+    <h2 class="group__title">HCP Insights — 医生要览 (AI 洞察卡)</h2>
+    <p class="group__sub">.ea-hcp-insights · Figma 1939:6756 · 下一步行动 + 医生动向 + 医生观念 · embedded in 基本信息 tab</p>
+
+    <p class="label">默认状态（with 下一步行动 action card + 2 insight sections）</p>
+    <div class="phone">
+
+      <div class="ea-hcp-insights-frame">
+      <section class="ea-hcp-insights">
+
+        <!-- Header — title + timestamp -->
+        <header class="ea-hcp-insights__head">
+          <span class="ea-hcp-insights__title">医生要览</span>
+          <span class="ea-hcp-insights__timestamp">更新时间:03/26 15:00</span>
+        </header>
+
+        <!-- ─── 下一步行动 (dashed action card) ──────── -->
+        <div class="ea-hcp-insights__action">
+          <div class="ea-hcp-insights__action-head">
+            <span class="ea-hcp-insights__action-icon"
+              style="--icon: url('../assets/icons/面性/面性-灯泡.svg')"></span>
+            <span class="ea-hcp-insights__action-title">下一步行动</span>
+          </div>
+          <div class="ea-hcp-insights__action-body">
+            建议发送《维我替尼药物 III 期临床疗效汇总》：医生近期对&ldquo;疗效&rdquo;存疑，且您已 30 天未进行深度学术拜访。
+          </div>
+          <button type="button" class="ea-hcp-insights__action-cta">
+            <span class="ea-hcp-insights__action-cta-icon"
+              style="--icon: url('../assets/icons/面性/面性-ai-star.svg')"></span>
+            发送资料
+          </button>
+        </div>
+
+        <!-- ─── 医生动向 ─────────────────────────────── -->
+        <div class="ea-hcp-insights__section">
+          <div class="ea-hcp-insights__section-head">
+            <span class="ea-hcp-insights__section-icon"
+              style="--icon: url('../assets/icons/面性/面性-ai-star.svg')"></span>
+            <span class="ea-hcp-insights__section-title">医生动向</span>
+          </div>
+
+          <div class="ea-hcp-insights__bullet">
+            <span class="ea-hcp-insights__bullet-dot"></span>
+            <span class="ea-hcp-insights__bullet-content">
+              <span class="ea-hcp-insights__bullet-label">【会议动向】</span>
+              梁教授主持或参与 4 场细胞免疫会议深度解析了以泽沃基奥仑赛为代表的 CAR-T 疗法在血液肿瘤中的精准干预与分层管理策略<span class="ea-hcp-insights__citation">4</span>
+            </span>
+          </div>
+          <div class="ea-hcp-insights__bullet">
+            <span class="ea-hcp-insights__bullet-dot"></span>
+            <span class="ea-hcp-insights__bullet-content">
+              <span class="ea-hcp-insights__bullet-label">【会议动向】</span>
+              梁教授结合 2 场专项研讨明确指出，以长效 G-CSF 为核心的副作用规范管理是保障淋巴瘤及骨髓瘤患者生存率与生活质量的关键支持<span class="ea-hcp-insights__citation">2</span>
+            </span>
+          </div>
+          <div class="ea-hcp-insights__bullet">
+            <span class="ea-hcp-insights__bullet-dot"></span>
+            <span class="ea-hcp-insights__bullet-content">
+              <span class="ea-hcp-insights__bullet-label">【会议动向】</span>
+              梁教授在医师协会及美年健康合作中多次提倡构建血液病&ldquo;预防-诊疗-康复&rdquo;的一体化服务条，强调通过早筛与慢病管理平台提升全生命周期的健康服务水平<span class="ea-hcp-insights__citation">2</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- ─── 医生观念 ─────────────────────────────── -->
+        <div class="ea-hcp-insights__section">
+          <div class="ea-hcp-insights__section-head">
+            <span class="ea-hcp-insights__section-icon"
+              style="--icon: url('../assets/icons/面性/面性-灯泡.svg')"></span>
+            <span class="ea-hcp-insights__section-title">医生观念</span>
+          </div>
+
+          <div class="ea-hcp-insights__bullet">
+            <span class="ea-hcp-insights__bullet-dot"></span>
+            <span class="ea-hcp-insights__bullet-content">
+              维我替尼[A1]，维我维他命[B2]，维我止咳口服液[B3]，维我替思[A2]
+            </span>
+          </div>
+          <div class="ea-hcp-insights__bullet">
+            <span class="ea-hcp-insights__bullet-dot"></span>
+            <span class="ea-hcp-insights__bullet-content">
+              在过去 14 天内，共有 3 次拜访记录。针对克洛凯在高血脂症的应用反馈中出现了明显的不一致。医学部拜访数据显示医生早期对于<strong>该药应作为全人群的一线标准治疗</strong>持认可态度<span class="ea-hcp-insights__citation">1</span>，转而在最近一次拜访倾向于<strong>仅限于二线或难治性病例的保底方案</strong><span class="ea-hcp-insights__citation">1</span>。下次拜访必须澄清并确认医生当前的核心关注点，了解其变化来源，以便提供针对性的专业支持。
+            </span>
+          </div>
+        </div>
+
+        <!-- 收起全文 link -->
+        <button type="button" class="ea-hcp-insights__expand">
+          收起全文
+          <span class="ea-hcp-insights__expand-icon"
+            style="--icon: url('../assets/icons/线性/线性-向上方向.svg')"></span>
+        </button>
+
+        <!-- 帮我规划下次拜访 — AI 主行动按钮 -->
+        <button type="button" class="ea-hcp-insights__plan-cta">
+          <span class="ea-hcp-insights__plan-cta-icon"
+            style="--icon: url('../assets/icons/面性/面性-ai-star.svg')"></span>
+          帮我规划下次拜访
+        </button>
+
+        <!-- 内容由 AI 生成 mark -->
+        <div class="ea-hcp-insights__ai-mark">
+          <span class="ea-hcp-insights__ai-mark-icon"
+            style="--icon: url('../assets/icons/面性/面性-ai-star.svg')"></span>
+          内容由AI生成
+        </div>
+
+      </section>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="group">
+    <h2 class="group__title">使用方法 / Usage</h2>
+    <p class="group__sub">复制下面的 markup 到任何 page（通常嵌入到详情页 基本信息 tab 内），引用 hcp-insights.css 即可。<br>外层用 <code>.ea-hcp-insights-frame</code> 提供蓝渐变背景（贴边），内层 <code>.ea-hcp-insights</code> 为白底卡片。</p>
+    <pre style="background:var(--color-bg-f5); padding:16px; border-radius:6px; font-size:12px; line-height:18px; overflow-x:auto; color:var(--color-fg-h2)"><code>&lt;link rel="stylesheet" href="path/to/hcp-insights.css"&gt;
+
+&lt;!-- 外层渐变 frame（贴手机壳左右边缘，12px上下间距） --&gt;
+&lt;div class="ea-hcp-insights-frame"&gt;
+&lt;section class="ea-hcp-insights"&gt;
+
+  &lt;!-- 1. 标题 + 时间戳（必需） --&gt;
+  &lt;header class="ea-hcp-insights__head"&gt;
+    &lt;span class="ea-hcp-insights__title"&gt;医生要览&lt;/span&gt;
+    &lt;span class="ea-hcp-insights__timestamp"&gt;更新时间:03/26 15:00&lt;/span&gt;
+  &lt;/header&gt;
+
+  &lt;!-- 2. 下一步行动（可选 — 虚线 CTA 卡片） --&gt;
+  &lt;div class="ea-hcp-insights__action"&gt;
+    &lt;div class="ea-hcp-insights__action-head"&gt;
+      &lt;span class="ea-hcp-insights__action-icon"
+        style="--icon: url(面性-灯泡.svg)"&gt;&lt;/span&gt;
+      &lt;span class="ea-hcp-insights__action-title"&gt;下一步行动&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="ea-hcp-insights__action-body"&gt;… body text …&lt;/div&gt;
+    &lt;button class="ea-hcp-insights__action-cta"&gt;
+      &lt;span class="ea-hcp-insights__action-cta-icon"
+        style="--icon: url(面性-ai-star.svg)"&gt;&lt;/span&gt;
+      发送资料
+    &lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;!-- 3. Section（重复 1..N 次 — 医生动向/医生观念/…） --&gt;
+  &lt;div class="ea-hcp-insights__section"&gt;
+    &lt;div class="ea-hcp-insights__section-head"&gt;
+      &lt;span class="ea-hcp-insights__section-icon"
+        style="--icon: url(面性-ai-star.svg)"&gt;&lt;/span&gt;
+      &lt;span class="ea-hcp-insights__section-title"&gt;医生动向&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- bullet 可以带 __bullet-label 前缀 / 没有前缀 / 含 &lt;strong&gt; 中段强调 --&gt;
+    &lt;div class="ea-hcp-insights__bullet"&gt;
+      &lt;span class="ea-hcp-insights__bullet-dot"&gt;&lt;/span&gt;
+      &lt;span class="ea-hcp-insights__bullet-content"&gt;
+        &lt;span class="ea-hcp-insights__bullet-label"&gt;【会议动向】&lt;/span&gt;
+        body text &lt;span class="ea-hcp-insights__citation"&gt;4&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 中段强调用 &lt;strong&gt;，不要新建 modifier 类 --&gt;
+    &lt;div class="ea-hcp-insights__bullet"&gt;
+      &lt;span class="ea-hcp-insights__bullet-dot"&gt;&lt;/span&gt;
+      &lt;span class="ea-hcp-insights__bullet-content"&gt;
+        本品 &lt;strong&gt;早期对一线标准治疗持认可态度&lt;/strong&gt; ……
+        &lt;span class="ea-hcp-insights__citation"&gt;1&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- 4. 如需嵌套小标题（执业生态 那种），加 __subsections 容器 --&gt;
+  &lt;div class="ea-hcp-insights__section"&gt;
+    &lt;div class="ea-hcp-insights__section-head"&gt; … &lt;/div&gt;
+    &lt;div class="ea-hcp-insights__subsections"&gt;
+      &lt;div class="ea-hcp-insights__subsection"&gt;
+        &lt;div class="ea-hcp-insights__subsection-title"&gt;机构战略&lt;/div&gt;
+        &lt;div class="ea-hcp-insights__bullet"&gt; … &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- 5. 收起全文 + 规划 CTA + AI 标记（必需） --&gt;
+  &lt;button class="ea-hcp-insights__expand"&gt;
+    收起全文
+    &lt;span class="ea-hcp-insights__expand-icon"
+      style="--icon: url(线性-向上方向.svg)"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;!-- 主行动按钮：青→蓝渐变 pill，带 ai-star 图标 --&gt;
+  &lt;button class="ea-hcp-insights__plan-cta"&gt;
+    &lt;span class="ea-hcp-insights__plan-cta-icon"
+      style="--icon: url(面性-ai-star.svg)"&gt;&lt;/span&gt;
+    帮我规划下次拜访
+  &lt;/button&gt;
+  &lt;div class="ea-hcp-insights__ai-mark"&gt;
+    &lt;span class="ea-hcp-insights__ai-mark-icon"
+      style="--icon: url(面性-ai-star.svg)"&gt;&lt;/span&gt;
+    内容由AI生成
+  &lt;/div&gt;
+
+&lt;/section&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+
+</div>
+</body>
+</html>

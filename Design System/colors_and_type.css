@@ -1,0 +1,337 @@
+/* WeChat Design System — global tokens
+   --------------------------------------------------------
+   Source of truth: Figma `2026-WeChat-Design-System` file
+   (color frame 1:3429, radius/shadow frame 1:3860).
+
+   Conventions:
+   - Each color family has a `Base` + 6 alpha tints
+     (light-0 .. light-6 at 5% / 10% / 15% / 40% / 50% / 65%).
+   - Brand-Veeva is the primary brand mark (was --color-ai-orange).
+   - Radii: 0 / 2 / 4 / 20 / 100% — five tokens, no in-between.
+   - Shadows: lighter / light / base / dark — four tiers.
+   - Typography & spacing kept from the previous version.
+*/
+
+:root {
+
+  /* ════════════════════════════════════════════════════════
+     RAW PALETTE
+     ════════════════════════════════════════════════════════ */
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ── Brand · Veeva (primary brand / formerly AI orange) ── */
+  --color-brand-veeva:        #f7981d;
+  --color-brand-veeva-light-6: #f7981da6;   /* 65% */
+  --color-brand-veeva-light-5: #f7981d80;   /* 50% */
+  --color-brand-veeva-light-4: #f7981d66;   /* 40% */
+  --color-brand-veeva-light-2: #f7981d26;   /* 15% */
+  --color-brand-veeva-light-1: #f7981d1a;   /* 10% */
+  --color-brand-veeva-light-0: #f7981d0d;   /*  5% */
+
+  /* ── Brand · J&J ─────────────────────────────────────── */
+  --color-brand-jj:            #eb1700;
+  --color-brand-jj-light-6:    #eb1700a6;
+  --color-brand-jj-light-5:    #eb170080;
+  --color-brand-jj-light-4:    #eb170066;
+  --color-brand-jj-light-2:    #eb170026;
+  --color-brand-jj-light-1:    #eb17001a;
+  --color-brand-jj-light-0:    #eb17000d;
+
+  /* ── Brand · MSD ─────────────────────────────────────── */
+  --color-brand-msd:           #00857c;
+  --color-brand-msd-light-6:   #00857ca6;
+  --color-brand-msd-light-5:   #00857c80;
+  --color-brand-msd-light-4:   #00857c66;
+  --color-brand-msd-light-2:   #00857c26;
+  --color-brand-msd-light-1:   #00857c1a;
+  --color-brand-msd-light-0:   #00857c0d;
+
+  /* ── Brand · Merck ───────────────────────────────────── */
+  --color-brand-merck:         #503191;
+  --color-brand-merck-light-6: #503191a6;
+  --color-brand-merck-light-5: #50319180;
+  --color-brand-merck-light-4: #50319166;
+  --color-brand-merck-light-2: #50319126;
+  --color-brand-merck-light-1: #5031911a;
+  --color-brand-merck-light-0: #5031910d;
+
+  /* Legacy: top NavigationBar fill (Veeva header chrome) */
+  --color-brand-blue:          #3975c6;
+
+  /* ── Secondary · Blue · "Veeva Blue" (canonical brand blue) ─
+     #007AFF is the canonical "Veeva Blue" in the 2026 spec.
+     It's used for: hyperlinks, primary blue accents, the
+     default blue in the new system. The previous #2069D6 is
+     now scoped to section text only (see --color-section-blue). */
+  --color-veeva-blue:          #007aff;
+  --color-veeva-blue-light-6:  #007affa6;
+  --color-veeva-blue-light-5:  #007aff80;
+  --color-veeva-blue-light-4:  #007aff66;
+  --color-veeva-blue-light-2:  #007aff26;
+  --color-veeva-blue-light-1:  #007aff1a;
+  --color-veeva-blue-light-0:  #007aff0d;
+
+  /* Aliases — same hex, kept for files that prefer the
+     generic name "blue" or were already migrated. */
+  --color-blue:                var(--color-veeva-blue);
+  --color-blue-light-6:        var(--color-veeva-blue-light-6);
+  --color-blue-light-5:        var(--color-veeva-blue-light-5);
+  --color-blue-light-4:        var(--color-veeva-blue-light-4);
+  --color-blue-light-2:        var(--color-veeva-blue-light-2);
+  --color-blue-light-1:        var(--color-veeva-blue-light-1);
+  --color-blue-light-0:        var(--color-veeva-blue-light-0);
+
+  /* Legacy section accent (#2069D6) — ONLY for section text
+     headings now. Distinct from hyperlink / Veeva-blue uses. */
+  --color-section-blue:        #2069d6;
+
+  /* ── Secondary · Success ─────────────────────────────── */
+  --color-success:             #00df93;
+  --color-success-light-6:     #00df93a6;
+  --color-success-light-5:     #00df9380;
+  --color-success-light-4:     #00df9366;
+  --color-success-light-2:     #00df9326;
+  --color-success-light-1:     #00df931a;
+  --color-success-light-0:     #00df930d;
+
+  /* ── Secondary · Warning (yellow, NOT brand orange) ──── */
+  --color-warning:             #ffcc00;
+  --color-warning-light-6:     #ffcc00a6;
+  --color-warning-light-5:     #ffcc0080;
+  --color-warning-light-4:     #ffcc0066;
+  --color-warning-light-2:     #ffcc0026;
+  --color-warning-light-1:     #ffcc001a;
+  --color-warning-light-0:     #ffcc000d;
+
+  /* ── Secondary · Error ───────────────────────────────── */
+  --color-error:               #ff5543;
+  --color-error-light-6:       #ff5543a6;
+  --color-error-light-5:       #ff554380;
+  --color-error-light-4:       #ff554366;
+  --color-error-light-2:       #ff554326;
+  --color-error-light-1:       #ff55431a;
+  --color-error-light-0:       #ff55430d;
+
+  /* ── Secondary · Info (slate, neutral notice) ────────── */
+  --color-info:                #7788a2;
+  --color-info-light-6:        #7788a2a6;
+  --color-info-light-5:        #7788a280;
+  --color-info-light-4:        #7788a266;
+  --color-info-light-2:        #7788a226;
+  --color-info-light-1:        #7788a21a;
+
+  /* ── Text ramp ───────────────────────────────────────── */
+  --color-fg-h1:               #000000;     /* H1 title */
+  --color-fg-h2:               #333333;     /* H2 / body strong */
+  --color-fg-h3:               #666666;     /* H3 / secondary */
+  --color-fg-h4:               #999999;     /* H4 / tertiary */
+  --color-fg-placeholder:      #b5b5b5;     /* placeholder copy */
+  --color-fg-disabled:         #cccccc;     /* disabled copy & inputs */
+  --color-fg-info:             #5f646e;     /* info / muted slate text */
+  --color-fg-link:             #007aff;     /* hyperlink color (= --color-veeva-blue) */
+
+  /* Legacy aliases — kept so older code still resolves;
+     all NEW work should use the named tokens above. */
+  --color-fg-1: var(--color-fg-h1);
+  --color-fg-2: var(--color-fg-h2);
+  --color-fg-3: var(--color-fg-h3);
+  --color-fg-4: var(--color-fg-h4);
+
+  /* ── Border ──────────────────────────────────────────── */
+  --color-border-base:         #eeeeee;     /* hairline (most rows) */
+  --color-border-e2:           #e2e2e2;     /* stronger divider (was DADADA) */
+  --color-border-cc:           #cccccc;     /* strongest hard border */
+  --color-border-l6:           #f2f5fc;     /* very soft blue-tinted divider */
+
+  /* Legacy aliases */
+  --color-line-1: var(--color-border-base);
+  --color-line-2: var(--color-border-e2);
+
+  /* ── Background ──────────────────────────────────────── */
+  --color-bg-white:            #ffffff;
+  --color-bg-fa:               #fafafa;
+  --color-bg-f8:               #f8f8f8;     /* page canvas */
+  --color-bg-f5:               #f5f5f5;     /* input wells */
+  --color-bg-f2:               #f2f2f2;     /* deeper neutral fill */
+  --color-bg-overlay:          #00000080;   /* 50% black modal backdrop */
+
+  /* Soft blue washes (alpha-driven) */
+  --color-bg-extra-blue-0:     #007aff26;   /* 15% */
+  --color-bg-extra-blue-1:     #007aff1a;   /* 10% */
+  --color-bg-extra-blue-2:     #007aff0d;   /*  5% */
+
+  /* Legacy aliases */
+  --color-bg-canvas:  var(--color-bg-f8);
+  --color-bg-card:    var(--color-bg-white);
+  --color-bg-input:   var(--color-bg-f5);
+  --color-bg-tint-blue: var(--color-bg-extra-blue-2);
+
+  /* ── File-type colors (List file fields) ─────────────
+     Locked color per file-format family. Applied via CSS
+     mask + background-color, so the single-color icon library
+     icon ('面性-pdf.svg' etc.) renders in the brand color. */
+  --color-file-pdf:    #ff5543;   /* red — matches Adobe PDF */
+  --color-file-ppt:    #d04423;   /* orange-red — matches MS PowerPoint */
+  --color-file-excel:  #1d6f42;   /* green — matches MS Excel */
+  --color-file-word:   #2a5599;   /* blue — matches MS Word */
+  --color-file-zip:    #00857c;   /* teal */
+  --color-file-video:  #2069d6;   /* blue */
+  --color-file-audio:  #43e3eb;   /* cyan */
+  --color-file-email:  #0078d4;   /* blue — matches MS Outlook */
+  --color-file-image:  #7788a2;   /* slate (= info) */
+  --color-file-other:  #666666;   /* neutral gray */
+
+  /* ── Color Palette · 9 colors (charts / data viz) ────── */
+  --color-palette-F26D5F: #f26d5f;
+  --color-palette-FF945A: #ff945a;
+  --color-palette-FFCC00: #ffcc00;
+  --color-palette-C4E649: #c4e649;
+  --color-palette-3EDDB1: #3eddb1;
+  --color-palette-43E3EB: #43e3eb;
+  --color-palette-39D3FF: #39d3ff;
+  --color-palette-88A8FF: #88a8ff;
+  --color-palette-ACA3FF: #aca3ff;
+
+  /* ── Alpha utilities ─────────────────────────────────── */
+  --color-hairline:  rgba(0, 0, 0, 0.10);
+
+
+  /* ════════════════════════════════════════════════════════
+     SEMANTIC ALIASES
+     ════════════════════════════════════════════════════════ */
+
+  --fg-title:        var(--color-fg-h1);
+  --fg-default:      var(--color-fg-h2);
+  --fg-muted:        var(--color-fg-h3);
+  --fg-subtle:       var(--color-fg-h4);
+  --fg-placeholder:  var(--color-fg-placeholder);
+  --fg-disabled:     var(--color-fg-disabled);
+  --fg-info:         var(--color-fg-info);
+
+  --fg-link:         var(--color-veeva-blue);       /* #007AFF — hyperlinks (canonical Veeva Blue) */
+  --fg-section:      var(--color-section-blue);     /* #2069D6 — section text headers ONLY */
+  --fg-veeva-blue:   var(--color-veeva-blue);
+  --fg-brand:        var(--color-brand-veeva);
+  --fg-success:      var(--color-success);
+  --fg-warning:      var(--color-warning);
+  --fg-danger:       var(--color-error);
+  --fg-info-text:    var(--color-info);
+  --fg-on-brand:     var(--color-white);
+
+  --bg-page:         var(--color-bg-f8);
+  --bg-surface:      var(--color-bg-white);
+  --bg-input:        var(--color-bg-f5);
+  --bg-overlay:      var(--color-bg-overlay);
+  --bg-brand-soft:   var(--color-brand-veeva-light-2);   /* 15% orange tint */
+
+  --border-default:  1px solid var(--color-border-base);
+  --border-strong:   1px solid var(--color-border-e2);
+  --border-hard:     1px solid var(--color-border-cc);
+
+
+  /* ════════════════════════════════════════════════════════
+     TYPOGRAPHY
+     ════════════════════════════════════════════════════════ */
+
+  --font-cn: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+             "Source Han Sans SC", "Noto Sans SC", system-ui, sans-serif;
+  --font-en: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+             Roboto, sans-serif;
+
+  --fs-micro:   10px;
+  --fs-caption: 12px;
+  --fs-body-sm: 13px;
+  --fs-body:    14px;        /* default */
+  --fs-body-lg: 15px;
+  --fs-title:   16px;
+  --fs-navbar:  17px;
+  --fs-section: 20px;
+  --fs-hero:    24px;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-bold:    700;
+
+  --lh-tight: 1;
+  --lh-body:  1.4;
+  --lh-loose: 1.6;
+
+
+  /* ════════════════════════════════════════════════════════
+     SPACING
+     ════════════════════════════════════════════════════════ */
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+
+
+  /* ════════════════════════════════════════════════════════
+     RADIUS  (Figma 1:3860 — five tokens, no 8/12)
+     ════════════════════════════════════════════════════════ */
+
+  --r-none:   0;
+  --r-small:  2px;
+  --r-base:   4px;
+  --r-round:  20px;
+  --r-circle: 9999px;     /* Figma "Circle 100%"; use 9999px for rect→circle */
+
+
+  /* ════════════════════════════════════════════════════════
+     SHADOW  (Figma 1:3860 — four-tier elevation)
+     ════════════════════════════════════════════════════════ */
+
+  --shadow-lighter: 0 0 6px rgba(0, 0, 0, 0.12);
+  --shadow-light:   0 0 12px rgba(0, 0, 0, 0.12);
+  --shadow-base:    0 8px 20px rgba(0, 0, 0, 0.08),
+                    0 12px 32px 4px rgba(0, 0, 0, 0.04);
+  --shadow-dark:    0 8px 16px -8px rgba(0, 0, 0, 0.16),
+                    0 12px 32px rgba(0, 0, 0, 0.12),
+                    0 16px 48px 16px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Tag defaults + named utilities (typography — unchanged) */
+
+body,
+.ea-body {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  color: var(--fg-default);
+  line-height: var(--lh-body);
+}
+
+.ea-hero {
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-medium);
+  color: var(--fg-title);
+  line-height: var(--lh-tight);
+}
+.ea-section {
+  font-size: var(--fs-section);
+  font-weight: var(--fw-medium);
+  color: var(--fg-title);
+}
+.ea-navbar {
+  font-size: var(--fs-navbar);
+  font-weight: var(--fw-medium);
+  color: var(--fg-on-brand);
+}
+.ea-title {
+  font-size: var(--fs-title);
+  font-weight: var(--fw-medium);
+  color: var(--fg-title);
+}
+.ea-body-md { font-size: var(--fs-body); color: var(--fg-default); }
+.ea-muted   { font-size: var(--fs-body); color: var(--fg-muted); }
+.ea-caption { font-size: var(--fs-caption); color: var(--fg-muted); }
+.ea-link    { color: var(--fg-link); }
+.ea-section-text { color: var(--fg-section); }   /* renamed: section text only */
+.ea-brand   { color: var(--fg-brand); }

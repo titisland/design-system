@@ -1,0 +1,58 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; background: #F8F8F8; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .lbl { font: 500 11px/14px var(--font-han); color: var(--fg-3); margin-bottom: 10px; }
+
+  /* Plain card — host CRM list / detail surface */
+  .plain {
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.06);
+  }
+  .plain .ttl { font: 500 16px/100% var(--font-han); color: #333; margin-bottom: 8px; }
+  .plain .row { font: 400 13px/22px var(--font-han); color: #666; }
+
+  /* User message bubble — cyan→mint gradient, right-aligned, what the rep
+     sent in the chat flow. NOT a generic card surface. */
+  .chat-frame {
+    background: linear-gradient(180deg, #DDF1FF 0%, #F8FAFE 100%);
+    border-radius: 8px;
+    padding: 16px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .user-bubble {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #45D4FB 0%, #57E9F2 52%, #9EFBD3 100%);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font: 500 14px/22px var(--font-han);
+    color: #333;
+    max-width: 75%;
+  }
+  .bot-line { font: 400 13px/20px var(--font-han); color: #333; align-self: flex-start; }
+</style></head><body>
+  <div class="grid">
+    <div>
+      <div class="lbl">PLAIN CARD — host CRM surface (list / detail)</div>
+      <div class="plain">
+        <div class="ttl">维我替尼产品研讨会</div>
+        <div class="row">会议开始时间：2025-05-10</div>
+        <div class="row">会议类型：科室会</div>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">USER MESSAGE BUBBLE — cyan→mint gradient (chat flow only)</div>
+      <div class="chat-frame">
+        <div class="bot-line">…</div>
+        <div class="user-bubble">帮我规划下次拜访</div>
+      </div>
+    </div>
+  </div>
+</body></html>

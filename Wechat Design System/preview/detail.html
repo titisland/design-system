@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>详情页 — Detail page demo</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../navbar.css">
+<link rel="stylesheet" href="../detail-identity.css">
+<link rel="stylesheet" href="../list-shell.css">
+<link rel="stylesheet" href="../form-section.css">
+<link rel="stylesheet" href="../forms.css">
+<link rel="stylesheet" href="../actions.css">
+<style>
+  html, body { margin:0; padding:0; background:var(--color-bg-f8); font-family:var(--font-cn); }
+  .stage { padding:32px; display:flex; gap:32px; flex-wrap:wrap; align-items:flex-start; justify-content:center; }
+  .phone {
+    width:100%; max-width:420px; background:var(--color-bg-f8);
+    border:1px solid var(--color-border-base); border-radius:16px; overflow:hidden;
+    box-shadow:var(--shadow-base);
+  }
+  /* iOS status icon glyphs */
+  .si-signal { display:inline-flex; gap:1.5px; align-items:flex-end; }
+  .si-signal span { width:3px; background:var(--color-white); border-radius:1px; }
+  .si-signal span:nth-child(1) { height:3px; }
+  .si-signal span:nth-child(2) { height:5px; }
+  .si-signal span:nth-child(3) { height:7px; }
+  .si-signal span:nth-child(4) { height:9px; }
+  .si-batt { width:22px; height:11px; border:1px solid var(--color-white); border-radius:2px; position:relative; padding:1px; }
+  .si-batt::after { content:""; position:absolute; right:-3px; top:3px; width:1.5px; height:5px; background:var(--color-white); border-radius:0 1px 1px 0; }
+  .si-batt-fill { height:100%; width:75%; background:var(--color-white); border-radius:1px; }
+
+  .body-bg { background:var(--color-bg-white); }
+  .phone__home { height:34px; background:var(--color-bg-white); display:flex; align-items:flex-start; justify-content:center; padding-top:21px; }
+  .phone__home::after { content:""; width:134px; height:5px; border-radius:3px; background:#000; opacity:0.85; }
+
+  /* List tabs reuse — no margin to fit the detail page chrome */
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="phone">
+
+    <!-- 1 · NavBar -->
+    <header class="ea-navbar">
+      <div class="ea-navbar__status">
+        <span class="ea-navbar__status-time">11:31</span>
+        <div class="ea-navbar__status-icons">
+          <div class="si-signal"><span></span><span></span><span></span><span></span></div>
+          <span style="font-size:10px">5G</span>
+          <div class="si-batt"><div class="si-batt-fill"></div></div>
+        </div>
+      </div>
+      <div class="ea-navbar__row">
+        <div class="ea-navbar__leading">
+          <button type="button" class="ea-navbar__icon" aria-label="返回"
+            style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_126%29%22%3E%20%3Cpath%20d%3D%22M7.00032%2015.0313C7.00282%2015.3202%207.11425%2015.6083%207.33469%2015.8288L21.1715%2029.6656C21.6174%2030.1115%2022.3403%2030.1115%2022.7863%2029.6656C23.2322%2029.2196%2023.2322%2028.4967%2022.7863%2028.0508L9.74811%2015.0127L22.8116%201.94918C23.2575%201.5033%2023.2575%200.78031%2022.8116%200.33443C22.3657%20-0.111487%2021.6427%20-0.111487%2021.1968%200.33443L7.33444%2014.1968C7.10458%2014.4267%206.99322%2014.7301%207.00032%2015.0313Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_126%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></button>
+        </div>
+        <h1 class="ea-navbar__title">医生详情</h1>
+        <div class="ea-navbar__trailing">
+          <button type="button" class="ea-navbar__icon" aria-label="更多"
+            style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M4.28571%2017.2857C5.39029%2017.2857%206.28571%2016.3903%206.28571%2015.2857C6.28571%2014.1811%205.39029%2013.2857%204.28571%2013.2857C3.18114%2013.2857%202.28571%2014.1811%202.28571%2015.2857C2.28571%2016.3903%203.18114%2017.2857%204.28571%2017.2857ZM4.28571%2019.5714C1.91879%2019.5714%200%2017.6526%200%2015.2857C0%2012.9188%201.91879%2011%204.28571%2011C6.65264%2011%208.57143%2012.9188%208.57143%2015.2857C8.57143%2017.6526%206.65264%2019.5714%204.28571%2019.5714ZM15%2017.2857C16.1046%2017.2857%2017%2016.3903%2017%2015.2857C17%2014.1811%2016.1046%2013.2857%2015%2013.2857C13.8954%2013.2857%2013%2014.1811%2013%2015.2857C13%2016.3903%2013.8954%2017.2857%2015%2017.2857ZM15%2019.5714C12.6331%2019.5714%2010.7143%2017.6526%2010.7143%2015.2857C10.7143%2012.9188%2012.6331%2011%2015%2011C17.3669%2011%2019.2857%2012.9188%2019.2857%2015.2857C19.2857%2017.6526%2017.3669%2019.5714%2015%2019.5714ZM25.7143%2017.2857C26.8189%2017.2857%2027.7143%2016.3903%2027.7143%2015.2857C27.7143%2014.1811%2026.8189%2013.2857%2025.7143%2013.2857C24.6097%2013.2857%2023.7143%2014.1811%2023.7143%2015.2857C23.7143%2016.3903%2024.6097%2017.2857%2025.7143%2017.2857ZM25.7143%2019.5714C23.3474%2019.5714%2021.4286%2017.6526%2021.4286%2015.2857C21.4286%2012.9188%2023.3474%2011%2025.7143%2011C28.0812%2011%2030%2012.9188%2030%2015.2857C30%2017.6526%2028.0812%2019.5714%2025.7143%2019.5714Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')"></button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3 · 身份卡 -->
+    <section class="ea-detail-identity">
+      <div class="ea-detail-identity__row">
+        <div class="ea-detail-identity__avatar">
+          <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2040%2040%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_2144_152%29%22%3E%20%3Cpath%20d%3D%22M0%2011.4286C0%205.11676%205.11676%200%2011.4286%200H28.5714C34.8832%200%2040%205.11676%2040%2011.4286V28.5714C40%2034.8832%2034.8832%2040%2028.5714%2040H11.4286C5.11676%2040%200%2034.8832%200%2028.5714V11.4286Z%22%20fill%3D%22white%22%2F%3E%20%3Cpath%20d%3D%22M0%2011.4286C0%205.11676%205.11676%200%2011.4286%200H28.5714C34.8832%200%2040%205.11676%2040%2011.4286V28.5714C40%2034.8832%2034.8832%2040%2028.5714%2040H11.4286C5.11676%2040%200%2034.8832%200%2028.5714V11.4286Z%22%20fill%3D%22%23007AFF%22%20fill-opacity%3D%220.1%22%2F%3E%20%3Cpath%20d%3D%22M11.6343%2017.8927C11.8171%2021.0006%2014.24%2023.5058%2017.2571%2023.5058C20.2743%2023.5058%2022.6971%2021.0006%2022.88%2017.894C20.9965%2017.7012%2019.1047%2017.6009%2017.2114%2017.5932C15.1543%2017.5932%2013.0971%2017.7424%2011.6343%2017.894V17.8927ZM20.32%2024.0563C19.6343%2024.0563%2017.2571%2027.3146%2017.2571%2027.3146C17.2571%2027.3146%2015.0171%2024.0576%2014.1943%2024.0576C11.3143%2024.0576%208.57143%2027.2636%208.57143%2029.9701C8.57143%2031.1731%2012.2743%2029.9701%2017.5314%2029.9701C22.7429%2029.9701%2025.9429%2031.1731%2025.9429%2029.9701C25.9429%2027.3643%2022.7429%2024.0576%2020.32%2024.0576V24.0563ZM23.3829%2017.0415L22.3771%2010.5772C22.3771%2010.5772%2020.5943%209.4762%2017.2571%209.4762C13.92%209.4762%2012.1371%2010.5784%2012.1371%2010.5784L11.1314%2017.0428C11.1314%2017.0428%2014.56%2016.4922%2017.44%2016.4922C20.1829%2016.4922%2023.3829%2017.0428%2023.3829%2017.0428V17.0415ZM16.8%2015.0881V13.5844H15.3829C15.1086%2013.5844%2014.9257%2013.3843%2014.9257%2013.0836C14.9257%2012.7829%2015.1543%2012.5816%2015.3829%2012.5816H16.8V11.0792C16.8%2010.8033%2017.0057%2010.5784%2017.2571%2010.5784C17.5086%2010.5784%2017.7143%2010.8021%2017.7143%2011.0805V12.5841H19.1314C19.4057%2012.5841%2019.5886%2012.7829%2019.5886%2013.0849C19.5886%2013.3608%2019.3829%2013.5857%2019.1314%2013.5857H17.7143V15.0893C17.7143%2015.3651%2017.5086%2015.5901%2017.2571%2015.5901C17.0057%2015.5901%2016.8%2015.3664%2016.8%2015.0893V15.0881Z%22%20fill%3D%22%23007AFF%22%2F%3E%20%3Cpath%20d%3D%22M26.3977%2024.5099C28.5657%2024.5099%2031.4286%2027.4687%2031.4286%2029.8011C31.4286%2030.5343%2030.096%2030.2684%2027.7657%2030.0249L27.7714%2029.954C27.7714%2028.4206%2026.6629%2026.6423%2025.2549%2025.4394C25.72%2024.9237%2026.1657%2024.5099%2026.3977%2024.5099ZM24.6103%2018.739C26.144%2018.7738%2027.6103%2018.8856%2028.688%2018.9962C28.5246%2021.7748%2026.3566%2024.019%2023.6571%2024.019C22.864%2024.0208%2022.0815%2023.8217%2021.3714%2023.4375V23.2001L21.4514%2023.1455C22.8937%2022.1281%2023.989%2020.6241%2024.5691%2018.8645L24.6103%2018.739ZM23.8537%2011.4645C26.5109%2011.503%2028.0171%2012.3219%2028.2149%2012.4362L28.2377%2012.4487L29.1371%2018.2345C29.1371%2018.2345%2027.0126%2017.8679%2024.856%2017.7672C24.9703%2017.1782%2025.0286%2016.5768%2025.0286%2015.9729C25.0312%2014.4629%2024.6652%2012.9791%2023.968%2011.6732L23.8537%2011.4645Z%22%20fill%3D%22%23007AFF%22%20fill-opacity%3D%220.4%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_2144_152%22%3E%20%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E" alt="">
+        </div>
+        <div class="ea-detail-identity__title">
+          <div class="ea-detail-identity__name">李大魁</div>
+          <div class="ea-detail-identity__count">关注数<span class="ea-detail-identity__count-num">4</span></div>
+        </div>
+        <button type="button" class="ea-detail-identity__follow">
+          <span class="ea-detail-identity__follow-icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_45_23%29%22%3E%20%3Cpath%20d%3D%22M29.908%2011.311C29.6628%2010.4918%2028.9484%209.87008%2027.7848%209.46305C27.7695%209.45744%2027.7544%209.4528%2027.7389%209.44865L21.4206%207.73413C20.0505%205.64475%2018.6787%203.55609%2017.3071%201.46696C17.3015%201.45877%2017.2889%201.43973%2017.2833%201.43154C16.6232%200.508523%2015.8007%200%2014.9679%200C14.3658%200%2013.4831%200.259604%2012.6882%201.50699L9.16934%207.22304C7.59349%207.70057%206.01789%208.18026%204.44114%208.65969L2.13693%209.36059C1.06371%209.70918%200.385749%2010.2733%200.121713%2011.0376C-0.155296%2011.8405%200.0393714%2012.7768%200.717616%2013.9C0.73402%2013.9275%200.751961%2013.9536%200.771474%2013.9783C2.15002%2015.7225%203.52798%2017.4687%204.9066%2019.2169C4.83587%2021.7358%204.76407%2024.2576%204.69091%2026.7792C4.58584%2027.9866%204.7605%2028.8374%205.22428%2029.3802C5.57562%2029.7916%206.06427%2030%206.67665%2030C7.14583%2030%207.70235%2029.8775%208.45325%2029.6044L14.5375%2027.128C16.8331%2027.9842%2019.1314%2028.8381%2021.4576%2029.701C21.9116%2029.8473%2022.332%2029.9213%2022.7074%2029.9213C23.5634%2029.9213%2025.0169%2029.5275%2025.1329%2026.8894C25.134%2026.8623%2025.134%2026.8355%2025.1323%2026.8085C25.005%2024.5604%2024.8763%2022.317%2024.7478%2020.0726L24.746%2020.043L29.2273%2014.0171C29.9187%2013.0224%2030.1477%2012.1115%2029.908%2011.311Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_45_23%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></span>
+          关注
+        </button>
+      </div>
+      <div class="ea-detail-identity__tags">
+        <span class="ea-detail-identity__tag ea-detail-identity__tag--wechat">微信已认证</span>
+        <span class="ea-detail-identity__tag ea-detail-identity__tag--pa">公众号已关注</span>
+      </div>
+      <div class="ea-detail-identity__meta">
+        北京大学第一人民医院<span class="ea-detail-identity__meta-sep">｜</span>普外科<span class="ea-detail-identity__meta-sep">｜</span>主任医师<span class="ea-detail-identity__meta-sep">｜</span>北京市朝阳区
+      </div>
+    </section>
+
+    <!-- 4 · Tab strip (复用 list-tabs) -->
+    <div class="ea-list-tabs">
+      <div class="ea-list-tabs__strip">
+        <button type="button" class="ea-list-tabs__item ea-list-tabs__item--active">基本信息</button>
+        <button type="button" class="ea-list-tabs__item">我的战友</button>
+        <button type="button" class="ea-list-tabs__item">产品指标</button>
+        <button type="button" class="ea-list-tabs__item">时间线</button>
+      </div>
+      <button type="button" class="ea-list-tabs__overflow" aria-label="所有 tab"
+        style="background:transparent">
+        <span style="display:inline-block;width:18px;height:3px;background:var(--color-fg-h3);box-shadow:0 5px 0 var(--color-fg-h3),0 -5px 0 var(--color-fg-h3);"></span>
+      </button>
+    </div>
+
+    <!-- 5 · 基本信息 section + form view rows -->
+    <div class="body-bg">
+      <div class="ea-form-section">
+        <div class="ea-form-section__strip">
+          <span class="ea-form-section__title">基本信息</span>
+        </div>
+      </div>
+
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">医生姓名</span></div><div class="ff-value"><span class="ff-value__text">李大魁</span></div></div></div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">性别</span></div><div class="ff-value"><span class="ff-value__text">男</span></div></div></div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">医生影响力</span></div><div class="ff-value"><span class="ff-value__text">国家级</span></div></div></div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">民族</span></div><div class="ff-value"><span class="ff-value__text">汉族</span></div></div></div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">默认执业医院</span></div><div class="ff-value"><a class="ff-value__text" href="#" style="color:var(--color-veeva-blue); text-decoration:underline">北京大学第一人民医院</a></div></div></div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">科室</span></div><div class="ff-value"><span class="ff-value__text">普外科</span></div></div></div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">职称</span></div><div class="ff-value"><span class="ff-value__text">主任医师</span></div></div></div>
+
+      <div class="ea-form-section">
+        <div class="ea-form-section__strip">
+          <span class="ea-form-section__title">联系方式</span>
+        </div>
+      </div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">手机号码</span></div><div class="ff-value"><span class="ff-value__text">15739901787</span></div></div></div>
+      <div class="ff-row"><div class="ff-row__inner"><div class="ff-label"><span class="ff-label__txt">邮箱</span></div><div class="ff-value"><span class="ff-value__text">li.dakui@example.cn</span></div></div></div>
+    </div>
+
+    <!-- 6 · 底部 BAB (2 button) -->
+    <div class="ea-bab">
+      <button type="button" class="ea-bab__btn">
+        <span class="ea-bab__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_152%29%22%3E%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M28.049%200.334741C28.4953%20-0.11158%2029.219%20-0.11158%2029.6653%200.334741C30.1116%200.781027%2030.1116%201.50467%2029.6653%201.95096L16.5938%2015.0224C16.3707%2015.2456%2016.0782%2015.3571%2015.7857%2015.3571C15.4932%2015.3571%2015.2007%2015.2456%2014.9776%2015.0224C14.5313%2014.5761%2014.5313%2013.8525%2014.9776%2013.4062L28.049%200.334741ZM25.5714%2014C25.5714%2013.3688%2026.0831%2012.8571%2026.7143%2012.8571C27.3455%2012.8571%2027.8572%2013.3688%2027.8572%2014V27.3959C27.8572%2028.8318%2026.6889%2030%2025.253%2030H2.60407C1.16818%2030%200%2028.8318%200%2027.3959V4.74691C0%203.31102%201.16818%202.14284%202.60407%202.14284H16C16.6312%202.14284%2017.1429%202.65452%2017.1429%203.2857C17.1429%203.91688%2016.6312%204.42856%2016%204.42856H2.60407C2.42854%204.42856%202.28572%204.57138%202.28572%204.74691V27.3959C2.28572%2027.5715%202.42854%2027.7143%202.60407%2027.7143H25.253C25.4286%2027.7143%2025.5714%2027.5715%2025.5714%2027.3959V14Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_152%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')"></span>
+        <span class="ea-bab__label">编辑</span>
+      </button>
+      <button type="button" class="ea-bab__btn">
+        <span class="ea-bab__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M11.5918%2015.5714C11.5918%2013.599%209.99286%2012%208.02039%2012H5.57143C3.599%2012%202%2013.599%202%2015.5714V30H11.5918V20.7215L14.2611%2022.2639C14.7735%2022.56%2015.4285%2022.3845%2015.7241%2021.8719L15.7883%2021.7607L17.5867%2020.7215V30H27.1786V15.5714C27.1786%2013.599%2025.5796%2012%2023.6071%2012H21.1581C19.1857%2012%2017.5867%2013.599%2017.5867%2015.5714V18L14.5893%2019.732L11.5919%2018L11.5918%2015.5714ZM25.4643%2028.2857V15.5714C25.4643%2014.5458%2024.6328%2013.7143%2023.6071%2013.7143H21.1581C20.1325%2013.7143%2019.301%2014.5458%2019.301%2015.5714V28.2857H25.4643ZM9.87757%2017.7511L9.87754%2017.7511V28.2857H3.71429V15.5714C3.71429%2014.5458%204.54577%2013.7143%205.57143%2013.7143H8.02039C9.04607%2013.7143%209.87754%2014.5458%209.87754%2015.5714L9.87757%2017.7511ZM6.79593%207.88571C8.49648%207.88571%209.87754%206.50558%209.87754%204.8C9.87754%203.09442%208.49648%201.71429%206.79593%201.71429C5.09536%201.71429%203.71429%203.09444%203.71429%204.8C3.71429%206.50556%205.09536%207.88571%206.79593%207.88571ZM19.301%204.8C19.301%206.50558%2020.6821%207.88571%2022.3826%207.88571C24.0832%207.88571%2025.4643%206.50556%2025.4643%204.8C25.4643%203.09444%2024.0832%201.71429%2022.3826%201.71429C20.6821%201.71429%2019.301%203.09442%2019.301%204.8ZM11.5918%204.8C11.5918%207.45096%209.44464%209.6%206.79593%209.6C4.14721%209.6%202%207.45096%202%204.8C2%202.14904%204.14721%200%206.79593%200C9.44464%200%2011.5918%202.14904%2011.5918%204.8ZM17.5868%204.8C17.5868%207.45096%2019.7339%209.6%2022.3826%209.6C25.0314%209.6%2027.1786%207.45096%2027.1786%204.8C27.1786%202.14904%2025.0314%200%2022.3826%200C19.7339%200%2017.5868%202.14904%2017.5868%204.8Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')"></span>
+        <span class="ea-bab__label">拜访</span>
+      </button>
+    </div>
+
+    <div class="phone__home"></div>
+  </div>
+</div>
+</body>
+</html>

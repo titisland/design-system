@@ -1,0 +1,184 @@
+/* =========================================================
+   Voice Call Voice Agent — Visit Report Card
+   voice-report.css
+   ─────────────────────────────────────────────────────────
+   The generated 拜访报告 (visit report) card shown in the
+   chat after voice processing completes.
+
+   Structure — card-in-card:
+   ┌── .vc-report (outer, #F8F8F8, 12px radius, soft shadow) ─┐
+   │  ┌── .vc-report__inner (inner, #FFF, 8px radius) ────────┐ │
+   │  │  doctor row                                           │ │
+   │  │  key-value fields (date / objective / summary)        │ │
+   │  │  "English" translation chip                           │ │
+   │  │  progress bar row                                     │ │
+   │  └───────────────────────────────────────────────────────┘ │
+   │  action buttons row (OUTSIDE inner, INSIDE outer)          │
+   └──────────────────────────────────────────────────────────┘
+
+   Depends on: colors_and_type.css
+   ========================================================= */
+
+/* ── Outer card frame ── */
+.vc-report {
+  width: 100%;
+  background: var(--color-bg-f8);
+  border-radius: var(--vc-r-card);   /* 12px */
+  box-shadow: var(--vc-shadow-card); /* 0 0 20px rgba(0,0,0,.05) */
+  padding: 8px 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Inner white surface ── */
+.vc-report__inner {
+  background: var(--color-bg-white);
+  border-radius: var(--vc-r-bubble);  /* 8px */
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Doctor identity row ── */
+.vc-report__doctor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 8px;
+  border-bottom: 1px solid var(--color-border-base);
+}
+.vc-report__doctor-icon {
+  /* 20×20 rounded square, iOS-blue tinted */
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: var(--color-bg-extra-blue-1);  /* rgba(0,122,255,0.10) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--vc-link-blue);
+}
+.vc-report__doctor-name {
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-title);  /* 16px */
+  color: var(--fg-title);      /* #000 */
+}
+
+/* ── Key-value fields ── */
+.vc-report__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 8px;
+}
+.vc-report__field {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  line-height: 18px;
+}
+.vc-report__field-label {
+  font-weight: var(--fw-medium);
+  color: var(--fg-default);
+}
+.vc-report__field-value {
+  color: var(--fg-muted);
+}
+
+/* Summary field — multi-line, has the English chip */
+.vc-report__field--summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vc-report__field--summary .vc-report__field-value {
+  line-height: 20px;
+}
+
+/* ── "English" translation chip ── */
+.vc-report__en-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-end;
+  background: rgba(0, 122, 255, 0.05);
+  color: var(--vc-link-blue);
+  font-family: var(--font-en);
+  font-size: var(--fs-caption);  /* 12px */
+  border-radius: var(--vc-r-pill);
+  padding: 2px 10px;
+}
+
+/* ── Progress bar row ── */
+.vc-report__progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  padding-top: 4px;
+}
+.vc-report__progress-label {
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-caption);
+  color: var(--fg-default);
+  flex-shrink: 0;
+}
+.vc-report__progress-track {
+  flex: 1;
+  height: 18px;
+  border-radius: var(--vc-r-bubble);  /* 8px */
+  background: var(--color-bg-f2);     /* #F2F2F2 */
+  overflow: hidden;
+}
+.vc-report__progress-fill {
+  height: 100%;
+  background: var(--vc-success);  /* #00DF93 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+.vc-report__progress-pct {
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-micro);  /* 10px */
+  color: #fff;
+}
+
+/* ── Action buttons (outside inner surface, inside outer frame) ── */
+.vc-report__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 0 8px;
+}
+.vc-report__btn {
+  /* reset */
+  all: unset;
+  cursor: pointer;
+  /* layout */
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body);
+  border-radius: var(--vc-r-pill);
+  padding: 7px 20px;
+  border: 1px solid var(--color-border-e2);
+  background: var(--color-bg-white);
+  color: var(--fg-default);
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.vc-report__btn:active {
+  opacity: 0.6;
+}
+/* Primary CTA — submit — orange outline */
+.vc-report__btn--submit {
+  border-color: var(--vc-orange);
+  color: var(--vc-orange);
+  padding-left: 22px;
+  padding-right: 22px;
+}

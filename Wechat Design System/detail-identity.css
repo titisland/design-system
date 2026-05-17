@@ -1,0 +1,210 @@
+/* WeChat Design System — Detail Identity Card (详情身份卡)
+   --------------------------------------------------------
+   Source: Figma 详情页面 (9I1NNGaRTsFFcAnWFzW5qe) node 2481:62357
+           (Group 101 / 3150:69764 — identity block).
+
+   Identity card on the detail page top: avatar + name + meta
+   chips + meta line + a "关注" pill on the right. Sits below
+   the sub-header on the same orange/peach background.
+
+   Anatomy:
+     ┌───────────────────────────────────────────────┐
+     │ [60 avatar]  李大魁                  [⭐ 关注]  │
+     │              关注数 4                         │
+     │              [微信已认证] [公众号已关注]       │
+     │              北京大学… ｜ 普外科 ｜ 主任医师    │
+     └───────────────────────────────────────────────┘
+                      ~160px tall
+
+   Background: solid vertical gradient from brand-veeva orange
+   (top) to white (bottom). NO texture overlay on this card —
+   color only.
+
+   ── Locked icons ─────────────────────────────────────────
+   Avatar glyph — Homepage business icon (default Homepage-我的医生.svg)
+                  rendered as <img> at 32×32 inside the 60 white well.
+   关注 button  — `线性/线性-收藏.svg` or `面性/面性-五角星实心.svg`,
+                  brand-veeva tint, 12×12 left of the label.
+   ────────────────────────────────────────────────────────── */
+
+:root {
+  --dic-pad-x:           16px;
+  --dic-pad-y:           16px;
+  --dic-bg-start:        var(--color-brand-veeva);    /* #F7981D top */
+  --dic-bg-end:          var(--color-white);          /* white bottom */
+  --dic-fg-name:         var(--color-fg-h1);          /* #000 */
+  --dic-fg-meta:         var(--color-fg-h3);          /* #666 */
+  --dic-fg-count:        var(--color-fg-h3);
+  --dic-fg-count-num:    var(--color-brand-veeva);    /* the "4" in "关注数 4" — orange */
+
+  --dic-avatar-size:     60px;
+  --dic-avatar-bg:       var(--color-bg-extra-blue-1);  /* light blue well */
+  --dic-avatar-icon-sz:  32px;
+
+  --dic-name-fs:         20px;
+  --dic-name-fw:         var(--fw-medium);
+
+  --dic-tag-h:           20px;
+  --dic-tag-pad-x:       6px;
+  --dic-tag-fs:          12px;
+  --dic-tag-radius:      var(--r-base);
+  --dic-tag-wechat-bg:   var(--color-success-light-1);
+  --dic-tag-wechat-fg:   #06AE56;                       /* WeChat green */
+  --dic-tag-pa-bg:       var(--color-veeva-blue-light-1);
+  --dic-tag-pa-fg:       var(--color-veeva-blue);
+
+  --dic-follow-h:        28px;
+  --dic-follow-pad-x:    12px;
+  --dic-follow-radius:   var(--r-circle);
+  --dic-follow-bg:       var(--color-brand-veeva);
+  --dic-follow-fg:       var(--color-white);
+  --dic-follow-fs:       14px;
+  --dic-follow-icon-sz:  12px;
+
+  --dic-meta-fs:         13px;
+  --dic-meta-color:      var(--color-fg-h3);
+  --dic-meta-divider:    var(--color-fg-disabled);     /* the ｜ separator */
+}
+
+.ea-detail-identity {
+  position: relative;
+  width: 100%;
+  padding: var(--dic-pad-y) var(--dic-pad-x);
+  /* Solid gradient only — orange → white vertical. NO texture overlay
+     here (the pattern lived on the home-banner; the identity card
+     uses a clean color-only background). */
+  background: linear-gradient(180deg, var(--dic-bg-start) 0%, var(--dic-bg-end) 100%);
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ea-detail-identity__row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+/* Avatar — round white well + icon-library Homepage business icon */
+.ea-detail-identity__avatar {
+  flex: 0 0 var(--dic-avatar-size);
+  width: var(--dic-avatar-size);
+  height: var(--dic-avatar-size);
+  border-radius: 50%;
+  background: var(--dic-avatar-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-detail-identity__avatar img {
+  width: var(--dic-avatar-icon-sz);
+  height: var(--dic-avatar-icon-sz);
+  display: block;
+}
+
+/* Name + 关注数 column */
+.ea-detail-identity__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ea-detail-identity__name {
+  font-size: var(--dic-name-fs);
+  font-weight: var(--dic-name-fw);
+  color: var(--dic-fg-name);
+  line-height: 28px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ea-detail-identity__count {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--dic-fg-count);
+}
+.ea-detail-identity__count-num {
+  color: var(--dic-fg-count-num);
+  font-weight: var(--fw-medium);
+  margin-left: 4px;
+}
+
+/* 关注 pill button */
+.ea-detail-identity__follow {
+  flex: 0 0 auto;
+  height: var(--dic-follow-h);
+  padding: 0 var(--dic-follow-pad-x);
+  border: 0;
+  border-radius: var(--dic-follow-radius);
+  background: var(--dic-follow-bg);
+  color: var(--dic-follow-fg);
+  font-size: var(--dic-follow-fs);
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: center;
+}
+.ea-detail-identity__follow-icon {
+  width: var(--dic-follow-icon-sz);
+  height: var(--dic-follow-icon-sz);
+  background-color: var(--dic-follow-fg);
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+/* Verification tags row (微信已认证 / 公众号已关注) */
+.ea-detail-identity__tags {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ea-detail-identity__tag {
+  display: inline-flex;
+  align-items: center;
+  height: var(--dic-tag-h);
+  padding: 0 var(--dic-tag-pad-x);
+  border-radius: var(--dic-tag-radius);
+  font-size: var(--dic-tag-fs);
+  line-height: 1;
+  background: var(--color-bg-f5);
+  color: var(--color-fg-h3);
+}
+.ea-detail-identity__tag--wechat {
+  background: var(--dic-tag-wechat-bg);
+  color: var(--dic-tag-wechat-fg);
+}
+.ea-detail-identity__tag--pa {
+  background: var(--dic-tag-pa-bg);
+  color: var(--dic-tag-pa-fg);
+}
+
+/* Meta line — fields separated by ｜ (full-width vertical bar) */
+.ea-detail-identity__meta {
+  position: relative;
+  z-index: 1;
+  font-size: var(--dic-meta-fs);
+  line-height: 22px;
+  color: var(--dic-meta-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ea-detail-identity__meta-sep {
+  color: var(--dic-meta-divider);
+  margin: 0 6px;
+  font-weight: var(--fw-regular);
+}

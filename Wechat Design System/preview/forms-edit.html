@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Form fields — 一级表单</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=5">
+<link rel="stylesheet" href="../forms.css?v=5">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8F8F8; font-family: var(--ff-font); }
+  .stage { padding: 24px; display: flex; flex-direction: column; gap: 28px; margin: 0 auto; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px 20px;
+    align-items: start;
+  }
+  .col { display: flex; flex-direction: column; }
+  .col-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: #000;
+    margin: 0 0 12px;
+    letter-spacing: 0.02em;
+  }
+  .col-sub {
+    font-size: 12px;
+    color: #999;
+    margin: -6px 0 14px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .frame {
+    border: 1px dashed rgb(151,71,255);
+    border-radius: 5px;
+    padding: 20px;
+    background: #fff;
+  }
+  .frame > .ff-row + .ff-row { /* rows visually stacked, divider supplies separation */ }
+  h2.section {
+    font-size: 36px;
+    font-weight: 600;
+    margin: 12px 0 4px;
+    color: #000;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <h2 class="section">组件</h2>
+
+  <div class="grid">
+
+    <!-- =================================================== Text -->
+    <div class="col">
+      <div class="col-title">Text</div>
+      <div class="col-sub">单行文本 / lookup / date / datetime</div>
+      <div class="frame">
+        <!-- Edit / value off / hint off -->
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text ff-value__placeholder">请输入内容</div></div>
+          </div>
+        </div>
+        <!-- Edit / value on -->
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text">文本内容</div></div>
+          </div>
+        </div>
+        <!-- Edit / value on / required -->
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text">文本内容</div></div>
+          </div>
+        </div>
+        <!-- View / value on -->
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text">文本内容</div></div>
+          </div>
+        </div>
+        <!-- Edit / value off / 报错 -->
+        <div class="ff-row ff-row--error">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-value__text ff-value__placeholder">请输入内容</div>
+              <div class="ff-error">必填项不能为空</div>
+            </div>
+          </div>
+        </div>
+        <!-- Edit / value off / inline hint -->
+        <div class="ff-row ff-row--hint">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text ff-value__placeholder">请输入内容</div></div>
+          </div>
+          <div class="ff-hint">ⓘ 此处为字段说明，可自定义提示内容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================== Long text -->
+    <div class="col">
+      <div class="col-title">Long text</div>
+      <div class="col-sub">longtext · 多行</div>
+      <div class="frame">
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text ff-value__placeholder">请输入内容</div></div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--longtext">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-textarea-readonly">文本内容文本内容文本内容文本内容文本内容文本内容文本内容文本内容文本内容文本内容文本内容文本内容文本内容文本内容</div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--longtext">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <textarea class="ff-textarea" placeholder="请输入内容"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--error ff-row--longtext">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <textarea class="ff-textarea" placeholder="请输入内容"></textarea>
+              <div class="ff-error">必填项不能为空</div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--hint ff-row--longtext">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><textarea class="ff-textarea" placeholder="请输入内容"></textarea></div>
+          </div>
+          <div class="ff-hint">ⓘ 此处为字段说明，可自定义提示内容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================== Boolean -->
+    <div class="col">
+      <div class="col-title">Boolean</div>
+      <div class="col-sub">boolean · 是 / 否</div>
+      <div class="frame">
+        <div class="ff-row" style="min-height:80px">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-radio-group" role="radiogroup">
+                <label class="ff-radio"><input type="radio" name="b1" checked><span>是</span></label>
+                <label class="ff-radio"><input type="radio" name="b1"><span>否</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text">是</div></div>
+          </div>
+        </div>
+        <div class="ff-row" style="min-height:80px">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-radio-group" role="radiogroup">
+                <label class="ff-radio"><input type="radio" name="b2" checked><span>是</span></label>
+                <label class="ff-radio"><input type="radio" name="b2"><span>否</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--hint" style="min-height:110px">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-radio-group" role="radiogroup">
+                <label class="ff-radio"><input type="radio" name="b3"><span>是</span></label>
+                <label class="ff-radio"><input type="radio" name="b3"><span>否</span></label>
+              </div>
+            </div>
+          </div>
+          <div class="ff-hint">ⓘ 此处为字段说明，可自定义提示内容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================== Picklist -->
+    <div class="col">
+      <div class="col-title">Picklist</div>
+      <div class="col-sub">picklist · 单选段</div>
+      <div class="frame">
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text ff-value__placeholder">请选择内容</div></div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span>选项一</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cpath%20d%3D%22M14.167%2018.689L0.334178%205.81286C-0.111393%205.39814%20-0.111393%204.72575%200.334178%204.31104C0.779678%203.89632%201.50204%203.89632%201.94757%204.31104L15%2016.4607L28.0524%204.31104C28.498%203.89632%2029.2203%203.89632%2029.6658%204.31104C30.1114%204.72575%2030.1114%205.39814%2029.6658%205.81282L15.9042%2018.6226C15.8153%2018.7053%2015.7137%2018.7732%2015.6034%2018.8239C15.1604%2019.0974%2014.5574%2019.0524%2014.167%2018.689V18.689ZM14.167%2026.189L0.334178%2013.3129C-0.111393%2012.8981%20-0.111393%2012.2257%200.334178%2011.811C0.779678%2011.3963%201.50204%2011.3963%201.94757%2011.811L15%2023.9607L28.0524%2011.811C28.498%2011.3963%2029.2203%2011.3963%2029.6658%2011.811C30.1114%2012.2257%2030.1114%2012.8981%2029.6658%2013.3128L15.9042%2026.1226C15.8153%2026.2053%2015.7137%2026.2732%2015.6034%2026.3239C15.1604%2026.5974%2014.5574%2026.5524%2014.167%2026.189V26.189Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value" style="padding-top:3px">
+              <div class="ff-segment" role="radiogroup">
+                <button type="button" class="ff-segment__opt" aria-pressed="true">打招呼</button>
+                <button type="button" class="ff-segment__opt" aria-pressed="false">用药沟通</button>
+                <button type="button" class="ff-segment__opt" aria-pressed="false">上量</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--error">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-value__text ff-value__placeholder">请选择内容</div>
+              <div class="ff-error">必填项不能为空</div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--hint">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value"><div class="ff-value__text ff-value__placeholder">请选择内容</div></div>
+          </div>
+          <div class="ff-hint">ⓘ 此处为字段说明，可自定义提示内容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================== Date -->
+    <div class="col">
+      <div class="col-title">Date</div>
+      <div class="col-sub">date · 日期 / 日期时间</div>
+      <div class="frame">
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span class="ff-value__placeholder">请选择日期</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_178%29%22%3E%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M23.5638%204.1767H27.7116C28.9755%204.1767%2030%205.30011%2030%206.68594V25.2357C30%2026.6215%2028.9755%2027.7449%2027.7116%2027.7449H2.28844C1.02458%2027.7449%200%2026.6215%200%2025.2357V6.6859C0%205.30007%201.02458%204.17666%202.28844%204.17666H6.43623V3.03917C6.43623%202.46527%206.95321%202%207.54691%202C8.14062%202%208.68892%202.46527%208.68892%203.03917V4.17666H21.3111V3.03917C21.3111%202.46527%2021.8594%202%2022.4531%202C23.0468%202%2023.5638%202.46527%2023.5638%203.0392V4.1767ZM27.6485%2025.4565C27.6742%2025.4224%2027.7116%2025.3497%2027.7116%2025.2357V10.2911H2.28844V25.2357C2.28844%2025.3498%202.3258%2025.4224%202.35155%2025.4565H27.6485ZM2.28844%209.00834H27.7116V6.68594C27.7116%206.57191%2027.6742%206.49925%2027.6485%206.46514H23.5638V7.11101C23.5638%207.68491%2023.0468%208.15018%2022.4531%208.15018C21.8594%208.15018%2021.3111%207.68491%2021.3111%207.11101V6.46514H8.68892V7.11101C8.68892%207.68491%208.14058%208.15018%207.54691%208.15018C6.95324%208.15018%206.43623%207.68491%206.43623%207.11101V6.46514H2.35155C2.3258%206.49925%202.28844%206.57191%202.28844%206.68594V9.00834ZM10.7025%2020.652C10.9679%2020.908%2011.2891%2021.0361%2011.6663%2021.0361C12.0713%2021.0361%2012.4123%2020.8824%2012.6894%2020.5751C12.9663%2020.2678%2013.1049%2019.8535%2013.1049%2019.332C13.1049%2018.8386%2012.9722%2018.4475%2012.7068%2018.1587C12.4415%2017.8701%2012.1178%2017.7258%2011.7361%2017.7258C11.4847%2017.7258%2011.1844%2017.7747%2010.8352%2017.8724L11.0517%2016.2731C11.5824%2016.2871%2011.9875%2016.1719%2012.2669%2015.9274C12.5462%2015.683%2012.6859%2015.3583%2012.6859%2014.9532C12.6859%2014.6087%2012.5834%2014.334%2012.3786%2014.1291C12.1736%2013.9243%2011.9013%2013.8218%2011.5615%2013.8218C11.2263%2013.8218%2010.94%2013.9383%2010.7025%2014.171C10.4651%2014.4039%2010.3207%2014.7437%2010.2695%2015.1907L8.46072%2014.8834C8.58644%2014.2642%208.77606%2013.7695%209.0299%2013.3993C9.28363%2013.0292%209.63751%2012.7383%2010.0914%2012.5264C10.5454%2012.3145%2011.054%2012.2086%2011.6174%2012.2086C12.5812%2012.2086%2013.354%2012.5158%2013.936%2013.1304C14.4155%2013.6332%2014.6553%2014.2013%2014.6553%2014.8345C14.6553%2015.7331%2014.1641%2016.4501%2013.1818%2016.9854C13.7684%2017.1112%2014.2374%2017.3929%2014.589%2017.8305C14.9405%2018.2682%2015.1162%2018.7967%2015.1162%2019.4158C15.1162%2020.3144%2014.788%2021.0804%2014.1315%2021.7135C13.475%2022.3467%2012.658%2022.6632%2011.6802%2022.6632C10.7537%2022.6632%209.98546%2022.3968%209.3756%2021.8636C8.76558%2021.3305%208.4118%2020.6334%208.31404%2019.772L10.2136%2019.5415C10.2741%2020.0258%2010.4371%2020.396%2010.7025%2020.652ZM20.6446%2022.4887H18.6821V15.0929C17.9651%2015.7633%2017.1201%2016.2592%2016.147%2016.5804V14.7996C16.6592%2014.632%2017.2156%2014.3142%2017.8162%2013.8463C18.4168%2013.3784%2018.8288%2012.8325%2019.0523%2012.2086H20.6446V22.4887Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_178%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span>2024-07-30</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_178%29%22%3E%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M23.5638%204.1767H27.7116C28.9755%204.1767%2030%205.30011%2030%206.68594V25.2357C30%2026.6215%2028.9755%2027.7449%2027.7116%2027.7449H2.28844C1.02458%2027.7449%200%2026.6215%200%2025.2357V6.6859C0%205.30007%201.02458%204.17666%202.28844%204.17666H6.43623V3.03917C6.43623%202.46527%206.95321%202%207.54691%202C8.14062%202%208.68892%202.46527%208.68892%203.03917V4.17666H21.3111V3.03917C21.3111%202.46527%2021.8594%202%2022.4531%202C23.0468%202%2023.5638%202.46527%2023.5638%203.0392V4.1767ZM27.6485%2025.4565C27.6742%2025.4224%2027.7116%2025.3497%2027.7116%2025.2357V10.2911H2.28844V25.2357C2.28844%2025.3498%202.3258%2025.4224%202.35155%2025.4565H27.6485ZM2.28844%209.00834H27.7116V6.68594C27.7116%206.57191%2027.6742%206.49925%2027.6485%206.46514H23.5638V7.11101C23.5638%207.68491%2023.0468%208.15018%2022.4531%208.15018C21.8594%208.15018%2021.3111%207.68491%2021.3111%207.11101V6.46514H8.68892V7.11101C8.68892%207.68491%208.14058%208.15018%207.54691%208.15018C6.95324%208.15018%206.43623%207.68491%206.43623%207.11101V6.46514H2.35155C2.3258%206.49925%202.28844%206.57191%202.28844%206.68594V9.00834ZM10.7025%2020.652C10.9679%2020.908%2011.2891%2021.0361%2011.6663%2021.0361C12.0713%2021.0361%2012.4123%2020.8824%2012.6894%2020.5751C12.9663%2020.2678%2013.1049%2019.8535%2013.1049%2019.332C13.1049%2018.8386%2012.9722%2018.4475%2012.7068%2018.1587C12.4415%2017.8701%2012.1178%2017.7258%2011.7361%2017.7258C11.4847%2017.7258%2011.1844%2017.7747%2010.8352%2017.8724L11.0517%2016.2731C11.5824%2016.2871%2011.9875%2016.1719%2012.2669%2015.9274C12.5462%2015.683%2012.6859%2015.3583%2012.6859%2014.9532C12.6859%2014.6087%2012.5834%2014.334%2012.3786%2014.1291C12.1736%2013.9243%2011.9013%2013.8218%2011.5615%2013.8218C11.2263%2013.8218%2010.94%2013.9383%2010.7025%2014.171C10.4651%2014.4039%2010.3207%2014.7437%2010.2695%2015.1907L8.46072%2014.8834C8.58644%2014.2642%208.77606%2013.7695%209.0299%2013.3993C9.28363%2013.0292%209.63751%2012.7383%2010.0914%2012.5264C10.5454%2012.3145%2011.054%2012.2086%2011.6174%2012.2086C12.5812%2012.2086%2013.354%2012.5158%2013.936%2013.1304C14.4155%2013.6332%2014.6553%2014.2013%2014.6553%2014.8345C14.6553%2015.7331%2014.1641%2016.4501%2013.1818%2016.9854C13.7684%2017.1112%2014.2374%2017.3929%2014.589%2017.8305C14.9405%2018.2682%2015.1162%2018.7967%2015.1162%2019.4158C15.1162%2020.3144%2014.788%2021.0804%2014.1315%2021.7135C13.475%2022.3467%2012.658%2022.6632%2011.6802%2022.6632C10.7537%2022.6632%209.98546%2022.3968%209.3756%2021.8636C8.76558%2021.3305%208.4118%2020.6334%208.31404%2019.772L10.2136%2019.5415C10.2741%2020.0258%2010.4371%2020.396%2010.7025%2020.652ZM20.6446%2022.4887H18.6821V15.0929C17.9651%2015.7633%2017.1201%2016.2592%2016.147%2016.5804V14.7996C16.6592%2014.632%2017.2156%2014.3142%2017.8162%2013.8463C18.4168%2013.3784%2018.8288%2012.8325%2019.0523%2012.2086H20.6446V22.4887Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_178%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--error">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span class="ff-value__placeholder">请选择日期</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_178%29%22%3E%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M23.5638%204.1767H27.7116C28.9755%204.1767%2030%205.30011%2030%206.68594V25.2357C30%2026.6215%2028.9755%2027.7449%2027.7116%2027.7449H2.28844C1.02458%2027.7449%200%2026.6215%200%2025.2357V6.6859C0%205.30007%201.02458%204.17666%202.28844%204.17666H6.43623V3.03917C6.43623%202.46527%206.95321%202%207.54691%202C8.14062%202%208.68892%202.46527%208.68892%203.03917V4.17666H21.3111V3.03917C21.3111%202.46527%2021.8594%202%2022.4531%202C23.0468%202%2023.5638%202.46527%2023.5638%203.0392V4.1767ZM27.6485%2025.4565C27.6742%2025.4224%2027.7116%2025.3497%2027.7116%2025.2357V10.2911H2.28844V25.2357C2.28844%2025.3498%202.3258%2025.4224%202.35155%2025.4565H27.6485ZM2.28844%209.00834H27.7116V6.68594C27.7116%206.57191%2027.6742%206.49925%2027.6485%206.46514H23.5638V7.11101C23.5638%207.68491%2023.0468%208.15018%2022.4531%208.15018C21.8594%208.15018%2021.3111%207.68491%2021.3111%207.11101V6.46514H8.68892V7.11101C8.68892%207.68491%208.14058%208.15018%207.54691%208.15018C6.95324%208.15018%206.43623%207.68491%206.43623%207.11101V6.46514H2.35155C2.3258%206.49925%202.28844%206.57191%202.28844%206.68594V9.00834ZM10.7025%2020.652C10.9679%2020.908%2011.2891%2021.0361%2011.6663%2021.0361C12.0713%2021.0361%2012.4123%2020.8824%2012.6894%2020.5751C12.9663%2020.2678%2013.1049%2019.8535%2013.1049%2019.332C13.1049%2018.8386%2012.9722%2018.4475%2012.7068%2018.1587C12.4415%2017.8701%2012.1178%2017.7258%2011.7361%2017.7258C11.4847%2017.7258%2011.1844%2017.7747%2010.8352%2017.8724L11.0517%2016.2731C11.5824%2016.2871%2011.9875%2016.1719%2012.2669%2015.9274C12.5462%2015.683%2012.6859%2015.3583%2012.6859%2014.9532C12.6859%2014.6087%2012.5834%2014.334%2012.3786%2014.1291C12.1736%2013.9243%2011.9013%2013.8218%2011.5615%2013.8218C11.2263%2013.8218%2010.94%2013.9383%2010.7025%2014.171C10.4651%2014.4039%2010.3207%2014.7437%2010.2695%2015.1907L8.46072%2014.8834C8.58644%2014.2642%208.77606%2013.7695%209.0299%2013.3993C9.28363%2013.0292%209.63751%2012.7383%2010.0914%2012.5264C10.5454%2012.3145%2011.054%2012.2086%2011.6174%2012.2086C12.5812%2012.2086%2013.354%2012.5158%2013.936%2013.1304C14.4155%2013.6332%2014.6553%2014.2013%2014.6553%2014.8345C14.6553%2015.7331%2014.1641%2016.4501%2013.1818%2016.9854C13.7684%2017.1112%2014.2374%2017.3929%2014.589%2017.8305C14.9405%2018.2682%2015.1162%2018.7967%2015.1162%2019.4158C15.1162%2020.3144%2014.788%2021.0804%2014.1315%2021.7135C13.475%2022.3467%2012.658%2022.6632%2011.6802%2022.6632C10.7537%2022.6632%209.98546%2022.3968%209.3756%2021.8636C8.76558%2021.3305%208.4118%2020.6334%208.31404%2019.772L10.2136%2019.5415C10.2741%2020.0258%2010.4371%2020.396%2010.7025%2020.652ZM20.6446%2022.4887H18.6821V15.0929C17.9651%2015.7633%2017.1201%2016.2592%2016.147%2016.5804V14.7996C16.6592%2014.632%2017.2156%2014.3142%2017.8162%2013.8463C18.4168%2013.3784%2018.8288%2012.8325%2019.0523%2012.2086H20.6446V22.4887Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_178%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+              <div class="ff-error">必填项不能为空</div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--hint">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span class="ff-value__placeholder">请选择日期</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_178%29%22%3E%20%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M23.5638%204.1767H27.7116C28.9755%204.1767%2030%205.30011%2030%206.68594V25.2357C30%2026.6215%2028.9755%2027.7449%2027.7116%2027.7449H2.28844C1.02458%2027.7449%200%2026.6215%200%2025.2357V6.6859C0%205.30007%201.02458%204.17666%202.28844%204.17666H6.43623V3.03917C6.43623%202.46527%206.95321%202%207.54691%202C8.14062%202%208.68892%202.46527%208.68892%203.03917V4.17666H21.3111V3.03917C21.3111%202.46527%2021.8594%202%2022.4531%202C23.0468%202%2023.5638%202.46527%2023.5638%203.0392V4.1767ZM27.6485%2025.4565C27.6742%2025.4224%2027.7116%2025.3497%2027.7116%2025.2357V10.2911H2.28844V25.2357C2.28844%2025.3498%202.3258%2025.4224%202.35155%2025.4565H27.6485ZM2.28844%209.00834H27.7116V6.68594C27.7116%206.57191%2027.6742%206.49925%2027.6485%206.46514H23.5638V7.11101C23.5638%207.68491%2023.0468%208.15018%2022.4531%208.15018C21.8594%208.15018%2021.3111%207.68491%2021.3111%207.11101V6.46514H8.68892V7.11101C8.68892%207.68491%208.14058%208.15018%207.54691%208.15018C6.95324%208.15018%206.43623%207.68491%206.43623%207.11101V6.46514H2.35155C2.3258%206.49925%202.28844%206.57191%202.28844%206.68594V9.00834ZM10.7025%2020.652C10.9679%2020.908%2011.2891%2021.0361%2011.6663%2021.0361C12.0713%2021.0361%2012.4123%2020.8824%2012.6894%2020.5751C12.9663%2020.2678%2013.1049%2019.8535%2013.1049%2019.332C13.1049%2018.8386%2012.9722%2018.4475%2012.7068%2018.1587C12.4415%2017.8701%2012.1178%2017.7258%2011.7361%2017.7258C11.4847%2017.7258%2011.1844%2017.7747%2010.8352%2017.8724L11.0517%2016.2731C11.5824%2016.2871%2011.9875%2016.1719%2012.2669%2015.9274C12.5462%2015.683%2012.6859%2015.3583%2012.6859%2014.9532C12.6859%2014.6087%2012.5834%2014.334%2012.3786%2014.1291C12.1736%2013.9243%2011.9013%2013.8218%2011.5615%2013.8218C11.2263%2013.8218%2010.94%2013.9383%2010.7025%2014.171C10.4651%2014.4039%2010.3207%2014.7437%2010.2695%2015.1907L8.46072%2014.8834C8.58644%2014.2642%208.77606%2013.7695%209.0299%2013.3993C9.28363%2013.0292%209.63751%2012.7383%2010.0914%2012.5264C10.5454%2012.3145%2011.054%2012.2086%2011.6174%2012.2086C12.5812%2012.2086%2013.354%2012.5158%2013.936%2013.1304C14.4155%2013.6332%2014.6553%2014.2013%2014.6553%2014.8345C14.6553%2015.7331%2014.1641%2016.4501%2013.1818%2016.9854C13.7684%2017.1112%2014.2374%2017.3929%2014.589%2017.8305C14.9405%2018.2682%2015.1162%2018.7967%2015.1162%2019.4158C15.1162%2020.3144%2014.788%2021.0804%2014.1315%2021.7135C13.475%2022.3467%2012.658%2022.6632%2011.6802%2022.6632C10.7537%2022.6632%209.98546%2022.3968%209.3756%2021.8636C8.76558%2021.3305%208.4118%2020.6334%208.31404%2019.772L10.2136%2019.5415C10.2741%2020.0258%2010.4371%2020.396%2010.7025%2020.652ZM20.6446%2022.4887H18.6821V15.0929C17.9651%2015.7633%2017.1201%2016.2592%2016.147%2016.5804V14.7996C16.6592%2014.632%2017.2156%2014.3142%2017.8162%2013.8463C18.4168%2013.3784%2018.8288%2012.8325%2019.0523%2012.2086H20.6446V22.4887Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_178%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+          <div class="ff-hint">ⓘ 此处为字段说明，可自定义提示内容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================== Datetime -->
+    <div class="col">
+      <div class="col-title">Datetime</div>
+      <div class="col-sub">datetime · 含时分</div>
+      <div class="frame">
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span class="ff-value__placeholder">请选择日期</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_269%29%22%3E%20%3Cpath%20d%3D%22M15%200C23.2843%200%2030%206.71571%2030%2015C30%2023.2843%2023.2843%2030%2015%2030C6.71571%2030%200%2023.2843%200%2015C0%206.71571%206.71571%200%2015%200ZM15%202.28571C7.97811%202.28571%202.28571%207.97811%202.28571%2015C2.28571%2022.0219%207.97811%2027.7143%2015%2027.7143C22.0219%2027.7143%2027.7143%2022.0219%2027.7143%2015C27.7143%207.97811%2022.0219%202.28571%2015%202.28571ZM15%206.42857C15.5917%206.42857%2016.0714%206.90825%2016.0714%207.5V15H23.5714C24.1632%2015%2024.6429%2015.4797%2024.6429%2016.0714C24.6429%2016.6632%2024.1632%2017.1429%2023.5714%2017.1429H15C14.4082%2017.1429%2013.9286%2016.6632%2013.9286%2016.0714V7.5C13.9286%206.90825%2014.4082%206.42857%2015%206.42857Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_269%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span>2024-07-30 15:30</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_269%29%22%3E%20%3Cpath%20d%3D%22M15%200C23.2843%200%2030%206.71571%2030%2015C30%2023.2843%2023.2843%2030%2015%2030C6.71571%2030%200%2023.2843%200%2015C0%206.71571%206.71571%200%2015%200ZM15%202.28571C7.97811%202.28571%202.28571%207.97811%202.28571%2015C2.28571%2022.0219%207.97811%2027.7143%2015%2027.7143C22.0219%2027.7143%2027.7143%2022.0219%2027.7143%2015C27.7143%207.97811%2022.0219%202.28571%2015%202.28571ZM15%206.42857C15.5917%206.42857%2016.0714%206.90825%2016.0714%207.5V15H23.5714C24.1632%2015%2024.6429%2015.4797%2024.6429%2016.0714C24.6429%2016.6632%2024.1632%2017.1429%2023.5714%2017.1429H15C14.4082%2017.1429%2013.9286%2016.6632%2013.9286%2016.0714V7.5C13.9286%206.90825%2014.4082%206.42857%2015%206.42857Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_269%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--error">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span class="ff-value__placeholder">请选择日期</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_269%29%22%3E%20%3Cpath%20d%3D%22M15%200C23.2843%200%2030%206.71571%2030%2015C30%2023.2843%2023.2843%2030%2015%2030C6.71571%2030%200%2023.2843%200%2015C0%206.71571%206.71571%200%2015%200ZM15%202.28571C7.97811%202.28571%202.28571%207.97811%202.28571%2015C2.28571%2022.0219%207.97811%2027.7143%2015%2027.7143C22.0219%2027.7143%2027.7143%2022.0219%2027.7143%2015C27.7143%207.97811%2022.0219%202.28571%2015%202.28571ZM15%206.42857C15.5917%206.42857%2016.0714%206.90825%2016.0714%207.5V15H23.5714C24.1632%2015%2024.6429%2015.4797%2024.6429%2016.0714C24.6429%2016.6632%2024.1632%2017.1429%2023.5714%2017.1429H15C14.4082%2017.1429%2013.9286%2016.6632%2013.9286%2016.0714V7.5C13.9286%206.90825%2014.4082%206.42857%2015%206.42857Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_269%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+              <div class="ff-error">必填项不能为空</div>
+            </div>
+          </div>
+        </div>
+        <div class="ff-row ff-row--hint">
+          <div class="ff-row__inner">
+            <div class="ff-label"><span class="ff-required" aria-hidden="true"></span><span class="ff-label__txt">Label名称</span></div>
+            <div class="ff-value">
+              <div class="ff-trigger">
+                <span class="ff-value__placeholder">请选择日期</span>
+                <span class="ff-trigger__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_42_269%29%22%3E%20%3Cpath%20d%3D%22M15%200C23.2843%200%2030%206.71571%2030%2015C30%2023.2843%2023.2843%2030%2015%2030C6.71571%2030%200%2023.2843%200%2015C0%206.71571%206.71571%200%2015%200ZM15%202.28571C7.97811%202.28571%202.28571%207.97811%202.28571%2015C2.28571%2022.0219%207.97811%2027.7143%2015%2027.7143C22.0219%2027.7143%2027.7143%2022.0219%2027.7143%2015C27.7143%207.97811%2022.0219%202.28571%2015%202.28571ZM15%206.42857C15.5917%206.42857%2016.0714%206.90825%2016.0714%207.5V15H23.5714C24.1632%2015%2024.6429%2015.4797%2024.6429%2016.0714C24.6429%2016.6632%2024.1632%2017.1429%2023.5714%2017.1429H15C14.4082%2017.1429%2013.9286%2016.6632%2013.9286%2016.0714V7.5C13.9286%206.90825%2014.4082%206.42857%2015%206.42857Z%22%20fill%3D%22%23333333%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_42_269%22%3E%20%3Crect%20width%3D%2230%22%20height%3D%2230%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E')" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+          <div class="ff-hint">ⓘ 此处为字段说明，可自定义提示内容</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ Specs legend ============ -->
+  <div style="font-size:12px;color:#999;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;line-height:1.8;padding:0 4px">
+    <div>row width 100% (fluid) · padding 5/15 · label 105w · gap 10 · value flex · divider 1px #EEE</div>
+    <div>label #666 14/22 · placeholder #E5E5E5 · value #333 14/100% · readonly #999 · error #FF5543 15/100%</div>
+    <div>required asterisk = 8-pt sparkle 6.5×6.5 #FF5543 (NOT char *)</div>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.ff-segment').forEach(seg => {
+    seg.addEventListener('click', e => {
+      const b = e.target.closest('.ff-segment__opt');
+      if (!b) return;
+      seg.querySelectorAll('.ff-segment__opt').forEach(x => x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+    });
+  });
+</script>
+</body>
+</html>

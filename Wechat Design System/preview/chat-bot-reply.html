@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bot reply structure — Chat AI Agent</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../chat-shell.css">
+<style>
+html, body { margin:0; padding:0; background:#F0F0F0; font-family:var(--font-cn); }
+.preview-page { max-width:920px; margin:0 auto; padding:32px 24px 80px; }
+
+.section-title {
+  font-size:11px; font-weight:600; color:#999; letter-spacing:0.08em;
+  text-transform:uppercase; margin:48px 0 16px;
+  border-top:1px solid #DDD; padding-top:24px;
+}
+.section-title:first-of-type { margin-top:0; border-top:none; padding-top:0; }
+.sub-label { font-size:11px; color:#AAA; margin-bottom:8px; }
+.note {
+  font-size:12px; color:#888; background:#FFF8E6;
+  border-left:3px solid #F7981D; padding:8px 12px;
+  border-radius:0 4px 4px 0; line-height:18px; margin-bottom:16px;
+}
+.note code { font-family:monospace; font-size:11px; color:#555; }
+.row { display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap; }
+
+/* Canvas — 白色背景，模拟 bot 回复气泡 */
+.canvas {
+  background: #FFFFFF;
+  border-radius:8px;
+  padding:16px 14px;
+}
+</style>
+</head>
+<body>
+<div class="preview-page">
+
+  <div class="note">
+    Bot 回复直接渲染在画布上，无白色气泡、无头像。后端返回普通文本自动转换为
+    <code>MarkdownAIMessage</code>。样式类：<code>ea-chat-msg__*</code>。
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       §1  文本 — h2 / h3 / text / muted / 内联样式
+       ══════════════════════════════════════════════ -->
+  <div class="section-title">1 · 文本 — h2 / h3 / text / muted</div>
+
+  <div class="row">
+
+    <div>
+      <div class="sub-label">标题层级 + 正文 + 次要文本</div>
+      <div class="canvas" style="width:343px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h2">嗨！我是你的智能小助手</p>
+            <p class="ea-chat-msg__text">好的，为您总结上次拜访的内容。</p>
+          </div>
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h3">重点标题</p>
+            <p class="ea-chat-msg__text">根据近期互动数据，建议重点沟通 X 产品的最新临床研究结果，尤其关注三年 OS 数据与竞品对比。</p>
+            <p class="ea-chat-msg__muted">上次拜访：2025-04-28 · 下次建议：2025-05-15</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sub-label">内联加粗 / 斜体</div>
+      <div class="canvas" style="width:343px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h2">背景分析</p>
+            <p class="ea-chat-msg__text">
+              沈杨医生近两年互动<span class="ea-chat-msg__strong">活跃、学术影响力突出</span>。
+              共完成 <span class="ea-chat-msg__strong">8次拜访</span>（含5次学术拜访），
+              发送42次，阅读53次。
+            </p>
+          </div>
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h3">特别关注</p>
+            <p class="ea-chat-msg__text">
+              他作为<span class="ea-chat-msg__em">讲者/主持人</span>深度参与
+              <span class="ea-chat-msg__strong">6场高规格会议</span>，
+              涵盖血液转化创新大会等，专注淋巴瘤与 AML 精准治疗前沿。
+            </p>
+            <p class="ea-chat-msg__muted">数据周期：2024.03 — 2026.03</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       §2  列表 — ul / ol / 二级嵌套
+       ══════════════════════════════════════════════ -->
+  <div class="section-title">2 · 列表 — ul / ol / 二级嵌套</div>
+
+  <div class="row">
+
+    <div>
+      <div class="sub-label">无序列表 L1 + L2 嵌套</div>
+      <div class="canvas" style="width:310px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h3">重点标题</p>
+            <ul class="ea-chat-msg__ul">
+              <li class="ea-chat-msg__li">Bot 回复分 Point — 主要结论一句话</li>
+              <li class="ea-chat-msg__li">
+                <div style="flex:1; min-width:0;">
+                  Bot 回复分 Point，折行内容前缀与首行对齐
+                  <ul class="ea-chat-msg__ul" style="margin-top:4px;">
+                    <li class="ea-chat-msg__li ea-chat-msg__li--l2">二级内容在这里显示</li>
+                    <li class="ea-chat-msg__li ea-chat-msg__li--l2">二级内容在这里显示</li>
+                  </ul>
+                </div>
+              </li>
+              <li class="ea-chat-msg__li">科室会邀请跟进</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sub-label">有序列表</div>
+      <div class="canvas" style="width:310px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h3">推荐拜访步骤</p>
+            <ol class="ea-chat-msg__ol">
+              <li class="ea-chat-msg__li">确认医生近期处方情况</li>
+              <li class="ea-chat-msg__li">介绍最新临床数据更新</li>
+              <li class="ea-chat-msg__li">讨论患者管理方案</li>
+              <li class="ea-chat-msg__li">邀请参加下月科室会</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sub-label">带日期的互动记录</div>
+      <div class="canvas" style="width:330px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__text">为您找到了最近的三条互动记录：</p>
+            <ul class="ea-chat-msg__ul">
+              <li class="ea-chat-msg__li">
+                <span class="ea-chat-msg__strong">2026-03-06</span>
+                城市会：《合作共赢、共创辉煌》参会
+              </li>
+              <li class="ea-chat-msg__li">
+                <span class="ea-chat-msg__strong">2026-03-04</span>
+                医学问询：关于立文降压14片的临床咨询
+              </li>
+              <li class="ea-chat-msg__li">
+                <span class="ea-chat-msg__strong">2026-02-20</span>
+                学术拜访：由西城主管1主导，状态<span class="ea-chat-msg__em">"未完成"</span>
+              </li>
+            </ul>
+          </div>
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__text">您和医生的互动很紧密，保持这个节奏，成功就在不远处！加油！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       §3  表格
+       ══════════════════════════════════════════════ -->
+  <div class="section-title">3 · 表格 — .ea-chat-msg__table</div>
+  <div class="note">
+    横向可滚动（<code>overflow-x: auto; display: block</code>）。奇偶行交替底色，表头加重，<code>white-space: nowrap</code> 防止折行。
+  </div>
+
+  <div class="row">
+
+    <div>
+      <div class="sub-label">简单对比表</div>
+      <div class="canvas" style="width:360px;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h3">近期互动医生列表</p>
+            <table class="ea-chat-msg__table">
+              <thead>
+                <tr><th>医生</th><th>科室</th><th>近期拜访</th><th>评级</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>李伟</td><td>心血管科</td><td>3 次</td><td>V级</td></tr>
+                <tr><td>张梅</td><td>内分泌科</td><td>1 次</td><td>A级</td></tr>
+                <tr><td>王磊</td><td>神经内科</td><td>5 次</td><td>V级</td></tr>
+                <tr><td>陈静</td><td>肿瘤科</td><td>2 次</td><td>B级</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sub-label">多维度指标表（横向滚动）</div>
+      <div class="canvas" style="width:380px; overflow:hidden;">
+        <div class="ea-chat-msg__body">
+          <div class="ea-chat-msg__section">
+            <p class="ea-chat-msg__h3">医院维度对比</p>
+            <table class="ea-chat-msg__table">
+              <thead>
+                <tr>
+                  <th>指标/维度</th>
+                  <th>路垚（纽约第二人民医院）</th>
+                  <th>李伟（协和医院）</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>医院所在地</td><td>纽约</td><td>北京</td></tr>
+                <tr><td>所属科室</td><td>胃肠外科</td><td>心血管内科</td></tr>
+                <tr><td>克罗凯评估等级</td><td>F级</td><td>V级</td></tr>
+                <tr><td>近期拜访记录</td><td>无（数据为空）</td><td>3次</td></tr>
+                <tr><td>近期参会记录</td><td>无</td><td>2次</td></tr>
+                <tr><td>近期医学问询主题</td><td>无</td><td>降压用药</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       §4  完整示例 — 多 section 混排
+       ══════════════════════════════════════════════ -->
+  <div class="section-title">4 · 完整示例 — 文本 + 列表 + 表格混排</div>
+  <div class="note">
+    多个 <code>ea-chat-msg__section</code> 之间 12 px 间距，section 内部 4 px 间距。
+  </div>
+
+  <div class="canvas" style="max-width:420px;">
+    <div class="ea-chat-msg__body">
+
+      <div class="ea-chat-msg__section">
+        <p class="ea-chat-msg__h2">沈杨医生互动分析</p>
+        <p class="ea-chat-msg__text">
+          近两年（2024.03–2026.03）互动活跃、学术影响力突出！共完成
+          <span class="ea-chat-msg__strong">8次拜访</span>（含5次学术拜访）、
+          2场城市会参会、1次医学问询（聚焦立文降压14片）。
+        </p>
+      </div>
+
+      <div class="ea-chat-msg__section">
+        <p class="ea-chat-msg__h3">最近三条互动记录</p>
+        <ul class="ea-chat-msg__ul">
+          <li class="ea-chat-msg__li">
+            <span class="ea-chat-msg__strong">2026-03-06</span>
+            城市会：《合作共赢、共创辉煌》参会
+          </li>
+          <li class="ea-chat-msg__li">
+            <span class="ea-chat-msg__strong">2026-03-04</span>
+            医学问询：关于立文降压14片的临床咨询
+          </li>
+          <li class="ea-chat-msg__li">
+            <span class="ea-chat-msg__strong">2026-02-20</span>
+            学术拜访：由西城主管1主导，状态<span class="ea-chat-msg__em">"未完成"</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="ea-chat-msg__section">
+        <p class="ea-chat-msg__h3">高频触达资料 TOP 3</p>
+        <table class="ea-chat-msg__table">
+          <thead><tr><th>资料名称</th><th>发送</th><th>阅读</th></tr></thead>
+          <tbody>
+            <tr><td>立文降压14片说明书</td><td>18次</td><td>22次</td></tr>
+            <tr><td>心血管临床研究报告</td><td>14次</td><td>19次</td></tr>
+            <tr><td>患者支持项目手册</td><td>10次</td><td>12次</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ea-chat-msg__section">
+        <p class="ea-chat-msg__text">您和医生的互动很紧密，保持这个节奏，成功就在不远处！加油！</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

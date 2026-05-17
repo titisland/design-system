@@ -1,0 +1,128 @@
+/* WeChat Design System — Home Voice Entry (Voice Call 入口卡)
+   --------------------------------------------------------
+   Source: WechatHome.vue demo — 2.5 · Voice Call 入口
+
+   固定位置：紧接在 .ea-home-banner 之下，.ea-home-grid 之上。
+   不可移动，不可省略（Voice Call 是首页必现模块）。
+
+   结构：
+     ┌─────────────────────────────────────────────┐
+     │  [mascot 36]  Hi,我是小助手 Voice Call       │  ← __hello 行
+     │  [🪄 魔法棒] 点击记录拜访  [›]               │  ← __cta pill
+     └─────────────────────────────────────────────┘
+
+   背景：青蓝渐变 135deg，rgba(69,212,251/.3) → rgba(87,233,242/.3)
+         → rgba(158,251,211/.3)，30% 透明度
+
+   CTA pill：
+     • 渐变 90deg: #45D4FB → #57E9F2 → #9EFBD3
+     • 高度 36px，border-radius 100px，1px solid #fff border
+     • 左图标 面性/面性-魔法棒.svg 18×18，白色 mask
+     • 居中文字 "点击记录拜访"，font-size --fs-body-lg，white
+     • 右箭头 线性/线性-向右方向.svg 14×14，嵌在 32px well 里
+
+   Spec:
+     • Card margin  — 16px 水平，上 16px（与 banner 间距）
+     • Card padding — 12px
+     • Border-radius — 12px
+     • Mascot        — voice-call-mascot.png，36×36，object-fit: contain
+     • Hello gap     — 8px，mb 10px
+     • Hello text    — --fs-body / --fw-medium / --color-fg-h1
+
+   ── Icon rule ──────────────────────────────────────────────
+   魔法棒 — 面性/面性-魔法棒.svg（18×18，白色 mask）
+   右箭头 — 线性/线性-向右方向.svg（14×14，白色 mask）
+   ──────────────────────────────────────────────────────────
+*/
+
+.ea-home-voice {
+  margin: 16px 16px 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(69, 212, 251, 0.3),
+    rgba(87, 233, 242, 0.3),
+    rgba(158, 251, 211, 0.3)
+  );
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+}
+
+/* ── Hello 行：吉祥物 + 问候文字 ── */
+.ea-home-voice__hello {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ea-home-voice__mascot {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: block;
+  object-fit: contain;
+}
+
+.ea-home-voice__hello-text {
+  flex: 1 1 auto;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--color-fg-h1);
+  line-height: 22px;
+}
+
+/* ── CTA pill ── */
+.ea-home-voice__cta {
+  width: 100%;
+  height: 36px;
+  border: 1px solid #fff;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #45D4FB, #57E9F2, #9EFBD3);
+  color: var(--color-white);
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px 0 18px;
+  box-sizing: border-box;
+}
+.ea-home-voice__cta:active { opacity: 0.85; }
+
+/* 左侧魔法棒图标 — 面性/面性-魔法棒.svg，白色 mask */
+.ea-home-voice__cta-icon {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--color-white);
+  -webkit-mask: var(--icon, none) center / contain no-repeat;
+          mask: var(--icon, none) center / contain no-repeat;
+}
+
+/* 居中标签 */
+.ea-home-voice__cta-label {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+}
+
+/* 右侧箭头 well — 线性/线性-向右方向.svg，白色 mask */
+.ea-home-voice__cta-arrow-well {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ea-home-voice__cta-arrow {
+  width: 14px;
+  height: 14px;
+  background-color: var(--color-white);
+  -webkit-mask: var(--icon, none) center / contain no-repeat;
+          mask: var(--icon, none) center / contain no-repeat;
+}

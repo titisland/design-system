@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 22px; }
+  .grid { display: grid; grid-template-columns: 90px 1fr; gap: 12px 18px; }
+  .tag { font: 500 12px/18px var(--font-han); color: #6E55CF; padding-top: 2px; }
+  .ex { font: 400 14px/22px var(--font-han); color: #333; }
+  .yes { color: #00857C; font-weight: 500; }
+  .no  { color: #FF5543; font-weight: 500; }
+</style></head><body>
+  <div class="grid">
+    <div class="tag">AI → 你 / 您</div>
+    <div class="ex">"你正在查看李伟医生的详情页" · AI uses 你 with the rep, switches to 您 inside drafted output for HCPs.</div>
+
+    <div class="tag">User → first-person</div>
+    <div class="ex">"帮我规划下次拜访" · 总结一下最近3个月的互动情况</div>
+
+    <div class="tag">Tone</div>
+    <div class="ex"><span class="yes">Helpful, structured</span> · <span class="no">never chatty</span> · 2-sentence intro → bullet list of suggested questions.</div>
+
+    <div class="tag">Punctuation</div>
+    <div class="ex">Full-width Chinese throughout — <strong>，。？：""</strong>. One "！" max, only in the greeting. Space between Chinese / Latin tokens.</div>
+
+    <div class="tag">Emoji</div>
+    <div class="ex"><span class="no">Never in copy.</span> Decorative section sprites (🎯 💡 💬 📚 in Pre-Call Planning) are bespoke flat assets.</div>
+
+    <div class="tag">Disclaimer</div>
+    <div class="ex">Always renders under the composer at 12/Regular · #AAA · centered: "内容由AI生成"</div>
+  </div>
+</body></html>

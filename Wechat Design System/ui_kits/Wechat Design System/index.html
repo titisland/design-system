@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Event Agent — UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#E6EAEF;font-family:var(--font-cn);min-height:100%}
+  .stage{display:flex;gap:28px;padding:40px 28px;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+  .slot{width:440px}
+  .label{text-align:center;font-size:11px;color:#555;margin-top:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+  .sub{text-align:center;font-size:11px;color:#999;margin-top:2px}
+  .btn{font-size:11px;padding:4px 10px;border-radius:4px;border:1px solid #CCC;background:#fff;cursor:pointer;margin:0 4px}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="./Icons.jsx"></script>
+<script type="text/babel" src="./Shell.jsx"></script>
+<script type="text/babel" src="./Screens.jsx"></script>
+<script type="text/babel" src="./MoreScreens.jsx"></script>
+<script type="text/babel">
+  function Slot({ label, sub, children }) {
+    return (
+      <div className="slot">
+        <Phone>{children}</Phone>
+        <div className="label">{label}</div>
+        {sub && <div className="sub">{sub}</div>}
+      </div>
+    );
+  }
+  function App() {
+    const [hint, setHint] = React.useState(false);
+    const [chatBack, setChatBack] = React.useState(0);
+    return (
+      <div className="stage">
+        <Slot label="Event List" sub={hint ? 'with AI hint bubble' : 'tap ↓ to show AI hint'}>
+          <EventListScreen showBubble={hint} onOpen={() => {}} />
+          <div style={{ position: 'absolute', bottom: 30, left: 0, right: 0, textAlign: 'center', zIndex: 200 }}>
+            <button className="btn" onClick={() => setHint(h => !h)}>Toggle AI hint</button>
+          </div>
+        </Slot>
+        <Slot label="Doctor Detail">
+          <DoctorScreen onBack={() => {}} onOpenChat={() => {}} />
+        </Slot>
+        <Slot label="AI Event Agent Chat" sub="auto-animates on mount">
+          <ChatScreen key={chatBack} onBack={() => setChatBack(c => c + 1)} />
+          <div style={{ position: 'absolute', bottom: 30, left: 0, right: 0, textAlign: 'center', zIndex: 200 }}>
+            <button className="btn" onClick={() => setChatBack(c => c + 1)}>Replay</button>
+          </div>
+        </Slot>
+        <Slot label="Approval Insights" sub="tabs swap card stack">
+          <ApprovalInsightsScreen onBack={() => {}} />
+        </Slot>
+        <Slot label="Attendee Recommendation" sub="tap rows to toggle">
+          <AttendeeScreen onBack={() => {}} />
+        </Slot>
+        <Slot label="Policy Helper" sub="CRM Bot bottom sheet">
+          <PolicyHelperScreen onBack={() => {}} />
+        </Slot>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

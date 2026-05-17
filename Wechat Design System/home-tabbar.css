@@ -1,0 +1,147 @@
+/* WeChat Design System — Home Tab Bar (首页底部固定操作栏)
+   --------------------------------------------------------
+   Source: Figma 首页_WeChat (JO8xVSc8EDUiyPWZizfGsu) node 6:5451.
+
+   Bottom-of-page persistent bar with 4 fixed primary tabs +
+   one big FAB on the right.
+
+     ┌─────────────────────────────────────────────────┐
+     │  首页 · 日程 · 看板 · 工作      ·       [ + ]   │
+     │  ── 4 tabs (split remaining width evenly) ── FAB │
+     └─────────────────────────────────────────────────┘
+
+   Spec:
+     • Bar height       — 90px (+ 34 home-indicator below)
+     • Bar bg           — white, 1px var(--color-border-base) top hairline
+     • 4 tabs share remaining width — `flex: 1 1 0` each
+     • FAB              — 56×56 circle, brand-veeva, white "+",
+                           --shadow-dark elevation. Right gutter
+                           ≈22px from edge.
+     • Tab icon         — 24×24 mask-driven; idle = 线性, active
+                           = 面性. Active color flips to brand-veeva.
+     • Tab label        — 12 / 400 / #999 idle, brand-veeva active.
+
+   ── Locked icon mapping (do NOT swap) ─────────────────────
+     首页 — 线性/线性-首页.svg     · 面性/面性-首页-1.svg
+     日程 — 线性/线性-日程.svg     · 面性/面性-日程.svg
+     看板 — 线性/线性-看板.svg     · 面性/面性-看板.svg
+     工作 — 线性/线性-工作台.svg   · 面性/面性-工作.svg
+     FAB  — 线性/线性-新建.svg (white, 纯加号十字，非圆角方框款线性-加.svg)
+   ────────────────────────────────────────────────────────── */
+
+:root {
+  --htb-h:                90px;
+  --htb-bg:               var(--color-bg-white);
+  --htb-divider-top:      1px solid var(--color-border-base);
+  --htb-tab-icon-size:    24px;
+  --htb-tab-label-fs:     12px;
+  --htb-tab-label-lh:     18px;
+  --htb-tab-fg-idle:      var(--color-fg-h4);    /* #999 */
+  --htb-tab-fg-active:    var(--color-brand-veeva);
+  --htb-tab-pad-y:        8px;
+  --htb-tab-gap:          4px;       /* icon ↔ label */
+
+  --htb-fab-size:         56px;
+  --htb-fab-bg:           var(--color-brand-veeva);
+  --htb-fab-fg:           var(--color-white);
+  --htb-fab-icon-size:    24px;
+  --htb-fab-shadow:       var(--shadow-dark);
+  --htb-fab-zone-w:       90px;       /* right zone width — accommodates 56 fab + gutters */
+  --htb-fab-offset-y:     -6px;       /* slight upward pop above the bar baseline */
+}
+
+.ea-home-tabbar {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: var(--htb-h);
+  background: var(--htb-bg);
+  border-top: var(--htb-divider-top);
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+}
+
+/* Left zone — 4 tabs share the remaining width evenly */
+.ea-home-tabbar__tabs {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.ea-home-tabbar__tab {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--htb-tab-gap);
+  padding: var(--htb-tab-pad-y) 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--htb-tab-fg-idle);
+  text-decoration: none;
+}
+
+/* Tab icon — mask-driven, swaps source between idle / active.
+   Caller sets --icon-idle (线性-*.svg) and --icon-active (面性-*.svg). */
+.ea-home-tabbar__icon {
+  width: var(--htb-tab-icon-size);
+  height: var(--htb-tab-icon-size);
+  background-color: currentColor;     /* picks up tab's color (idle gray / active orange) */
+  -webkit-mask: var(--icon-idle, none) center / contain no-repeat;
+          mask: var(--icon-idle, none) center / contain no-repeat;
+}
+
+.ea-home-tabbar__label {
+  font-size: var(--htb-tab-label-fs);
+  line-height: var(--htb-tab-label-lh);
+  color: currentColor;
+  white-space: nowrap;
+}
+
+/* Active tab — color flips to brand-veeva, AND icon swaps to 面性 variant */
+.ea-home-tabbar__tab--active,
+.ea-home-tabbar__tab[aria-current="page"] {
+  color: var(--htb-tab-fg-active);
+}
+.ea-home-tabbar__tab--active .ea-home-tabbar__icon,
+.ea-home-tabbar__tab[aria-current="page"] .ea-home-tabbar__icon {
+  -webkit-mask: var(--icon-active, none) center / contain no-repeat;
+          mask: var(--icon-active, none) center / contain no-repeat;
+}
+
+/* Right zone — FAB column with the big "+" button */
+.ea-home-tabbar__fab-zone {
+  flex: 0 0 var(--htb-fab-zone-w);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ea-home-tabbar__fab {
+  width: var(--htb-fab-size);
+  height: var(--htb-fab-size);
+  border-radius: 50%;
+  background: var(--htb-fab-bg);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--htb-fab-shadow);
+  margin-top: var(--htb-fab-offset-y);   /* slight pop above baseline */
+}
+
+.ea-home-tabbar__fab-icon {
+  width: var(--htb-fab-icon-size);
+  height: var(--htb-fab-icon-size);
+  background-color: var(--htb-fab-fg);   /* always white */
+  -webkit-mask: var(--icon, none) center / contain no-repeat;
+          mask: var(--icon, none) center / contain no-repeat;
+}

@@ -1,0 +1,299 @@
+/* WeChat Design System — Bottom Action Bar (底部操作栏)
+   --------------------------------------------------------
+   Source: Figma frames 1499:6948, 2706:1191, 2573:1210, 2582:1410
+   (file 8JUEcCAQPFeGCarHpB1JJX).
+
+   Pattern:
+     • A row of action buttons fixed (or sticky) at the bottom
+       of a form / detail page.
+     • Each button is icon (16×16, 14px from top, 8px to label)
+       + label (12/22, 2 chars preferred), stacked vertically,
+       centered.
+     • Up to 5 buttons displayed inline. When a screen needs
+       more than 5, the 5th slot becomes a "更多" button that
+       opens a popover above the bar with the overflow items.
+     • Popover constraints:
+         · max width: full viewport minus 16px on each side
+         · max items: 10 for list pages, 15 for detail pages
+         · single column layout: icon (left) + label
+         · pressed state: light gray bg
+         · close X at the bottom (orange)
+     • Tapping any popover item triggers the action AND closes
+       the popover. Tapping outside also closes it.
+
+   ── ICON RULE (HARD) ─────────────────────────────────────
+   Bottom Action Bar buttons (.ea-bab__btn) and overflow popover
+   items (.ea-bab-popover__item) MUST use ONLY OUTLINE icons —
+   `assets/icons/线性/线性-*.svg`.
+   • No 面性 (filled) variants.
+   • No Homepage business icons.
+   • No emoji / Unicode glyphs.
+   This keeps the bar visually consistent with iOS-style
+   navigation chrome and avoids competing visual weight with
+   page-content avatars (which use 面性 / Homepage icons).
+   ─────────────────────────────────────────────────────────
+
+   Pair with colors_and_type.css. All icons MUST come from
+   assets/icons/ — see the icon library rule in README. */
+
+:root {
+  /* Bar layout */
+  --bab-h:                64px;          /* bar height (excl. safe-area) */
+  --bab-px:               4px;           /* outer horizontal padding */
+  --bab-bg:               var(--color-bg-white);
+  --bab-divider:          var(--color-border-base);
+  --bab-shadow:           var(--shadow-lighter);
+
+  /* Button (icon + label) */
+  --bab-btn-pad-top:      14px;          /* icon → top of bar */
+  --bab-btn-pad-bottom:   8px;
+  --bab-btn-pad-x:        4px;
+  --bab-btn-gap:          8px;           /* icon → label */
+  --bab-icon-size:        16px;
+  --bab-label-fs:         var(--fs-caption);   /* 12px */
+  --bab-label-color:      var(--color-fg-h2);  /* locked to #333 token, won't drift with --fg-default */
+  --bab-icon-color:       var(--color-fg-h2);  /* locked to #333 token, won't drift with --fg-default */
+  --bab-press-bg:         var(--color-bg-f5);  /* #F5F5F5 — light gray on press */
+  --bab-press-radius:     var(--r-base);       /* 4px corner on press fill */
+
+  /* Popover */
+  --bab-pop-bg:           var(--color-bg-white);
+  --bab-pop-radius:       var(--r-round);      /* 20px outer corner */
+  --bab-pop-margin-x:     16px;                /* viewport gutter */
+  --bab-pop-shadow:       var(--shadow-base);
+  --bab-pop-divider:      var(--color-border-base);
+  --bab-pop-close-color:  #333333;
+  --bab-pop-item-h:       48px;
+  --bab-pop-item-pad-x:   24px;
+  --bab-pop-item-icon-sz: 20px;
+  --bab-pop-item-gap:     12px;
+}
+
+
+/* ============================================================
+   THE BAR                                       (Figma 2582:1410)
+   ============================================================ */
+
+.ea-bab {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  width: 100%;
+  min-height: var(--bab-h);
+  padding: 0 var(--bab-px) env(safe-area-inset-bottom, 0);
+  background: var(--bab-bg);
+  border-top: 1px solid var(--bab-divider);
+  font-family: var(--font-cn);
+  /* Optional elevated variant — drop the shadow if used as a
+     non-floating footer. */
+}
+.ea-bab--elevated { box-shadow: var(--bab-shadow); border-top: 0; }
+
+/* Each button: icon stacked above label, full-flex slot. */
+.ea-bab__btn {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bab-btn-gap);
+  padding: var(--bab-btn-pad-top) var(--bab-btn-pad-x) var(--bab-btn-pad-bottom);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--bab-label-color);
+  font-family: inherit;
+  border-radius: var(--bab-press-radius);
+}
+
+.ea-bab__icon {
+  width: var(--bab-icon-size);
+  height: var(--bab-icon-size);
+  background-color: var(--bab-icon-color);
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+.ea-bab__label {
+  font-size: var(--bab-label-fs);
+  line-height: 1;
+  color: var(--bab-label-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Press / active feedback (浅灰底色) */
+.ea-bab__btn:active,
+.ea-bab__btn[aria-pressed="true"] {
+  background: var(--bab-press-bg);
+}
+
+/* Disabled */
+.ea-bab__btn:disabled,
+.ea-bab__btn[aria-disabled="true"] {
+  color: var(--fg-disabled);
+  cursor: not-allowed;
+}
+.ea-bab__btn:disabled .ea-bab__icon,
+.ea-bab__btn[aria-disabled="true"] .ea-bab__icon {
+  background-color: var(--fg-disabled);
+}
+
+/* The "更多" overflow button is just a normal .ea-bab__btn with
+   the More icon — no visual variant required. Add this hook for
+   wiring up popover toggling. */
+.ea-bab__btn--more[aria-expanded="true"] { background: var(--bab-press-bg); }
+
+
+/* ============================================================
+   POPOVER                                      (Figma 2573:1210)
+   ============================================================
+   Anchored above the bar, full-bleed minus 16px gutters.
+   One column of items + a close X at the bottom. */
+
+.ea-bab-popover {
+  position: absolute;
+  /* Caller positions vertically; default anchor pattern:
+     bottom: calc(var(--bab-h) + 8px); right: var(--bab-pop-margin-x); */
+  background: var(--bab-pop-bg);
+  border-radius: var(--bab-pop-radius);
+  box-shadow: var(--bab-pop-shadow);
+  overflow: hidden;
+  font-family: var(--font-cn);
+  /* Width caller decides; usually 220–260 for narrow popovers,
+     or full-bleed minus 16px gutters for wide ones. */
+  min-width: 220px;
+  max-width: calc(100vw - (var(--bab-pop-margin-x) * 2));
+}
+
+/* Container for items + close. Keeps close pinned at the end. */
+.ea-bab-popover__inner {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable items area — caps at max-height for list / detail
+   guidance: 10 items × 48 = 480; 15 × 48 = 720. */
+.ea-bab-popover__list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: calc(var(--bab-pop-item-h) * 10);  /* default cap = list */
+}
+.ea-bab-popover--detail .ea-bab-popover__list {
+  max-height: calc(var(--bab-pop-item-h) * 15);
+}
+
+.ea-bab-popover__item {
+  display: flex;
+  align-items: center;
+  gap: var(--bab-pop-item-gap);
+  height: var(--bab-pop-item-h);
+  padding: 0 var(--bab-pop-item-pad-x);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--fs-body);     /* 14px */
+  color: var(--fg-default);
+  text-align: left;
+  width: 100%;
+}
+.ea-bab-popover__item + .ea-bab-popover__item {
+  border-top: 1px solid var(--bab-pop-divider);
+}
+
+.ea-bab-popover__item-icon {
+  flex: 0 0 var(--bab-pop-item-icon-sz);
+  width: var(--bab-pop-item-icon-sz);
+  height: var(--bab-pop-item-icon-sz);
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+/* Press feedback inside popover items (浅灰底) */
+.ea-bab-popover__item:active,
+.ea-bab-popover__item[aria-pressed="true"] {
+  background: var(--bab-press-bg);
+}
+
+/* Disabled item */
+.ea-bab-popover__item:disabled,
+.ea-bab-popover__item[aria-disabled="true"] {
+  color: var(--fg-disabled);
+  cursor: not-allowed;
+}
+
+/* Close X at the bottom (orange brand color) */
+.ea-bab-popover__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--bab-pop-divider);
+  color: var(--bab-pop-close-color);
+  cursor: pointer;
+  font-family: inherit;
+}
+.ea-bab-popover__close-icon {
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+
+  -webkit-mask-position: center;
+
+  -webkit-mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+
+          mask-image: var(--icon, none);
+
+          mask-position: center;
+
+          mask-size: contain;
+
+          mask-repeat: no-repeat;
+}
+
+/* Click-outside scrim helper for previews / mocks. The actual
+   app should manage open state in JS; this scrim is purely
+   visual for demos. */
+.ea-bab-scrim {
+  position: absolute;
+  inset: 0;
+  background: transparent;            /* clicks-pass-through demo */
+  pointer-events: none;
+}

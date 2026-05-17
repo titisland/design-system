@@ -1,0 +1,152 @@
+/* =========================================================
+   Voice Call Voice Agent — AI 追问 Bottom Sheet Modal
+   voice-modal.css
+   ─────────────────────────────────────────────────────────
+   The "AI 追问" (AI follow-up) modal that covers ~58% of
+   the screen from the bottom. It presents 3 quick-select
+   questions + 1 open voice response.
+
+   Layers (bottom to top):
+     1. Scrim — 4px backdrop blur over the content behind
+     2. Sheet — white card, top corners 20px radius
+     3. Header — "全部跳过" | "AI 追问" | progress "1/3"
+     4. Body — mascot praise + question text + option rows
+
+   Depends on: colors_and_type.css
+   ========================================================= */
+
+/* ── Scrim overlay ── */
+.vc-modal-scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--vc-bg-modal);   /* rgba(255,255,255,0.50) */
+  backdrop-filter: var(--vc-blur-scrim);
+  -webkit-backdrop-filter: var(--vc-blur-scrim);
+  z-index: 100;
+}
+
+/* ── Sheet ── */
+.vc-modal {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--vc-device-width);
+  background: var(--color-bg-white);
+  border-radius: var(--vc-r-sheet);   /* 20px 20px 0 0 */
+  box-shadow: var(--vc-shadow-sheet); /* 0 -4px 24px rgba(0,0,0,.15) */
+  z-index: 101;
+  overflow: hidden;
+  /* animation: slide up 200ms */
+  animation: mc-sheet-in 200ms ease-out both;
+}
+@keyframes mc-sheet-in {
+  from { transform: translateX(-50%) translateY(100%); }
+  to   { transform: translateX(-50%) translateY(0); }
+}
+
+/* Static variant for mockups */
+.vc-modal--static {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  animation: none;
+  width: 100%;
+}
+
+/* ── Header row ── */
+.vc-modal__header {
+  display: flex;
+  align-items: center;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--color-border-base);
+  background: var(--vc-bg-modal-glass);   /* glass effect */
+}
+.vc-modal__skip {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  color: var(--vc-link-blue);
+  line-height: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.vc-modal__title {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  line-height: 22px;
+}
+.vc-modal__progress {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  line-height: 22px;
+  flex-shrink: 0;
+}
+
+/* ── Body ── */
+.vc-modal__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Mascot praise row (short affirmation from agent) ── */
+.vc-modal__praise {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.vc-modal__praise-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--vc-r-pill);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.vc-modal__praise-text {
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  padding-top: 4px;
+  line-height: 20px;
+}
+
+/* ── Question text ── */
+.vc-modal__question {
+  font-family: var(--font-cn);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  line-height: 20px;
+}
+
+/* ── Option rows ── */
+.vc-modal__options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.vc-modal__option {
+  border: 1px solid var(--color-border-e2);
+  border-radius: var(--vc-r-input);   /* 12px */
+  padding: 12px 14px;
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  color: var(--fg-default);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 100ms;
+}
+/* Selected option — iOS blue border */
+.vc-modal__option--selected {
+  border-color: var(--vc-link-blue);
+}
+.vc-modal__option:active {
+  opacity: 0.7;
+}

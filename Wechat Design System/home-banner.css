@@ -1,0 +1,111 @@
+/* WeChat Design System — Home Banner (用户信息区)
+   --------------------------------------------------------
+   Source: Figma 首页_WeChat (JO8xVSc8EDUiyPWZizfGsu)
+           — node 12:4244 (banner content & avatar layout)
+           — node 6:5363  (底图渐变色 — 纯垂直 #F7981D → #FFFFFF)
+
+   背景：垂直渐变 linear-gradient(180deg, #F7981D 0%, #FFFFFF 100%)
+
+   内容行（普通流，flex 水平排列）：
+     [ avatar 36 ]  [ name + sub ]                       [ ⋯ more ]
+
+   Avatar — 面性/面性-头像-wechat.svg，CSS mask 渲染，白色（同 navbar icon 做法）。
+             不使用 <img>；.ea-home-banner__avatar 内放 <span> 并通过
+             --icon CSS 变量传入 data URL（stripClipRefs + encodeURIComponent）。
+   Right icon — 线性/线性-更多2.svg 20×20，白色，CSS mask。
+
+   Spec:
+     • Height       — 84px（固定；padding 16px × 2，内容区 52px）
+     • Avatar       — 36×36
+     • Name         — 16 / 500 / white，line-height 24px
+     • Sub          — 12 / 400 / rgba(255,255,255,0.85)，line-height 18px
+     • Body gap     — 4px（name 与 sub 之间）
+     • Row gap      — 14px（avatar / body / action 之间）
+     • Padding      — 16px vertical / 16px horizontal
+*/
+
+:root {
+  --hb-pad-x:       16px;
+  --hb-pad-y:       16px;
+  --hb-bg-start:    var(--color-brand-veeva);   /* #F7981D */
+  --hb-bg-end:      var(--color-white);         /* #FFFFFF */
+  --hb-fg:          var(--color-white);
+  --hb-fg-soft:     rgba(255, 255, 255, 0.85);
+  --hb-avatar-size: 36px;
+  --hb-name-fs:     16px;
+  --hb-sub-fs:      12px;
+  --hb-icon-size:   20px;
+}
+
+.ea-home-banner {
+  position: relative;
+  width: 100%;
+  height: 84px;
+  background: linear-gradient(180deg, var(--hb-bg-start) 0%, var(--hb-bg-end) 100%);
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ea-home-banner__row {
+  padding: var(--hb-pad-y) var(--hb-pad-x);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+/* Avatar — uses 面性/面性-头像-wechat.svg via CSS mask (white glyph).
+   Container is a flex centering wrapper; inner <span> carries the mask.
+   --icon must be set inline as a data URL (use stripClipRefs + encodeURIComponent
+   to avoid clip-path fragment issues). */
+.ea-home-banner__avatar {
+  flex: 0 0 var(--hb-avatar-size);
+  width: var(--hb-avatar-size);
+  height: var(--hb-avatar-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-home-banner__avatar-icon {
+  width: var(--hb-avatar-size);
+  height: var(--hb-avatar-size);
+  background-color: var(--hb-fg);   /* always white */
+  -webkit-mask: var(--icon, none) center / contain no-repeat;
+          mask: var(--icon, none) center / contain no-repeat;
+}
+
+.ea-home-banner__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  /* 不设固定高度：name(24px) + gap(4px) + sub(18px) = 46px，
+     大于 avatar(36px)，由内容撑开；行高由 flex 居中对齐 */
+  color: var(--hb-fg);
+}
+.ea-home-banner__name {
+  font-size: var(--hb-name-fs);
+  font-weight: var(--fw-medium);
+  line-height: 24px;
+}
+.ea-home-banner__sub {
+  font-size: var(--hb-sub-fs);
+  line-height: 18px;
+  color: var(--hb-fg-soft);
+}
+
+/* Right action icon — 线性/线性-更多2.svg, white via mask. */
+.ea-home-banner__action {
+  flex: 0 0 var(--hb-icon-size);
+  width: var(--hb-icon-size);
+  height: var(--hb-icon-size);
+  background-color: var(--hb-fg);   /* always white */
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-mask: var(--icon, none) center / contain no-repeat;
+          mask: var(--icon, none) center / contain no-repeat;
+}

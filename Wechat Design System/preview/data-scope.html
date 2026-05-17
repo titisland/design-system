@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Data Scope — 岗位数据切换</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=1">
+<link rel="stylesheet" href="../filters.css?v=1">
+<link rel="stylesheet" href="../data-scope.css?v=1">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8F8F8; font-family: var(--font-cn); }
+  .stage { padding: 24px; display: flex; flex-direction: column; gap: 36px; max-width: 1400px; margin: 0 auto; }
+  h2.section { font-size: 28px; font-weight: 600; margin: 0 0 4px; color: #000; letter-spacing: 0.01em; }
+  .lede { font-size: 13px; color: #666; max-width: 68ch; margin: 0 0 4px; line-height: 1.55; }
+  .col-title { font-size: 16px; font-weight: 500; margin: 0 0 8px; color: #000;
+    display: flex; align-items: baseline; gap: 8px; }
+  .col-title small { font-size: 11px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 400; }
+  .frames { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 24px; align-items: start; }
+  .frame {
+    border: 1px dashed rgb(151,71,255);
+    border-radius: 5px;
+    background: #F8F8F8;
+    width: 440px;
+    overflow: hidden;
+  }
+  .frame-cap { font-size: 11px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    padding: 6px 14px 12px; }
+  .legend { font-size: 12px; color: #999;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    line-height: 1.7; padding: 0 4px; }
+  .legend code { background: #ECECEC; padding: 1px 5px; border-radius: 3px; color: #333; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div>
+    <h2 class="section">Data scope sheet — 岗位数据切换</h2>
+    <p class="lede">点击列表筛选栏的 "下属数据" chip 时弹出此面板。两种组织方式 — by-user（按下属用户）与 by-position（按岗位）— 共享顶部的「仅查看被选中数据」开关与底部的取消 / 重置 / 确定按钮（来自 filters.css）。激活的行用橙色文字标记；by-position 进入下一级时多一行 "返回" 头。</p>
+
+    <div class="frames">
+
+      <!-- ============ BY USER · 初始 ============ -->
+      <div>
+        <div class="col-title">by-user · 初始 <small>· 平铺用户列表</small></div>
+        <div class="frame">
+          <div class="ea-ds">
+            <div class="ea-ds__nullonly">
+              <span class="ea-ds__nullonly-label">仅查看被选中用户数据</span>
+              <span class="ea-ds__toggle"></span>
+            </div>
+            <div class="ea-ds__list">
+              <div class="ea-ds__row ea-ds__row--two-line">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_dsm7@veeva.com</span>
+                  <span class="ea-ds__sub">at_dsm7岗位 , at_dsm6岗位</span>
+                </div>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line ea-ds__row--child">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_rep5@veeva.com</span>
+                  <span class="ea-ds__sub">at_rep5岗位 , at_rep5岗位的名称超级超级超级超级超级超级长的名称超级长2</span>
+                </div>
+                <span class="ea-ds__trail" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+          <div class="frame-cap">.ea-ds__row--two-line + child indent 20</div>
+        </div>
+      </div>
+
+      <!-- ============ BY USER · 下一级（active） ============ -->
+      <div>
+        <div class="col-title">by-user · 选中态 <small>· 父行 active</small></div>
+        <div class="frame">
+          <div class="ea-ds">
+            <div class="ea-ds__nullonly">
+              <span class="ea-ds__nullonly-label">仅查看被选中岗位数据</span>
+              <span class="ea-ds__toggle ea-ds__toggle--on"></span>
+            </div>
+            <div class="ea-ds__list">
+              <div class="ea-ds__row ea-ds__row--two-line">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_dsm7@veeva.com</span>
+                  <span class="ea-ds__sub">at_dsm7岗位</span>
+                </div>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line ea-ds__row--child">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_rep5@veeva.com</span>
+                  <span class="ea-ds__sub">at_rep5岗位</span>
+                </div>
+                <span class="ea-ds__trail" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line ea-ds__row--child">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_rep5@veeva.com</span>
+                  <span class="ea-ds__sub">at_rep5岗位2 <span class="ea-ds__sub-tag">(兼)</span></span>
+                </div>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_dsm6@veeva.com</span>
+                  <span class="ea-ds__sub">at_dsm7岗位 <span class="ea-ds__sub-tag">(兼)</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+          <div class="frame-cap">兼任标记 .ea-ds__sub-tag (#2069D6)</div>
+        </div>
+      </div>
+
+      <!-- ============ BY POSITION · 下一级 ============ -->
+      <div>
+        <div class="col-title">by-position · 下一级 <small>· 含 "返回" 头 + 选中行</small></div>
+        <div class="frame">
+          <div class="ea-ds">
+            <div class="ea-ds__nullonly">
+              <span class="ea-ds__nullonly-label">仅查看被选中用户数据</span>
+              <span class="ea-ds__toggle"></span>
+            </div>
+            <div class="ea-ds__list">
+              <div class="ea-ds__row ea-ds__row--back">
+                <span class="ea-ds__back-icon" aria-hidden="true">
+                  <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h7M6 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="ea-ds__back-label">返回</span>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_rep7@veeva.com</span>
+                  <span class="ea-ds__sub ea-ds__sub--quieter">at_rep7岗位</span>
+                </div>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line ea-ds__row--child ea-ds__row--active">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_rep10@veeva.com</span>
+                  <span class="ea-ds__sub">at_rep10岗位</span>
+                </div>
+                <span class="ea-ds__trail" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h10M3 12h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                </span>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line ea-ds__row--child">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_rep10@veeva.com</span>
+                  <span class="ea-ds__sub ea-ds__sub--quieter">at_rep10岗位2</span>
+                </div>
+              </div>
+              <div class="ea-ds__row ea-ds__row--two-line">
+                <div class="ea-ds__col">
+                  <span class="ea-ds__primary">at_rep12@veeva.com</span>
+                  <span class="ea-ds__sub ea-ds__sub--quieter">at_rep12岗位</span>
+                </div>
+                <span class="ea-ds__trail" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </div>
+            </div>
+            <div class="ea-fs__footer">
+              <button>取消</button>
+              <button>重置</button>
+              <button class="ea-fs__confirm">确定</button>
+            </div>
+          </div>
+          <div class="frame-cap">.ea-ds__row--back + active row (orange)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="legend" style="margin-top:24px">
+      Tokens: row <code>50</code> two-line / <code>40</code> back, indent <code>20</code>,
+      hairline <code>#EEE</code>, primary <code>14/20 #333</code>,
+      sub <code>11/16 #999</code>（备用 <code>#B5B5B5</code>），active <code>#F7981D</code>，
+      兼任 tag <code>#2069D6</code>. Toggle 40×20 / 18 thumb · on=orange.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

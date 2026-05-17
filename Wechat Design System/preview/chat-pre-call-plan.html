@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 0; background: linear-gradient(180deg,#DDF1FF 0%, #F8FAFE 100%); }
+  .sheet { padding: 16px 18px 20px; }
+  .hdr { display: flex; align-items: center; gap: 10px; padding: 6px 6px 12px; }
+  .x { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: #333; }
+  .x svg { width: 18px; height: 18px; }
+  .title { flex: 1; text-align: center; font: 400 14px/22px var(--font-han); color: #333; transform: translateX(-12px); }
+
+  .pcp-title { font: 500 16px/100% var(--font-han); color: #333; margin: 8px 0 14px; }
+
+  .section { margin-bottom: 14px; }
+  .sec-head { display: flex; align-items: center; gap: 6px; font: 500 14px/100% var(--font-han); color: #333; margin-bottom: 8px; }
+  .sec-icon { width: 18px; height: 18px; color: #F7981D; }
+  .sec-body { font: 400 14px/22px var(--font-han); color: #333; }
+  .cite { font: 400 11px/14px var(--font-roman); color: #007AFF; padding: 0 4px; border-radius: 4px; background: rgba(0,122,255,0.1); margin-left: 2px; }
+
+  .check { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .check .box {
+    width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; margin-top: 4px;
+    background: #007AFF; color: white;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check svg { width: 10px; height: 10px; }
+</style></head><body>
+  <div class="sheet">
+    <div class="hdr">
+      <div class="x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
+      <div class="title">Veeva AI</div>
+    </div>
+
+    <div class="pcp-title">李伟医生拜访计划</div>
+
+    <div class="section">
+      <div class="sec-head">
+        <svg class="sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
+        核心目标
+      </div>
+      <div class="sec-body">介绍科学理念与机制：建立双通路科学共识，强调 Ang-2 在解决血管不稳和炎症中的关键协同作用，打破单靶点满足感。<span class="cite">3</span></div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head">
+        <svg class="sec-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M11 1 C11.6 8 12 8.4 19 9 C12 9.6 11.6 10 11 17 C10.4 10 10 9.6 3 9 C10 8.4 10.4 8 11 1Z"/></svg>
+        核心沟通要点
+      </div>
+      <div class="check"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div><div class="sec-body">打破单一靶点局限：传统抗 VEGF 虽有效，但仍有部分病人积液反复。<span class="cite">2</span></div></div>
+      <div class="check"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div><div class="sec-body">安全可预测：双通路分子通过 Fc 端改造，在保证高效的同时维持长期安全性。<span class="cite">4</span></div></div>
+    </div>
+  </div>
+</body></html>

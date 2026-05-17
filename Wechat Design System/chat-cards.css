@@ -1,0 +1,873 @@
+/* WeChat CRM — Chat AI Agent Cards
+   ─────────────────────────────────────────────────────────────
+   Components in this file:
+
+   Structured Cards  (StructuredDataAIMessage)
+     Figma: Pre-Call-Agent_WeChat qTV8vGUpnQ8z6GtgaWGVc0 · node 866-23155
+
+     .ea-card               — white container (no border, px:12 only, items handle py)
+     .ea-card--shadow       — elevated variant (shadow-lighter)
+     .ea-card__item         — one record row (py:12, border-bottom:#EEE; last:none)
+     .ea-card__item-head    — icon + body flex row (gap:8, align:flex-start)
+     .ea-card__item-icon    — 20×20 circular icon, blue-tint bg (rgba(0,122,255,.1))
+     .ea-card__body         — flex-col content (gap:4, pt:4, flex:1)
+     .ea-card__title        — item headline (16 px / 500 / #333)
+     .ea-card__field        — single field text, label+value inline (14 px / #666)
+     .ea-card__item-footer  — right-aligned footer row (pt:4)
+     .ea-card__view-btn     — "查看" pill button (28px, #DDD border, 64px min-w)
+     .ea-card__badge        — top-right tag label (absolute, matches ea-tag style)
+     .ea-card__tip          — bottom tip text (expandable)
+     .ea-card__tip--open    — expanded state
+     .ea-card__image        — full-width thumbnail image
+     .ea-card__divider      — thin hairline between card sections
+
+   Card List  (.ea-card-list)
+     .ea-card-list          — vertical stack of cards
+     .ea-card-list__more    — "查看更多 N 条" expand trigger
+
+   Nested Card  (.ea-card--nested)
+     Applied to .ea-card inside another .ea-card to give smaller
+     inset styling.
+
+   Strategy Card  (.ea-card--strategy)
+     Orange-tint outer frame + white inner row.
+     Used in pre-call planner to show market strategy context.
+     .ea-card--strategy              — outer frame (color-brand-veeva-light-2)
+     .ea-card-strategy__row          — white inner flex row
+     .ea-card-strategy__icon         — 22×22 icon (mask or SVG child, orange)
+     .ea-card-strategy__body         — label + heading column
+     .ea-card-strategy__label        — 13px / #666 category text
+     .ea-card-strategy__heading      — 14px / bold / #000 main text
+     .ea-card-strategy__expand       — blue "展开" text button
+     .ea-card-strategy__expand-icon  — 12×12 down-arrow (mask-only)
+
+   Source Card  (semantic content search — 规范-semantic content search)
+     .ea-chat-source-card         — 2-col grid card (thumbnail + body)
+     .ea-chat-source-card__thumb  — 48×48 rounded-4 image / placeholder
+     .ea-chat-source-card__body   — flex-col: title + meta + footer
+     .ea-chat-source-card__title  — 14 px / 400 / #333, 2-line clamp
+     .ea-chat-source-card__meta   — 14 px / #666 (year, etc.)
+     .ea-chat-source-card__footer — right-aligned: page num + 查看原文 chip
+     .ea-chat-source-card__page   — 12 px / #999 page reference
+     .ea-chat-source-card__link   — blue pill "查看原文"
+
+   Source Card List  (.ea-chat-source-list)
+     .ea-chat-source-list         — 2-col responsive grid of source cards
+
+   Info Banners  (规范-info)
+     .ea-chat-banner              — base banner (normal / neutral)
+     .ea-chat-banner--highlight   — needs-attention (#FFFED4 bg, #F89728 text)
+     .ea-chat-banner--warn        — warning / error (#FFE8E5 bg, #FF5543 text)
+
+   Artboard sources (Figma: Chat.fig — 规范-semantic content search, 规范-info)
+
+   NOTE: Visual token values below are derived from the spec document
+   (Chat系列框架交互规范文档) and DS conventions. They will be refined
+   once the Figma card artboards are reviewed.
+
+   Pair with: colors_and_type.css, chat-shell.css (for .ea-chat-actions)
+
+   ── Icon usage rule ────────────────────────────────────────
+   Same two-pattern rule as chat-shell.css — pick ONE per element:
+
+     Pattern A — Mask-driven (no SVG child):
+       style="--icon: url(...); background-color: COLOR;"
+       → mask clips background-color to icon silhouette.
+
+     Pattern B — SVG child (no mask URL, no background-color):
+       style="color: COLOR;" + <svg fill="currentColor">
+       OR: <svg fill="COLOR"> (set fill directly on SVG)
+       → SVG provides its own color; wrapper stays transparent.
+
+   ✗ WRONG — mixing both:
+       style="background-color: orange" + SVG child
+       Without --icon set, mask is absent → entire element becomes a
+       solid orange block. SVG reads `color` (not background-color)
+       via currentColor → inherits black → black icon on orange block.
+
+   Special case — .ea-card__item-icon:
+       This element has a built-in circle background (blue tint).
+       It is ALWAYS Pattern B (SVG child only). Never add background-color
+       inline; never pass --icon. Color via `color: var(--card-icon-color)`
+       which is already in the class.
+   ─────────────────────────────────────────────────────────────
+*/
+
+:root {
+  /* ── Card container ───────────────────────────────────────── */
+  --card-bg:              var(--color-bg-white);
+  --card-radius:          8px;
+  --card-pad:             12px;        /* horizontal padding only; items add py */
+  --card-shadow:          var(--shadow-lighter);
+
+  /* Item row (one record per row inside the card) */
+  --card-item-pad-y:      12px;
+  --card-item-divider:    1px solid #EEE;
+
+  /* Item icon — 20×20 circular, blue-tint background */
+  --card-icon-size:       20px;
+  --card-icon-radius:     20px;
+  --card-icon-bg:         rgba(0, 122, 255, 0.1);
+  --card-icon-color:      #007AFF;     /* icon glyph / SVG color */
+
+  /* Item title */
+  --card-title-fs:        var(--fs-title);    /* 16 px */
+  --card-title-fw:        var(--fw-medium);   /* 500 */
+  --card-title-fg:        var(--color-fg-h2); /* #333 */
+  --card-title-lh:        20px;
+
+  /* Item field (single text, label:value combined) */
+  --card-field-fs:        var(--fs-body);     /* 14 px */
+  --card-field-fg:        var(--color-fg-h3); /* #666 */
+  --card-field-lh:        18px;
+
+  /* "查看" view pill button */
+  --card-view-btn-h:      28px;
+  --card-view-btn-w:      64px;
+  --card-view-btn-pad:    4px 12px;
+  --card-view-btn-border: 1px solid #DDD;
+  --card-view-btn-radius: 100px;
+  --card-view-btn-fs:     var(--fs-body);     /* 14 px */
+  --card-view-btn-fg:     var(--color-fg-h2); /* #333 */
+
+  /* Nested card (child inside parent) */
+  --card-nested-bg:       var(--color-bg-f5);
+  --card-nested-radius:   6px;
+  --card-nested-pad:      10px;
+
+  /* Badge (absolute top-right corner) — matches ea-tag style */
+  --card-badge-pad:       1px 4px;
+  --card-badge-radius:    var(--r-base);      /* 4 px */
+  --card-badge-fs:        var(--fs-body);     /* 14 px */
+  --card-badge-fw:        var(--fw-regular);
+  --card-badge-inset-x:   12px;
+  --card-badge-inset-y:   12px;
+
+  /* Tip */
+  --card-tip-fs:          var(--fs-body-sm);  /* 13 px */
+  --card-tip-fg:          var(--color-fg-h3); /* #666 */
+  --card-tip-lines:       2;                  /* collapsed clamp */
+
+  /* Card list (multiple ea-card stacked) */
+  --card-list-gap:        8px;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   1. BASE CARD  (StructuredDataAIMessage)
+   ══════════════════════════════════════════════════════════════
+   Figma: Pre-Call-Agent_WeChat · node 866-23155
+
+   One white card containing one or more item rows.
+   Items are divided by #EEE hairlines (last item: no border).
+   The card has no visible border — use .ea-card--shadow for elevation.
+   Horizontal padding on the container; items supply their own py:12.
+
+   Usage:
+     <div class="ea-card ea-card--shadow">
+
+       <div class="ea-card__item">
+         <div class="ea-card__item-head">
+           <span class="ea-card__item-icon">
+             <svg …>…</svg>           ← 14×14 glyph in 20×20 blue circle
+           </span>
+           <div class="ea-card__body">
+             <p class="ea-card__title">维我替尼产品研讨会</p>
+             <p class="ea-card__field">会议开始时间：2025-05-10</p>
+             <p class="ea-card__field">会议类型：科室会</p>
+           </div>
+         </div>
+         <div class="ea-card__item-footer">
+           <button class="ea-card__view-btn">查看</button>
+         </div>
+       </div>
+
+       <div class="ea-card__item">…</div>   ← second item (auto border-bottom)
+
+     </div>
+*/
+
+/* Card container — white, rounded 8px, horizontal padding only */
+.ea-card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 0 var(--card-pad);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-cn);
+  position: relative;   /* for .ea-card__badge */
+  overflow: hidden;
+}
+
+/* Elevated (shadow) variant — default for AI message cards */
+.ea-card--shadow {
+  box-shadow: var(--card-shadow);
+}
+
+/* ── Nested card (child inside parent) ─────────────────────── */
+.ea-card--nested {
+  background: var(--card-nested-bg);
+  border-radius: var(--card-nested-radius);
+  padding: var(--card-nested-pad);
+  box-shadow: none;
+}
+
+/* ── Badge (absolute top-right corner) ─────────────────────── */
+/* Mirrors ea-tag visual style: same padding / radius / font / line-height */
+.ea-card__badge {
+  position: absolute;
+  top: var(--card-badge-inset-y);
+  right: var(--card-badge-inset-x);
+  padding: var(--card-badge-pad);
+  border-radius: var(--card-badge-radius);
+  font-size: var(--card-badge-fs);
+  font-weight: var(--card-badge-fw);
+  line-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  background: var(--status-orange-bg, rgba(247,152,29,0.1));
+  color: var(--status-orange-fg, var(--color-brand-veeva));
+}
+.ea-card__badge--blue   { background: var(--color-veeva-blue-light-1); color: var(--color-veeva-blue); }
+.ea-card__badge--orange { background: var(--status-orange-bg);         color: var(--status-orange-fg); }
+.ea-card__badge--green  { background: var(--status-green-bg,  rgba(6,174,86,0.1)); color: var(--status-green-fg, #06AE56); }
+.ea-card__badge--red    { background: var(--status-red-bg);            color: var(--status-red-fg); }
+.ea-card__badge--gray   { background: var(--status-gray-bg);           color: var(--status-gray-fg); }
+
+/* ── Item row ───────────────────────────────────────────────── */
+/* Each item is one record (e.g. one meeting, one HCP).
+   All items except the last get a 1px #EEE bottom border. */
+.ea-card__item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--card-item-pad-y) 0;
+  border-bottom: var(--card-item-divider);
+}
+.ea-card__item:last-child {
+  border-bottom: 0;
+}
+
+/* Top row: icon + body */
+.ea-card__item-head {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 20×20 circular icon container — SVG CHILD ONLY.
+   The circle bg is baked into the class; never add background-color inline.
+   Icon color comes from CSS `color` → SVG uses fill="currentColor".
+
+   Usage:
+     <span class="ea-card__item-icon">
+       <svg viewBox="0 0 24 24" fill="currentColor">…</svg>
+     </span>
+
+   ✗ WRONG (mask + SVG mix):
+     style="background-color: orange" + SVG child
+     → background-color has no effect in SVG-child mode; mask is absent. */
+.ea-card__item-icon {
+  flex: 0 0 var(--card-icon-size);
+  width: var(--card-icon-size);
+  height: var(--card-icon-size);
+  border-radius: var(--card-icon-radius);      /* 20px → fully circular */
+  background: var(--card-icon-bg);             /* rgba(0,122,255,.1) blue tint */
+  color: var(--card-icon-color);               /* #007AFF — passed to SVG via currentColor */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;     /* aligns top with body's padding-top: 4px */
+  overflow: hidden;
+  flex-shrink: 0;
+}
+/* SVG scales to 14×14 inside the 20px circle and inherits color */
+.ea-card__item-icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Content body: title + field rows */
+.ea-card__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+/* Item headline */
+.ea-card__title {
+  font-size: var(--card-title-fs);
+  font-weight: var(--card-title-fw);
+  color: var(--card-title-fg);
+  line-height: var(--card-title-lh);
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Single field text — label and value in one string, e.g. "科室：心血管内科" */
+.ea-card__field {
+  font-size: var(--card-field-fs);
+  color: var(--card-field-fg);
+  line-height: var(--card-field-lh);
+  margin: 0;
+  word-break: break-word;
+}
+.ea-card__field--link { color: var(--color-veeva-blue); cursor: pointer; }
+
+/* Footer row — right-aligned actions */
+.ea-card__item-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+/* "查看" pill button */
+.ea-card__view-btn {
+  height: var(--card-view-btn-h);
+  min-width: var(--card-view-btn-w);
+  padding: var(--card-view-btn-pad);
+  border: var(--card-view-btn-border);
+  border-radius: var(--card-view-btn-radius);
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--card-view-btn-fs);
+  color: var(--card-view-btn-fg);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+.ea-card__view-btn:active { opacity: 0.7; }
+
+/* ── Tag row ────────────────────────────────────────────────── */
+/* Used when a card needs status/type chips (e.g. badge-less variant). */
+.ea-card__tag-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+/* .ea-card__tag — reuses ea-tag + ea-tag--* from lists.css */
+
+/* ── Thumbnail image ────────────────────────────────────────── */
+.ea-card__image {
+  width: 100%;
+  border-radius: calc(var(--card-radius) - 2px);
+  overflow: hidden;
+  background: var(--color-bg-f5);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Tip text (expandable) ──────────────────────────────────── */
+.ea-card__tip {
+  font-size: var(--card-tip-fs);
+  color: var(--card-tip-fg);
+  line-height: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--card-tip-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+.ea-card__tip--open {
+  -webkit-line-clamp: unset;
+  display: block;
+  overflow: visible;
+}
+
+/* ── Divider ────────────────────────────────────────────────── */
+.ea-card__divider {
+  height: 0;
+  border: 0;
+  border-top: var(--card-item-divider);
+  margin: 4px 0;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2. CARD LIST  (CardList container)
+   ══════════════════════════════════════════════════════════════
+   Wraps multiple .ea-card items. Handles the "展开更多" pattern
+   (default: show first 5, load 5 more on click).
+
+   Usage:
+     <div class="ea-card-list">
+       <div class="ea-card ea-card--shadow">…</div>
+       <div class="ea-card ea-card--shadow">…</div>
+       …
+       <button class="ea-card-list__more">查看更多 3 条 ›</button>
+     </div>
+*/
+
+.ea-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-list-gap);
+  font-family: var(--font-cn);
+}
+
+.ea-card-list__more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  background: var(--color-bg-f5);
+  border: 0;
+  border-radius: var(--r-base);
+  font-size: var(--fs-body);
+  color: var(--color-veeva-blue);
+  font-family: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+.ea-card-list__more:active { opacity: 0.7; }
+
+
+/* ══════════════════════════════════════════════════════════════
+   CARD + TIP  (.ea-card--tipped)
+   ══════════════════════════════════════════════════════════════
+   Selectable card with a collapsible reasoning tip block.
+   Click to select (border → blue). Tap chevron to expand tip.
+
+   Usage:
+     <div class="ea-card ea-card--shadow ea-card--tipped" onclick="…">
+       <p class="ea-card__title">邀请参加"上海心脏介入大会"城市会</p>
+       <div class="ea-card__tip-block">
+         <p class="ea-card__tip-body">依据：…</p>
+         <span class="ea-card__tip-chevron"></span>
+       </div>
+     </div>
+
+   States:
+     .is-active       → blue border (selected)
+     .ea-card__tip-body--open  → tip unclamped (expanded)
+     .ea-card__tip-chevron--open → chevron rotated 180°
+*/
+
+/* Override card padding/gap for this variant */
+.ea-card--tipped {
+  padding: 8px 12px;
+  gap: 4px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: border-color 150ms ease;
+}
+
+/* Selected state — blue border */
+.ea-card--tipped.is-active {
+  border-color: var(--color-veeva-blue);
+}
+
+/* Title — 14px (slimmer than standard 16px ea-card__title) */
+.ea-card--tipped .ea-card__title {
+  font-size: var(--fs-body);   /* 14px */
+  line-height: 18px;
+}
+
+/* Gray reasoning / tip block */
+.ea-card__tip-block {
+  background: #F8F8F8;
+  border-radius: var(--r-base);   /* 4px */
+  padding: 4px 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tip text — 2-line clamped by default */
+.ea-card__tip-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-caption);   /* 12px */
+  color: var(--color-fg-h4);      /* #999 */
+  line-height: 18px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  margin: 0;
+}
+.ea-card__tip-body--open {
+  -webkit-line-clamp: unset;
+  display: block;
+  overflow: visible;
+}
+
+/* Chevron — CSS downward triangle */
+.ea-card__tip-chevron {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.ea-card__tip-chevron::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-top: 5px solid #999;
+  transition: transform 150ms ease;
+}
+.ea-card__tip-chevron--open::after {
+  transform: rotate(180deg);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   3. STRATEGY CARD  (.ea-card--strategy)
+   ══════════════════════════════════════════════════════════════
+   Orange-tint outer frame wrapping a white inner content row.
+   Used in pre-call planner to display market strategy context.
+   Derived from PreCallPlanner.vue .pcp-strategy.
+
+   Structure — Pattern A (mask, icon from URL):
+     <span class="ea-card-strategy__icon"
+           style="--icon: url(icon-doc.svg);
+                  background-color: var(--color-brand-veeva);"></span>
+
+   Structure — Pattern B (SVG child):
+     <span class="ea-card-strategy__icon"
+           style="color: var(--color-brand-veeva);">
+       <svg fill="currentColor" width="22" height="22">…</svg>
+     </span>
+
+   ✗ WRONG (causes solid block):
+     style="background-color: orange" + SVG child (no --icon URL)
+     → no mask → entire element is a solid orange block; SVG reads
+       color (not background-color) → black icon on orange background.
+
+   Icon notes:
+   • .ea-card-strategy__expand-icon is mask-only (no SVG child); it
+     inherits background-color: currentColor from the parent button.
+*/
+
+:root {
+  --strategy-outer-bg:            var(--color-brand-veeva-light-2); /* 15% orange tint */
+  --strategy-outer-radius:        10px;
+  --strategy-outer-pad:           10px;
+  --strategy-inner-radius:        8px;
+  --strategy-inner-pad:           10px 12px;
+  --strategy-icon-size:           22px;
+  --strategy-label-fs:            var(--fs-body-sm);   /* 13px */
+  --strategy-label-fg:            var(--color-fg-h3);  /* #666 */
+  --strategy-heading-fs:          var(--fs-body);      /* 14px */
+  --strategy-heading-fw:          var(--fw-bold);
+  --strategy-heading-fg:          var(--color-fg-h1);  /* #000 */
+  --strategy-expand-fs:           var(--fs-body-sm);   /* 13px */
+  --strategy-expand-fg:           var(--color-veeva-blue);
+  --strategy-expand-icon-size:    12px;
+}
+
+/* Outer frame — replaces the default card bg/border/padding */
+.ea-card--strategy {
+  background: var(--strategy-outer-bg);
+  border-radius: var(--strategy-outer-radius);
+  border: 0;
+  padding: var(--strategy-outer-pad);
+  box-shadow: none;
+}
+
+/* White inner content row */
+.ea-card-strategy__row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: var(--strategy-inner-pad);
+  background: var(--color-bg-white);
+  border-radius: var(--strategy-inner-radius);
+}
+
+/* Strategy icon — mask-only, colored via inline background-color.
+   Distinct from .ea-card__item-icon (the circular blue-tint record icon). */
+.ea-card-strategy__icon {
+  flex: 0 0 var(--strategy-icon-size);
+  width: var(--strategy-icon-size);
+  height: var(--strategy-icon-size);
+  /* background-color: NOT in class — set inline (e.g. var(--color-brand-veeva)) */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ea-card-strategy__icon svg { width: 100%; height: 100%; display: block; }
+
+/* Label + heading column */
+.ea-card-strategy__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ea-card-strategy__label {
+  font-size: var(--strategy-label-fs);
+  color: var(--strategy-label-fg);
+  line-height: 18px;
+}
+
+.ea-card-strategy__heading {
+  font-size: var(--strategy-heading-fs);
+  font-weight: var(--strategy-heading-fw);
+  color: var(--strategy-heading-fg);
+  line-height: 22px;
+  word-break: break-word;
+}
+
+/* "展开" expand button */
+.ea-card-strategy__expand {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: 0;
+  padding: 0 4px;
+  cursor: pointer;
+  color: var(--strategy-expand-fg);
+  font-size: var(--strategy-expand-fs);
+  font-family: inherit;
+}
+.ea-card-strategy__expand:active { opacity: 0.65; }
+
+/* Down-arrow icon — mask-only (always used with --icon URL, never SVG child).
+   background-color: currentColor inherits from the parent button's blue color. */
+.ea-card-strategy__expand-icon {
+  width: var(--strategy-expand-icon-size);
+  height: var(--strategy-expand-icon-size);
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   SOURCE CARD  (规范-semantic content search)
+   ══════════════════════════════════════════════════════════════
+   Compact card for AI-cited reference documents. Two-column
+   layout: 48×48 thumbnail on the left, body text on the right.
+   Displayed in a 2-column grid inside .ea-chat-source-list.
+
+   Figma: Chat.fig — 规范-semantic content search frame.
+
+   Usage:
+     <div class="ea-chat-source-list">
+       <div class="ea-chat-source-card">
+         <div class="ea-chat-source-card__thumb"
+              style="background-image: url(cover.jpg)"></div>
+         <div class="ea-chat-source-card__body">
+           <p class="ea-chat-source-card__title">老年高血压患者使用克洛凯…</p>
+           <p class="ea-chat-source-card__meta">2024年发布</p>
+           <div class="ea-chat-source-card__footer">
+             <span class="ea-chat-source-card__page">第 15 页</span>
+             <span class="ea-chat-source-card__link">查看原文</span>
+           </div>
+         </div>
+       </div>
+       <!-- more cards … -->
+     </div>
+*/
+
+:root {
+  --source-card-radius:     var(--r-lg);       /* 12px — card corners */
+  --source-card-thumb-size: 48px;
+  --source-card-thumb-r:    var(--r-base);     /* 4px */
+  --source-card-gap:        10px;              /* thumb ↔ body */
+  --source-card-pad:        12px;
+  --source-card-bg:         rgba(255, 255, 255, 0.9);
+  --source-card-shadow:     0 1px 6px rgba(0, 0, 0, 0.04);
+  --source-card-link-bg:    var(--color-bg-extra-blue-0);  /* rgba(0,122,255,0.15) */
+  --source-card-link-fg:    var(--color-veeva-blue);
+  --source-list-gap:        10px;
+}
+
+/* 2-column responsive grid */
+.ea-chat-source-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--source-list-gap);
+  font-family: var(--font-cn);
+}
+
+/* Single card */
+.ea-chat-source-card {
+  background: var(--source-card-bg);
+  border-radius: var(--source-card-radius);
+  padding: var(--source-card-pad);
+  display: flex;
+  gap: var(--source-card-gap);
+  box-shadow: var(--source-card-shadow);
+  position: relative;  /* for .ea-card__badge */
+}
+
+/* Thumbnail — 48×48 square with cover-image fill */
+.ea-chat-source-card__thumb {
+  flex: 0 0 var(--source-card-thumb-size);
+  width: var(--source-card-thumb-size);
+  height: var(--source-card-thumb-size);
+  border-radius: var(--source-card-thumb-r);
+  background-color: var(--color-bg-f2);        /* fallback while image loads */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Body — flex column fills remaining width */
+.ea-chat-source-card__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Title — 2-line clamp */
+.ea-chat-source-card__title {
+  font-size: var(--fs-body);      /* 14px */
+  font-weight: var(--fw-regular);
+  color: var(--color-fg-h2);      /* #333 */
+  line-height: 22px;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta line (year, author, etc.) */
+.ea-chat-source-card__meta {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  color: var(--color-fg-h3);      /* #666 */
+  line-height: 18px;
+  margin: 0;
+}
+
+/* Footer — page ref + link chip, right-aligned */
+.ea-chat-source-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* Page reference */
+.ea-chat-source-card__page {
+  font-size: var(--fs-caption);   /* 12px */
+  color: var(--color-fg-h4);      /* #999 */
+  line-height: 18px;
+}
+
+/* "查看原文" blue pill chip */
+.ea-chat-source-card__link {
+  background: var(--source-card-link-bg);
+  color: var(--source-card-link-fg);
+  padding: 6px 12px;
+  border-radius: var(--r-circle);
+  font-size: var(--fs-body-sm);   /* 13px */
+  font-weight: var(--fw-medium);
+  line-height: 16px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ea-chat-source-card__link:active { opacity: 0.75; }
+
+
+/* ══════════════════════════════════════════════════════════════
+   INFO BANNERS  (规范-info)
+   ══════════════════════════════════════════════════════════════
+   Inline notice blocks shown inside AI replies to surface
+   important caveats or warnings. Three semantic variants:
+
+   .ea-chat-banner             — neutral auxiliary notice (gray)
+   .ea-chat-banner--highlight  — needs attention (amber/yellow)
+   .ea-chat-banner--warn       — warning / error (red)
+
+   Figma: Chat.fig — 规范-info frame.
+
+   Usage:
+     <div class="ea-chat-banner ea-chat-banner--highlight">
+       注意：王主任的FFGO将于 2025-08-10 失效。若能在会前确保其资格有效，
+       我们强烈推荐邀请这位参会人。
+     </div>
+*/
+
+:root {
+  --banner-radius:    var(--r-base);     /* 4px */
+  --banner-pad:       12px 14px;
+  --banner-fs:        var(--fs-body-sm); /* 13px */
+  --banner-lh:        20px;
+
+  /* neutral */
+  --banner-normal-bg: var(--color-bg-f5);      /* #F5F5F5 */
+  --banner-normal-fg: var(--color-fg-h4);      /* #999 */
+
+  /* highlight / needs-attention */
+  --banner-highlight-bg: var(--color-chat-highlight-bg);  /* #FFFED4 */
+  --banner-highlight-fg: var(--color-chat-highlight-fg);  /* #F89728 */
+
+  /* warn / error */
+  --banner-warn-bg:  var(--color-chat-warn-bg);  /* #FFE8E5 */
+  --banner-warn-fg:  var(--color-error);          /* #FF5543 */
+}
+
+.ea-chat-banner {
+  border-radius: var(--banner-radius);
+  padding: var(--banner-pad);
+  font-size: var(--banner-fs);
+  font-weight: var(--fw-regular);
+  line-height: var(--banner-lh);
+  font-family: var(--font-cn);
+  background: var(--banner-normal-bg);
+  color: var(--banner-normal-fg);
+  word-break: break-word;
+}
+
+/* Needs attention — amber/yellow */
+.ea-chat-banner--highlight {
+  background: var(--banner-highlight-bg);
+  color: var(--banner-highlight-fg);
+}
+
+/* Warning / error — red */
+.ea-chat-banner--warn {
+  background: var(--banner-warn-bg);
+  color: var(--banner-warn-fg);
+}

@@ -1,0 +1,469 @@
+/* WeChat Design System — HCP Insights (医生要览 — AI 洞察卡)
+   --------------------------------------------------------
+   Source: Figma Pre-Call-Agent_WeChat (qTV8vGUpnQ8z6GtgaWGVc0)
+           node 1423:25850 — HCP insights card embedded inside
+           the 基本信息 tab of the doctor detail page.
+
+   An AI-generated panel that summarises an HCP's recent activity,
+   beliefs, practice ecosystem, and relationship network ahead of
+   a sales call. Lives inside the `基本信息` tab on `preview/detail.html`.
+
+   Anatomy:
+     ┌─ .ea-hcp-insights ──────────────────────────────────┐
+     │ 医生要览                       更新时间:03/26 15:00 │ ← __head
+     │ 🌟 医生动向                                          │ ← __section
+     │  • 【会议动向】 <body text> <citation [1]>           │ ← __bullet
+     │  • 【资料展示】 <body text> <citation [1]>           │   with __bullet-label
+     │  • 【出版物】   <body text> <citation [1]>           │
+     │ 💡 医生观念                                          │
+     │  • 【医生定性】 <body text> <citation [2]>           │
+     │  • 【观点与洞察】<body text> <citation [1]>          │
+     │  • 【疾病洞察】 <body text> <citation [1]>           │
+     │ 🏛 执业生态                                          │
+     │   机构战略                                           │ ← __subsection-title
+     │    • 2026年1-3月: …               <citation [1]>     │
+     │    • 2026年2月: …                <citation [1]>      │
+     │   支付与绩效                                         │
+     │    • 2026年1-4月: …              <citation [1]>      │
+     │   技术准入                                           │
+     │    • 2026年4月: …                <citation [1]>      │
+     │   诊疗主张                                           │
+     │    • 2025.12-2026.04: …          <citation [2]>      │
+     │ 🔗 医生关系网                                         │
+     │  • 沈文卿(复旦大学… · 心内科)                         │ ← __bullet-label (relation)
+     │     2026.04.12 协同启动…         <citation [1]>      │
+     │  • 陈彦明(中国医学科学院… · 心衰中心)                 │
+     │     2026.03.25 联合署名…          <citation [1]>     │
+     │              收起全文 ↑                              │ ← __expand
+     │              内容由AI生成                            │ ← __ai-mark
+     └──────────────────────────────────────────────────────┘
+
+   ── Locked icons (from icon library) ─────────────────────
+   医生动向 section   — 面性/面性-ai-star.svg  (4-point sparkle)
+   医生观念 section   — 面性/面性-灯泡.svg     (filled lightbulb)
+   执业生态 section   — 面性/面性-医院.svg     (filled hospital)
+   医生关系网 section — 面性/面性-连接.svg     (3-node connection)
+   收起全文 / 展开    — 线性/线性-向上方向.svg / 线性-向下方向.svg
+   内容由AI生成 mark  — 面性/面性-ai-star.svg
+   All section icons render in brand-veeva orange (no per-section tint).
+   ──────────────────────────────────────────────────────── */
+
+:root {
+  /* Outer frame wrapper (.ea-hcp-insights-frame) — blue gradient band */
+  --hi-frame-from:         #DDF1FF;
+  --hi-frame-to:           rgba(248, 250, 254, 0.5);
+  --hi-frame-pad-x:        12px;
+  --hi-frame-pad-y:        16px;
+  --hi-frame-margin-y:     12px;
+
+  /* Inner card (.ea-hcp-insights) — white card floating inside the frame */
+  --hi-bg:                 var(--color-bg-white);          /* white card */
+  --hi-shadow:             0 0 8px rgba(0, 0, 0, 0.15);
+  --hi-radius:             8px;
+  --hi-pad-x:              12px;
+  --hi-pad-y:              12px;
+  --hi-gap:                18px;       /* spacing between top-level sections */
+  --hi-margin-x:           0;          /* frame handles outer margins */
+
+  /* Header */
+  --hi-title-fs:           16px;
+  --hi-title-fw:           var(--fw-medium);
+  --hi-title-color:        var(--color-section-blue);   /* #2069D6 */
+  --hi-timestamp-fs:       12px;
+  --hi-timestamp-color:    var(--color-fg-h4);          /* #999 */
+
+  /* Section block */
+  --hi-section-gap:        8px;        /* gap inside a section (head → bullets) */
+  --hi-section-icon-sz:    16px;
+  --hi-section-icon-fg:    var(--color-brand-veeva);    /* ALL section icons orange */
+  --hi-section-title-fs:   14px;
+  --hi-section-title-fw:   var(--fw-medium);
+  --hi-section-color:      var(--color-fg-h1);          /* #000 */
+
+  /* Subsection (nested header inside a section, e.g. 机构战略) */
+  --hi-subsection-gap:     14px;       /* gap between sibling subsections */
+  --hi-subsection-title-fs:14px;
+  --hi-subsection-title-fw:var(--fw-medium);
+  --hi-subsection-color:   var(--color-fg-h1);          /* #000 */
+  --hi-subsection-indent:  4px;        /* slight indent so subsection sits under section icon */
+
+  /* Bullet */
+  --hi-bullet-fs:          14px;
+  --hi-bullet-lh:          22px;
+  --hi-bullet-color:       var(--color-fg-h2);          /* #333 */
+  --hi-bullet-dot-color:   var(--color-veeva-blue);     /* #007AFF */
+  --hi-bullet-dot-size:    4px;
+  --hi-bullet-gap:         8px;        /* dot ↔ content gap */
+  --hi-bullet-indent:      6px;        /* indent inside section */
+
+  /* Inline label inside a bullet ("【会议动向】" / doctor-name prefix) */
+  --hi-label-fw:           var(--fw-medium);
+  --hi-label-color:        var(--color-fg-h1);          /* #000 */
+
+  /* Citation badge [N] */
+  --hi-cite-h:             16px;
+  --hi-cite-min-w:         16px;
+  --hi-cite-bg:            var(--color-bg-extra-blue-1);
+  --hi-cite-fg:            var(--color-veeva-blue);
+  --hi-cite-fs:            11px;
+  --hi-cite-radius:        var(--r-circle);             /* fully rounded pill */
+
+  /* Expand / AI mark */
+  --hi-expand-fs:          14px;
+  --hi-expand-color:       var(--color-section-blue);
+  --hi-ai-mark-fs:         12px;
+  --hi-ai-mark-color:      var(--color-fg-h4);
+
+  /* Action card (下一步行动) — optional next-step CTA card */
+  --hi-action-bg:          var(--color-white);
+  --hi-action-border:      1px dashed var(--color-veeva-blue-light-4);
+  --hi-action-radius:      10px;
+  --hi-action-pad:         12px;
+  --hi-action-title-fs:    14px;
+  --hi-action-icon-sz:     16px;
+  --hi-action-icon-fg:     var(--color-warning);          /* yellow lightbulb — distinct from orange section icons */
+  --hi-action-cta-bg:      var(--color-veeva-blue);       /* #007AFF */
+  --hi-action-cta-fg:      var(--color-white);
+  --hi-action-cta-h:       32px;
+
+  /* Plan CTA — 帮我规划下次拜访 (primary AI action button) */
+  --hi-plan-cta-from:      #3FCFD3;
+  --hi-plan-cta-to:        #4988F1;
+  --hi-plan-cta-h:         44px;
+  --hi-plan-cta-fg:        var(--color-white);
+  --hi-plan-cta-icon-sz:   16px;
+}
+
+/* ── Frame wrapper — blue gradient band ─────────────────── */
+/* Wrap .ea-hcp-insights with this to get the DDF1FF→F8FAFE
+   gradient band that bleeds edge-to-edge in the detail page. */
+
+.ea-hcp-insights-frame {
+  margin: var(--hi-frame-margin-y) 0;
+  padding: var(--hi-frame-pad-y) var(--hi-frame-pad-x);
+  background: linear-gradient(180deg,
+    var(--hi-frame-from) 0%,
+    var(--hi-frame-to)   100%);
+}
+
+/* ── Inner card ─────────────────────────────────────────── */
+
+.ea-hcp-insights {
+  position: relative;
+  margin: 0 var(--hi-margin-x);
+  padding: var(--hi-pad-y) var(--hi-pad-x);
+  background: var(--hi-bg);
+  border-radius: var(--hi-radius);
+  box-shadow: var(--hi-shadow);
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-gap);
+}
+
+/* ── Header — title + timestamp ─────────────────────────── */
+
+.ea-hcp-insights__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+.ea-hcp-insights__title {
+  font-size: var(--hi-title-fs);
+  font-weight: var(--hi-title-fw);
+  color: var(--hi-title-color);
+  line-height: 23px;
+}
+.ea-hcp-insights__timestamp {
+  font-size: var(--hi-timestamp-fs);
+  color: var(--hi-timestamp-color);
+  line-height: 16px;
+}
+
+/* ── Action card (下一步行动) — optional CTA card ────────── */
+/* Sits between the header and the first section. Dashed-border
+   white card with a yellow lightbulb glyph, an explanation body,
+   and a blue "发送资料 / 添加拜访" style primary pill button. */
+
+.ea-hcp-insights__action {
+  background: var(--hi-action-bg);
+  border: var(--hi-action-border);
+  border-radius: var(--hi-action-radius);
+  padding: var(--hi-action-pad);
+}
+
+.ea-hcp-insights__action-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ea-hcp-insights__action-icon {
+  width: var(--hi-action-icon-sz);
+  height: var(--hi-action-icon-sz);
+  background-color: var(--hi-action-icon-fg);        /* yellow — distinct from orange section icons */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+.ea-hcp-insights__action-title {
+  font-size: var(--hi-action-title-fs);
+  font-weight: var(--fw-medium);
+  color: var(--color-fg-h1);
+}
+
+.ea-hcp-insights__action-body {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-fg-h2);
+  margin-bottom: 12px;
+}
+
+/* CTA pill ("发送资料") */
+.ea-hcp-insights__action-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: var(--hi-action-cta-h);
+  padding: 0 12px;
+  background: var(--hi-action-cta-bg);
+  color: var(--hi-action-cta-fg);
+  border: 0;
+  border-radius: var(--r-circle);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  font-family: inherit;
+  cursor: pointer;
+}
+.ea-hcp-insights__action-cta-icon {
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+/* ── Section block (医生动向 / 医生观念 / 执业生态 / 医生关系网) ── */
+
+.ea-hcp-insights__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-section-gap);
+}
+
+.ea-hcp-insights__section-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ea-hcp-insights__section-icon {
+  width: var(--hi-section-icon-sz);
+  height: var(--hi-section-icon-sz);
+  background-color: var(--hi-section-icon-fg);   /* brand-veeva orange for every section */
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+.ea-hcp-insights__section-title {
+  font-size: var(--hi-section-title-fs);
+  font-weight: var(--hi-section-title-fw);
+  color: var(--hi-section-color);
+  line-height: 20px;
+}
+
+/* ── Subsection (nested group inside a section) ─────────── */
+
+.ea-hcp-insights__subsections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-subsection-gap);
+  padding-left: var(--hi-subsection-indent);
+}
+.ea-hcp-insights__subsection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-section-gap);
+}
+.ea-hcp-insights__subsection-title {
+  font-size: var(--hi-subsection-title-fs);
+  font-weight: var(--hi-subsection-title-fw);
+  color: var(--hi-subsection-color);
+  line-height: 20px;
+}
+
+/* ── Bullet rows ────────────────────────────────────────── */
+
+.ea-hcp-insights__bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--hi-bullet-gap);
+  padding-left: var(--hi-bullet-indent);
+}
+.ea-hcp-insights__bullet-dot {
+  flex: 0 0 var(--hi-bullet-dot-size);
+  width: var(--hi-bullet-dot-size);
+  height: var(--hi-bullet-dot-size);
+  background: var(--hi-bullet-dot-color);
+  border-radius: 50%;
+  margin-top: 9px;       /* optical align with first text line (22-lh) */
+}
+.ea-hcp-insights__bullet-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--hi-bullet-fs);
+  line-height: var(--hi-bullet-lh);
+  color: var(--hi-bullet-color);
+  word-break: break-word;
+}
+
+/* Inline bold label inside a bullet — for 【XXX】 bracketed prefixes
+   OR for the doctor-name+hospital prefix in 医生关系网 entries. */
+.ea-hcp-insights__bullet-label {
+  font-weight: var(--hi-label-fw);
+  color: var(--hi-label-color);
+}
+
+/* Inline mid-sentence emphasis (e.g. quoting an attitude
+   shift like "该药应作为全人群的一线标准治疗"). Reuse the
+   semantic <strong> tag rather than minting a new modifier. */
+.ea-hcp-insights__bullet-content strong {
+  font-weight: var(--hi-label-fw);
+  color: var(--hi-label-color);
+}
+
+/* ── Inline citation badge [N] ──────────────────────────── */
+
+.ea-hcp-insights__citation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--hi-cite-h);
+  min-width: var(--hi-cite-min-w);
+  padding: 0 5px;
+  margin: 0 2px;
+  background: var(--hi-cite-bg);
+  color: var(--hi-cite-fg);
+  border-radius: var(--hi-cite-radius);
+  font-size: var(--hi-cite-fs);
+  line-height: 1;
+  font-weight: var(--fw-medium);
+  vertical-align: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 收起全文 / 展开全文 link ───────────────────────────── */
+
+.ea-hcp-insights__expand {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: center;
+  background: transparent;
+  border: 0;
+  padding: 4px 8px;
+  color: var(--hi-expand-color);
+  font-size: var(--hi-expand-fs);
+  font-family: inherit;
+  cursor: pointer;
+  line-height: 18px;
+}
+.ea-hcp-insights__expand-icon {
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+/* ── "内容由AI生成" mark ───────────────────────────────── */
+
+.ea-hcp-insights__ai-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: var(--hi-ai-mark-fs);
+  color: var(--hi-ai-mark-color);
+  line-height: 16px;
+}
+.ea-hcp-insights__ai-mark-icon {
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-brand-veeva);
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}
+
+/* ── Plan CTA — 帮我规划下次拜访 ────────────────────────── */
+/* Full-width primary AI action button with cyan→blue gradient.
+   Sits between 收起全文 and 内容由AI生成.
+   Icon: 面性/面性-ai-star.svg */
+
+.ea-hcp-insights__plan-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: var(--hi-plan-cta-h);
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-circle);
+  background: linear-gradient(90deg,
+    var(--hi-plan-cta-from) 0%,
+    var(--hi-plan-cta-to)   100%);
+  color: var(--hi-plan-cta-fg);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+  font-family: inherit;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.ea-hcp-insights__plan-cta:active {
+  opacity: 0.85;
+}
+.ea-hcp-insights__plan-cta-icon {
+  width: var(--hi-plan-cta-icon-sz);
+  height: var(--hi-plan-cta-icon-sz);
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-image: var(--icon, none);
+          mask-position: center;
+          mask-size: contain;
+          mask-repeat: no-repeat;
+}

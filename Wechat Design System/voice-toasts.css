@@ -1,0 +1,107 @@
+/* =========================================================
+   Voice Call Voice Agent — Loading Toast Chain
+   voice-toasts.css
+   ─────────────────────────────────────────────────────────
+   The sequential loading messages shown while Voice Call is
+   processing a voice recording and generating a report.
+
+   Toasts land one-by-one (green check → green check → spinner)
+   via JS timing; this file only provides the visual atoms.
+
+   States:
+     --done    green check + green text (past step)
+     --loading orange spinner + dark text (active step)
+
+   Depends on: colors_and_type.css
+   ========================================================= */
+
+/* ── Toast list container ── */
+.vc-toasts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Single toast row ── */
+.vc-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-cn);
+  font-size: var(--fs-body);
+  line-height: 20px;
+  color: var(--fg-default);
+}
+
+/* Done state — green text */
+.vc-toast--done {
+  color: var(--vc-success-text);   /* #00CD88 */
+}
+
+/* Loading state — dark text + spinner */
+.vc-toast--loading {
+  color: var(--fg-default);
+}
+
+/* ── Status icon slot (16×16) ── */
+.vc-toast__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Green check circle (done) */
+.vc-toast__check {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--vc-success-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.vc-toast__check::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 5px;
+  border-left: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  transform: translateY(-1px) rotate(-45deg);
+}
+
+/* Orange spinner ring (loading) */
+.vc-toast__spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--vc-orange);
+  border-top-color: transparent;
+  animation: mc-spin 1s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes mc-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Orange mascot loading image (shown during report generation) ──
+   Replace with a Lottie animation in production. ── */
+.vc-toast-mascot {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+.vc-toast-mascot__img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  animation: mc-bounce 1.2s ease-in-out infinite;
+}
+@keyframes mc-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}

@@ -1,0 +1,142 @@
+/* WeChat Design System — NavigationBar (顶部导航栏)
+   --------------------------------------------------------
+   Source: Figma WeChat_列表、搜索、筛选 (XAOwZ67DO4lykc3lfB0pjR)
+           node 62:13869 — canonical 375×88 NavigationBar.
+
+   Figma layout (375 baseline → adaptive):
+     ┌───────────────────────────────── 88 ─────────────────────────────────┐
+     │  StatusBar  44 ─ time (left, ~16px gutter) · status icons (right)    │
+     │  Nav row    44 ─ [LeftOp 109] [ Title 167 (24-lh) ] [RightOp 99]     │
+     └──────────────────────────────────────────────────────────────────────┘
+   Title is positioned at x=109..276 (167-wide) in Figma, with the right
+   icon at x=337..361 (24-wide, gutter 14). For ADAPTIVE width we
+   collapse the side zones to `flex: 0 0 auto` and let the title `flex: 1`
+   stay text-centered, with 14px outer padding both sides.
+
+   Spec (non-negotiable):
+     • Height        — 88px fixed (44 status + 44 nav row)
+     • Width         — 100% adaptive (no hardcoded 375)
+     • Background    — var(--color-brand-blue) #3975C6
+     • Foreground    — pure white #FFFFFF (text + icons)
+     • Title         — 17 / 500 / 24-lh, single line, ellipsis on overflow
+     • Icons         — 24×24, white-only via CSS mask
+     • Outer gutter  — 14px both sides
+
+   ── Locked icons (only these from the reference frame) ────
+   Back chevron — assets/icons/线性/线性-向左方向.svg
+   More dots    — assets/icons/线性/线性-更多.svg
+   No other icons — no search / edit / share / notification.
+   No tints / opacities — color is always #FFFFFF.
+   ───────────────────────────────────────────────────────────
+
+   ⚠️ HARD RULE — PAGE NAME LIVES IN THE NAVBAR
+   The current page's title (医生详情 / 我的医院 / 拜访详情 …)
+   ALWAYS goes in `.ea-navbar__title`. Do NOT put it in a
+   secondary header strip below the NavBar; do NOT duplicate it
+   inside the page's identity card / header card.
+   This applies to ALL pages — list, detail, edit, settings.
+   ─────────────────────────────────────────────────────────── */
+
+:root {
+  --nav-h:           88px;
+  --nav-status-h:    44px;            /* StatusBar — iPhone X+ tall */
+  --nav-row-h:       44px;            /* Nav row */
+  --nav-bg:          var(--color-brand-blue);   /* #3975C6 */
+  --nav-fg:          var(--color-white);        /* #FFFFFF */
+  --nav-pad-x:       16px;            /* nav row gutter (both sides) */
+  --nav-status-pad-x:20px;            /* status bar gutter (slightly wider — iOS look) */
+  --nav-icon-size:   20px;            /* iOS HIG nav icon size — chevron renders ~12 wide */
+  --nav-title-fs:    17px;
+  --nav-title-lh:    24px;
+  --nav-side-gap:    8px;             /* gap between adjacent icons in a side zone */
+  --nav-time-fs:     15px;
+  --nav-time-fw:     700;             /* iOS time is bold */
+  --nav-status-icons-fs: 11px;
+}
+
+.ea-navbar {
+  width: 100%;
+  height: var(--nav-h);
+  background: var(--nav-bg);
+  color: var(--nav-fg);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-cn);
+}
+
+/* ── Status bar slot — 44 tall, time left / icons right ── */
+.ea-navbar__status {
+  flex: 0 0 var(--nav-status-h);
+  height: var(--nav-status-h);
+  padding: 0 var(--nav-status-pad-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--nav-fg);
+  font-family: var(--font-en);        /* iOS time font feel */
+}
+.ea-navbar__status-time {
+  font-size: var(--nav-time-fs);
+  font-weight: var(--nav-time-fw);    /* 700 bold */
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.ea-navbar__status-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--nav-status-icons-fs);
+}
+
+/* ── Nav row — 44 tall, leading · title · trailing ── */
+.ea-navbar__row {
+  flex: 0 0 var(--nav-row-h);
+  height: var(--nav-row-h);
+  padding: 0 var(--nav-pad-x);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ea-navbar__leading,
+.ea-navbar__trailing {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nav-side-gap);
+  min-width: var(--nav-icon-size);    /* always reserve at least one slot */
+}
+.ea-navbar__trailing { justify-content: flex-end; }
+
+.ea-navbar__title {
+  flex: 1 1 auto;
+  min-width: 0;                       /* allow ellipsis inside flex child */
+  text-align: center;
+  font-size: var(--nav-title-fs);
+  font-weight: var(--fw-medium);
+  line-height: var(--nav-title-lh);
+  color: var(--nav-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.01em;
+}
+
+/* Icon button — 24×24, white-only via mask */
+.ea-navbar__icon {
+  width: var(--nav-icon-size);
+  height: var(--nav-icon-size);
+  background-color: var(--nav-fg);    /* always #FFFFFF */
+  cursor: pointer;
+  display: block;
+  border: 0;
+  padding: 0;
+  -webkit-mask: var(--icon, none) center / contain no-repeat;
+          mask: var(--icon, none) center / contain no-repeat;
+}
+/* Empty placeholder to balance the row when one side has no action.
+   Same width as an icon, transparent fill. */
+.ea-navbar__icon--empty {
+  background-color: transparent;
+  pointer-events: none;
+}

@@ -1,0 +1,53 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8" />
+<title>Loading toasts</title><link rel="stylesheet" href="base.css" />
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { width:16px;height:16px;border-radius:50%;border:2px solid #F7981D;border-top-color:transparent;animation:spin 1s linear infinite;flex-shrink:0; }
+  .toast { display:flex;align-items:center;gap:8px;font-family:var(--font-cn);font-size:14px; }
+  .toast.done { color:#00CD88; }
+  .toast.live { color:#333; }
+  .toasts { display:flex;flex-direction:column;gap:12px; }
+</style>
+</head><body>
+<div class="card">
+
+  <!-- Step 0 — first toast active -->
+  <div class="label" style="margin-bottom:4px;">Step 1 of 3 — parsing</div>
+  <div class="toasts">
+    <div class="toast live">
+      <div class="spinner"></div>
+      <span>收到啦！小助手正全力解析你的内容，超认真！</span>
+    </div>
+  </div>
+
+  <!-- Step 1 — first done, second active -->
+  <div class="label" style="margin-bottom:4px;margin-top:8px;">Step 2 of 3 — sorting</div>
+  <div class="toasts">
+    <div class="toast done">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#00CD88"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.293 14.293L6.293 11.88 7.707 10.47l3 3 5.293-5.293 1.414 1.414-6.707 6.702z"/></svg>
+      <span>收到啦！小助手正全力解析你的内容，超认真！</span>
+    </div>
+    <div class="toast live">
+      <div class="spinner"></div>
+      <span>好多重点信息！正在分类整理，绝不遗漏！</span>
+    </div>
+  </div>
+
+  <!-- Step 2 — all done -->
+  <div class="label" style="margin-bottom:4px;margin-top:8px;">Step 3 of 3 — complete</div>
+  <div class="toasts">
+    <div class="toast done">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#00CD88"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.293 14.293L6.293 11.88 7.707 10.47l3 3 5.293-5.293 1.414 1.414-6.707 6.702z"/></svg>
+      <span>收到啦！小助手正全力解析你的内容，超认真！</span>
+    </div>
+    <div class="toast done">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#00CD88"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.293 14.293L6.293 11.88 7.707 10.47l3 3 5.293-5.293 1.414 1.414-6.707 6.702z"/></svg>
+      <span>好多重点信息！正在分类整理，绝不遗漏！</span>
+    </div>
+    <div class="toast done">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#00CD88"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.293 14.293L6.293 11.88 7.707 10.47l3 3 5.293-5.293 1.414 1.414-6.707 6.702z"/></svg>
+      <span>报告生成中！马上送上你的专属 AI 拜访！</span>
+    </div>
+  </div>
+
+</div></body></html>

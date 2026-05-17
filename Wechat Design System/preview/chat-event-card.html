@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event card — Chat AI Agent</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../lists.css">
+<link rel="stylesheet" href="../chat-shell.css">
+<link rel="stylesheet" href="../chat-cards.css">
+<style>
+html, body { margin:0; padding:0; background:#F8F8F8; font-family:var(--font-cn); color:var(--fg-default); }
+.preview-page { max-width:860px; margin:0 auto; padding:32px 24px 80px; }
+h2 { font-size:13px; font-weight:600; color:#999; letter-spacing:0.06em; text-transform:uppercase;
+      margin:48px 0 16px; border-top:1px solid #EEE; padding-top:24px; }
+h2:first-of-type { margin-top:0; }
+.swatch-row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+.label { font-size:12px; color:#999; margin-bottom:6px; }
+.note { font-size:12px; color:#888; background:#FFF8E6; border-left:3px solid #F7981D;
+         padding:8px 12px; border-radius:0 4px 4px 0; margin-top:12px; line-height:18px; }
+.note code { font-family:monospace; font-size:11px; color:#555; }
+.ea-event-card { width:311px; border:1px solid var(--color-border-base); border-radius:8px;
+                 background:var(--color-bg-white); padding:12px; position:relative; }
+.ea-event-card__badge { position:absolute; top:12px; right:12px; font-size:12px; color:var(--color-brand-veeva); }
+.ea-event-card__head { display:flex; gap:8px; align-items:flex-start; }
+.ea-event-card__ico { width:28px; height:28px; border-radius:4px; background:#EFF3FC;
+                      display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ea-event-card__title { font-size:16px; font-weight:var(--fw-medium); color:var(--fg-default); line-height:20px; }
+.ea-event-card__meta { font-size:14px; color:var(--fg-muted); line-height:22px; }
+</style>
+</head>
+<body>
+<div class="preview-page">
+  <!-- ═══════════════════════════════════════════════════════
+       9. EVENT CARD
+       ═══════════════════════════════════════════════════════ -->
+  <h2>9. Event card</h2>
+  <div class="swatch-row">
+
+    <!-- Default: approved status -->
+    <div>
+      <div class="label">审批通过</div>
+      <div class="ea-event-card">
+        <div class="ea-event-card__badge">审批通过</div>
+        <div class="ea-event-card__head">
+          <div class="ea-event-card__ico">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.371 21.029" width="18" height="18" fill="currentColor">
+              <path d="M 3.063 8.417 C 3.246 11.524 5.669 14.03 8.686 14.03 C 11.703 14.03 14.126 11.524 14.309 8.418 C 12.425 8.225 10.533 8.125 8.64 8.117 C 6.583 8.117 4.526 8.266 3.063 8.418 L 3.063 8.417 Z M 11.749 14.58 C 11.063 14.58 8.686 17.838 8.686 17.838 C 8.686 17.838 6.446 14.581 5.623 14.581 C 2.743 14.581 0 17.787 0 20.494 C 0 21.697 3.703 20.494 8.96 20.494 C 14.171 20.494 17.371 21.697 17.371 20.494 C 17.371 17.888 14.171 14.581 11.749 14.581 L 11.749 14.58 Z M 14.811 7.565 L 13.806 1.101 C 13.806 1.101 12.023 0 8.686 0 C 5.349 0 3.566 1.102 3.566 1.102 L 2.56 7.567 C 2.56 7.567 5.989 7.016 8.869 7.016 C 11.611 7.016 14.811 7.567 14.811 7.567 L 14.811 7.565 Z M 8.229 5.612 L 8.229 4.108 L 6.811 4.108 C 6.537 4.108 6.354 3.908 6.354 3.607 C 6.354 3.307 6.583 3.105 6.811 3.105 L 8.229 3.105 L 8.229 1.603 C 8.229 1.327 8.434 1.102 8.686 1.102 C 8.937 1.102 9.143 1.326 9.143 1.604 L 9.143 3.108 L 10.56 3.108 C 10.834 3.108 11.017 3.307 11.017 3.609 C 11.017 3.885 10.811 4.109 10.56 4.109 L 9.143 4.109 L 9.143 5.613 C 9.143 5.889 8.937 6.114 8.686 6.114 C 8.434 6.114 8.229 5.89 8.229 5.613 L 8.229 5.612 Z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="ea-event-card__title">维我替尼产品研讨会</div>
+            <div class="ea-event-card__meta">会议开始时间：2025-05-10</div>
+            <div class="ea-event-card__meta">会议类型：科室会</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending review -->
+    <div>
+      <div class="label">待审批</div>
+      <div class="ea-event-card">
+        <div class="ea-event-card__badge" style="color:var(--fg-subtle);">待审批</div>
+        <div class="ea-event-card__head">
+          <div class="ea-event-card__ico">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.371 21.029" width="18" height="18" fill="currentColor">
+              <path d="M 3.063 8.417 C 3.246 11.524 5.669 14.03 8.686 14.03 C 11.703 14.03 14.126 11.524 14.309 8.418 C 12.425 8.225 10.533 8.125 8.64 8.117 C 6.583 8.117 4.526 8.266 3.063 8.418 L 3.063 8.417 Z M 11.749 14.58 C 11.063 14.58 8.686 17.838 8.686 17.838 C 8.686 17.838 6.446 14.581 5.623 14.581 C 2.743 14.581 0 17.787 0 20.494 C 0 21.697 3.703 20.494 8.96 20.494 C 14.171 20.494 17.371 21.697 17.371 20.494 C 17.371 17.888 14.171 14.581 11.749 14.581 L 11.749 14.58 Z M 14.811 7.565 L 13.806 1.101 C 13.806 1.101 12.023 0 8.686 0 C 5.349 0 3.566 1.102 3.566 1.102 L 2.56 7.567 C 2.56 7.567 5.989 7.016 8.869 7.016 C 11.611 7.016 14.811 7.567 14.811 7.567 L 14.811 7.565 Z M 8.229 5.612 L 8.229 4.108 L 6.811 4.108 C 6.537 4.108 6.354 3.908 6.354 3.607 C 6.354 3.307 6.583 3.105 6.811 3.105 L 8.229 3.105 L 8.229 1.603 C 8.229 1.327 8.434 1.102 8.686 1.102 C 8.937 1.102 9.143 1.326 9.143 1.604 L 9.143 3.108 L 10.56 3.108 C 10.834 3.108 11.017 3.307 11.017 3.609 C 11.017 3.885 10.811 4.109 10.56 4.109 L 9.143 4.109 L 9.143 5.613 C 9.143 5.889 8.937 6.114 8.686 6.114 C 8.434 6.114 8.229 5.89 8.229 5.613 L 8.229 5.612 Z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="ea-event-card__title">Q3 区域学术会议</div>
+            <div class="ea-event-card__meta">会议开始时间：2025-08-22</div>
+            <div class="ea-event-card__meta">会议类型：区域会</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

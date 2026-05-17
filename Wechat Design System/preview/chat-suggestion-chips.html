@@ -1,0 +1,42 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; background: linear-gradient(180deg,#DDF1FF 0%, #F8FAFE 100%); }
+  .stack { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 100px;
+    padding: 8px 14px;
+    font: 400 14px/18px var(--font-han);
+    color: #333;
+  }
+  .chip-blue {
+    background: rgba(0,122,255,0.15);
+    color: #007AFF;
+    font-weight: 500;
+  }
+  .chip-bold { font-weight: 500; color: #00CD88; gap: 6px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .lbl { font: 500 11px/14px var(--font-han); color: var(--fg-3); margin-top: 6px; }
+  .pill-tag { background: #DCFAE9; color: #00CD88; padding: 2px 8px; border-radius: 4px; font: 500 12px/16px var(--font-han); }
+</style></head><body>
+  <div class="stack">
+    <div class="lbl">SUGGESTION CHIPS — default</div>
+    <div class="row">
+      <div class="chip">总结一下最近3个月的互动情况</div>
+      <div class="chip">帮我规划下次拜访</div>
+      <div class="chip">有没有等待回复的医学咨询？</div>
+    </div>
+    <div class="lbl">RECOMMENDED — with 推荐 badge</div>
+    <div class="row">
+      <div class="chip">最为推荐的按钮 <span class="pill-tag">推荐</span></div>
+      <div class="chip">查看拜访报告</div>
+    </div>
+    <div class="lbl">BLUE LINK CHIP — "查看原文"</div>
+    <div class="row">
+      <div class="chip chip-blue">查看原文</div>
+      <div class="chip chip-blue">查看医学问询</div>
+    </div>
+  </div>
+</body></html>

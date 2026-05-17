@@ -1,0 +1,66 @@
+/* _card.css — Chat AI preview card shell
+   Used by every chat-series preview/*.html file (from Chat spec).
+
+   This file imports the shared system tokens and then defines
+   compatibility aliases for the Chat spec's token names, so the
+   preview HTML files can reference --font-han, --fg-1, --crm-blue,
+   etc. without modification.
+   ────────────────────────────────────────────────────────────── */
+
+@import url("../colors_and_type.css");
+
+/* ── Compatibility aliases: Chat spec → existing system tokens ── */
+:root {
+  /* Typefaces */
+  --font-han:    var(--font-cn);
+  --font-roman:  var(--font-en);
+
+  /* Text ramp (Chat spec uses fg-1/2/3; system uses fg-h2/h3/h4) */
+  --white:       var(--color-white);
+  --fg-1:        var(--color-fg-h2);    /* #333 — primary body */
+  --fg-2:        var(--color-fg-h3);    /* #666 — secondary */
+  --fg-3:        var(--color-fg-h4);    /* #999 — tertiary / placeholder */
+  --fg-disclaimer: #aaaaaa;
+
+  /* Brand colors */
+  --crm-blue:    var(--color-veeva-blue);    /* #007AFF */
+  --ai-orange:   var(--color-brand-veeva);   /* #F7981D */
+  --success:     var(--color-success);       /* #00DF93 */
+
+  /* Border */
+  --border-hairline: var(--color-hairline);  /* rgba(0,0,0,0.10) */
+
+  /* Type roles (Chat spec shorthand) */
+  --type-body:  400 14px/22px var(--font-cn);
+  --type-meta:  400 12px/18px var(--font-cn);
+  --type-mono:  400 13px/20px ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* ── Base shell ─────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  background: var(--white);
+  color: var(--fg-1);
+  font: var(--type-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { padding: 24px; min-height: 100%; }
+
+/* Layout helpers */
+.pc-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.pc-col { display: flex; flex-direction: column; gap: 12px; }
+.pc-label { font: var(--type-meta); color: var(--fg-3); }
+.pc-mono  { font: var(--type-mono); color: var(--fg-2); }
+.pc-token-name { font: 500 13px/18px var(--font-cn); color: var(--fg-1); }
+
+.pc-swatch {
+  width: 56px; height: 56px;
+  border-radius: var(--r-md);
+  flex-shrink: 0;
+}
+.pc-swatch-sm { width: 40px; height: 40px; border-radius: var(--r-base); }
+.pc-swatch-label { display: flex; flex-direction: column; gap: 2px; }
+.pc-divider { width: 100%; height: 1px; background: var(--border-hairline); margin: 8px 0; }

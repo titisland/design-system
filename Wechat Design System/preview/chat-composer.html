@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 22px; background: linear-gradient(180deg,#DDF1FF 0%, #F8FAFE 100%); }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .lbl { font: 500 11px/14px var(--font-han); color: var(--fg-3); }
+  .composer {
+    height: 48px; border-radius: 12px; background: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    display: flex; align-items: center; padding: 10px 14px;
+    gap: 10px;
+    font: 400 16px/24px var(--font-han);
+  }
+  .ph { color: rgba(153,153,153,0.6); flex: 1; }
+  .typed { color: #333; flex: 1; }
+  .cursor { display: inline-block; width: 1px; height: 18px; background: #007AFF; vertical-align: -3px; animation: bl 1s steps(1) infinite; }
+  @keyframes bl { 50% { opacity: 0; } }
+  .icon-l { width: 24px; height: 24px; border-radius: 50%; background: #333; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; color: #fff; }
+  .icon-l svg { width: 14px; height: 14px; }
+  .send {
+    width: 24px; height: 24px; border-radius: 50%; background: #007AFF;
+    display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0;
+  }
+  .send svg { width: 14px; height: 14px; }
+</style></head><body>
+  <div class="stack">
+    <div class="lbl">DEFAULT — press-to-talk (mic icon, no send)</div>
+    <div class="composer">
+      <div class="icon-l">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+      </div>
+      <span class="ph" style="text-align:center;">按住说话</span>
+    </div>
+
+    <div class="lbl">FOCUSED — empty, cursor visible</div>
+    <div class="composer">
+      <span class="typed"><span class="cursor"></span> <span style="color:rgba(153,153,153,0.6);">嗨！今天能帮你些什么？</span></span>
+    </div>
+
+    <div class="lbl">TYPED — send arrow appears (CRM Blue)</div>
+    <div class="composer">
+      <span class="typed">这周我有什么会要开<span class="cursor"></span></span>
+      <div class="send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </div>
+    </div>
+  </div>
+</body></html>

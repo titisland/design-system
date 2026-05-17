@@ -1,0 +1,127 @@
+/* WeChat Design System — Home Dashboard (看板)
+   --------------------------------------------------------
+   Source: Figma 首页_WeChat (JO8xVSc8EDUiyPWZizfGsu) node 6:2026.
+
+   The dashboard section hosts data cards (KPI numbers, bar
+   chart, donut chart) at the bottom of the homepage. Each
+   card is a white surface with a 14/500 title row and a chart
+   body.
+
+   Spec:
+     • Outer container — .ea-home-dashboard, padding 8 / 12,
+                         column gap 12 between cards
+     • Card            — white, --r-base radius, 1px #EEE border,
+                         padding 14 / 14
+     • Card title      — 14 / 500 / #000 + optional period link
+     • Sub             — 12 / 400 / #999 (under title)
+     • Chart placeholder area — fixed-height region (variants:
+         · KPI       (.ea-hd-card--kpi)        80px
+         · Bar       (.ea-hd-card--bar)        140px
+         · Donut     (.ea-hd-card--donut)      140px
+
+   Charts in the preview are static SVG placeholders only —
+   real data viz is the consumer's job. Use the .ea-hd-chart
+   slot to swap in Chart.js / d3 / etc. */
+
+:root {
+  --hd-pad-x:        12px;
+  --hd-pad-y:        8px;
+  --hd-gap:          12px;
+  --hd-card-bg:      var(--color-bg-white);
+  --hd-card-border:  1px solid var(--color-border-base);
+  --hd-card-radius:  var(--r-base);
+  --hd-card-pad:     14px;
+  --hd-title-fs:     14px;
+  --hd-title-fw:     var(--fw-medium);
+  --hd-title-color:  var(--color-fg-h1);          /* #000 */
+  --hd-sub-fs:       12px;
+  --hd-sub-color:    var(--color-fg-h4);          /* #999 */
+  --hd-link-fs:      12px;
+  --hd-link-color:   var(--color-veeva-blue);
+}
+
+.ea-home-dashboard {
+  width: 100%;
+  padding: var(--hd-pad-y) var(--hd-pad-x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--hd-gap);
+  font-family: var(--font-cn);
+  box-sizing: border-box;
+}
+
+/* Two-up grid for KPI / paired cards */
+.ea-home-dashboard__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--hd-gap);
+}
+
+.ea-hd-card {
+  background: var(--hd-card-bg);
+  border: var(--hd-card-border);
+  border-radius: var(--hd-card-radius);
+  padding: var(--hd-card-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.ea-hd-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.ea-hd-card__title {
+  font-size: var(--hd-title-fs);
+  font-weight: var(--hd-title-fw);
+  color: var(--hd-title-color);
+}
+.ea-hd-card__sub {
+  font-size: var(--hd-sub-fs);
+  color: var(--hd-sub-color);
+  font-weight: var(--fw-regular);
+}
+.ea-hd-card__link {
+  font-size: var(--hd-link-fs);
+  color: var(--hd-link-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Body slot — drops in chart / KPI content. Variant fixes height. */
+.ea-hd-chart {
+  width: 100%;
+  display: block;
+}
+.ea-hd-card--kpi   .ea-hd-chart { min-height: 80px; }
+.ea-hd-card--bar   .ea-hd-chart { min-height: 140px; }
+.ea-hd-card--donut .ea-hd-chart { min-height: 140px; }
+
+/* KPI big-number helper (when chart slot is just a number) */
+.ea-hd-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ea-hd-kpi__value {
+  font-size: 32px;
+  font-weight: var(--fw-medium);
+  color: var(--color-fg-h1);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.ea-hd-kpi__delta {
+  font-size: 12px;
+  font-weight: var(--fw-regular);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.ea-hd-kpi__delta--up   { color: var(--color-success); }
+.ea-hd-kpi__delta--down { color: var(--color-error); }
+.ea-hd-kpi__caption {
+  font-size: 12px;
+  color: var(--hd-sub-color);
+}

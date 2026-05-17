@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { padding: 24px; background: #F0F4F8; }
+  .row { display: flex; gap: 32px; align-items: center; }
+  .fab {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #F7981D;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px -4px rgba(247,152,29,0.45), 0 2px 6px rgba(0,0,0,0.1);
+    color: #fff;
+  }
+  .fab svg { width: 28px; height: 28px; }
+  .info { display: flex; flex-direction: column; gap: 4px; }
+  .nm { font: 500 14px/100% var(--font-han); color: #333; }
+  .vl { font: var(--type-mono); color: var(--fg-2); font-size: 12px; }
+  .role { font: 12px/18px var(--font-han); color: var(--fg-3); max-width: 320px; }
+
+  .star {
+    width: 32px; height: 32px;
+    color: #F7981D;
+  }
+  .star.success { color: #00CD88; }
+  .star.idle { color: #333; }
+</style></head><body>
+  <div class="row">
+    <div class="fab">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7.92 1.05 C 8.6 6.8 9.15 7.35 14.9 8.03 C 9.15 8.71 8.6 9.27 7.92 15.01 C 7.24 9.27 6.69 8.71 0.94 8.03 C 6.69 7.35 7.24 6.8 7.92 1.05 Z"/><path d="M4.34 4.2 C 7.7 6.86 8.28 6.86 11.66 4.17 C 8.99 7.57 8.99 8.16 11.63 11.54 C 8.27 8.88 7.69 8.88 4.31 11.57 C 6.98 8.16 6.98 7.58 4.34 4.2 Z"/></svg>
+    </div>
+    <div class="info">
+      <div class="nm">Veeva AI FAB</div>
+      <div class="vl">56×56 · #F7981D · radius 50%</div>
+      <div class="role">Fixed bottom-right of every host CRM screen. Tap launches the AI sheet — the sheet always inherits the record on screen as context.</div>
+    </div>
+  </div>
+</body></html>
