@@ -121,16 +121,42 @@
   margin-top: 2px;
 }
 
-/* Inline hint message under the WHOLE row (row grows to 65) */
+/* Inline hint message under the WHOLE row (row grows to 65)
+   Matches .ea-field-prompt--inline from prompts.css (default variant). */
 .ff-row--hint { min-height: var(--ff-row-h-hint); }
 .ff-hint {
-  font-size: 12px;
-  line-height: 1;
-  color: var(--ff-color-readonly);
-  margin-top: 5px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  margin-top: 5px;
+  font-family: var(--font-cn);
+  font-size: var(--fs-caption);          /* 12px */
+  line-height: 18px;
+  color: var(--pr-pop-fg, #0064FF);      /* #0064FF — inline variant, feedback standard */
+}
+
+/* Icon inside hint (optional) — 12px CSS-mask icon, inherits blue */
+.ff-hint__icon {
+  flex: 0 0 12px;
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon, none);
+          mask-image: var(--icon, none);
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+
+/* Pop variant — pill on neutral bg, no icon */
+.ff-hint--pop {
+  padding: 2px 8px;
+  border-radius: var(--r-base);
+  background: var(--pr-pop-bg, #f2f2f2);
+  color: var(--pr-pop-fg, #0064FF);
 }
 
 /* ── Edit primitives inside .ff-value ─────────────────── */

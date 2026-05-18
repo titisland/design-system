@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>Modal — Multi-button &amp; Prompt</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin: 0; padding: 16px 24px; background: #F5F5F5;
+         display: flex; gap: 30px; align-items: flex-start; justify-content: center; }
+  .stage { width: 300px; }
+  .modal { width: 300px; border-radius: 16px; background: #FFF; overflow: hidden;
+           font-family: var(--font-han-sans); }
+  .body { margin: 0 20px; padding: 20px 0;
+          display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .icon { color: var(--color-brand-veeva); }
+  .title { width: 260px; text-align: center; font-size: 16px; line-height: 24px; color: #000; }
+  .btnstack { display: flex; flex-direction: column; padding-top: 4px; }
+  .btn { width: 100%; height: 48px; display: flex; align-items: center;
+         justify-content: center; font-size: 16px; font-weight: 500;
+         line-height: 24px; cursor: pointer; user-select: none;
+         color: var(--color-brand-veeva); }   /* all stacked btns = orange */
+  .btn.cancel  { color: #333; }
+  .input {
+    width: 236px; height: 24px; padding: 8px 12px;
+    border: 1px solid #CCCCCC; border-radius: 4px;
+    font-size: 14px; line-height: 24px; color: #333; outline: none;
+  }
+  .btnrow { display: flex; }
+  .btnrow .btn { flex: 1; }
+  .lbl { text-align: center; margin-top: 10px; font-size: 11px;
+         color: var(--color-fg-3); font-family: ui-monospace, monospace; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="modal">
+      <div class="body">
+        <svg class="icon" width="30" height="30" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor"/><rect x="11" y="6" width="2" height="8" rx="1" fill="#FFF"/><circle cx="12" cy="17" r="1.1" fill="#FFF"/></svg>
+        <div class="title">描述文字描述文字描述文字描述</div>
+      </div>
+      <div class="btnstack">
+        <div class="btn" style="color:#F7981D">主要按钮名称 1</div>
+        <div class="btn" style="color:#F7981D">主要按钮名称 2</div>
+        <div class="btn" style="color:#F7981D">取消</div>
+      </div>
+    </div>
+    <div class="lbl">名称=多个按钮</div>
+  </div>
+
+  <div class="stage">
+    <div class="modal">
+      <div class="body">
+        <div class="title" style="margin-top:0;color:#000;font-weight:400">标题名称标题名称标题名称</div>
+        <input class="input" placeholder="文字描述" />
+      </div>
+      <div class="btnrow">
+        <div class="btn" style="color:#333">取消</div>
+        <div class="btn" style="color:#F7981D">确定</div>
+      </div>
+    </div>
+    <div class="lbl">名称=Prompt</div>
+  </div>
+</body>
+</html>

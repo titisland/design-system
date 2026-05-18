@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>Field-level hint</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin: 0; padding: 24px; background: #FFF;
+         display: flex; flex-direction: column; gap: 18px; font-family: var(--font-han-sans); }
+  .field {
+    display: flex; flex-direction: column; gap: 6px;
+    max-width: 320px;
+  }
+  .input {
+    height: 32px; padding: 0 10px; border: 1px solid #CCC; border-radius: 4px;
+    font-size: 13px; color: #333; outline: none; background: #FFF;
+  }
+  .hint-inline {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'PingFang SC', 'Noto Sans SC', sans-serif;
+    font-size: 11px; color: #0064FF;
+  }
+  .hint-pop {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 8px 2px 12px;
+    background: #F2F2F2; border-radius: 3px;
+    font-family: 'PingFang SC', 'Noto Sans SC', sans-serif;
+    font-size: 11px; color: #0064FF;
+    width: max-content;
+  }
+  .hint-inline svg { color: #0064FF; }
+  .label { font-size: 11px; color: var(--color-fg-3); font-family: ui-monospace, monospace; }
+</style>
+</head>
+<body>
+  <div class="field">
+    <input class="input" placeholder="请输入" />
+    <div class="hint-inline">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="7.5" x2="12" y2="13"/><circle cx="12" cy="16.25" r="0.8" fill="currentColor" stroke="none"/></svg>
+      <span>提示内容在这里展示，如果超长就折行</span>
+    </div>
+    <div class="label">Property 1 = inline</div>
+  </div>
+  <div class="field">
+    <input class="input" placeholder="请输入" />
+    <div class="hint-pop">
+      <span>提示内容在这里展示，如果超长就折行</span>
+    </div>
+    <div class="label">Property 1 = pop-inline</div>
+  </div>
+</body>
+</html>

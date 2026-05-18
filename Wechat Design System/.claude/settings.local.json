@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__pencil__get_editor_state",
+      "Bash(python3)",
+      "Bash(awk 'NR>=67 && NR<=90' \"/Users/TingSu/Documents/Claude/Projects/Wechat Design System/preview/home.html\")",
+      "Bash(awk 'NR>=80 && NR<=130' \"/Users/TingSu/Documents/Claude/Projects/Wechat Design System/preview/home.html\")",
+      "Bash(awk 'NR>=112 && NR<=120' \"/Users/TingSu/Documents/Claude/Projects/Wechat Design System/preview/home.html\")",
+      "Bash(python3 -c ' *)",
+      "Bash(awk 'NR>=156 && NR<=163' \"/Users/TingSu/Documents/Claude/Projects/Wechat Design System/preview/home.html\")",
+      "Bash(awk 'NR>=125 && NR<=130' \"/Users/TingSu/Documents/Claude/Projects/Wechat Design System/preview/home.html\")"
+    ]
+  }
+}

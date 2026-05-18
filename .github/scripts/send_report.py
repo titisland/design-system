@@ -79,44 +79,66 @@ def get_changed_files_for_path(path: str, since: str) -> dict[str, list[str]]:
     return {k: sorted(v) for k, v in by_category.items()}
 
 
+def friendly_filename(name: str) -> str:
+    """把文件名转成更易读的组件名"""
+    name = name.replace(".css", "").replace(".json", "").replace(".md", "").replace("-", " ").replace("_", " ")
+    return name.title()
+
+
 def build_system_block(system: dict, since: str) -> list[list]:
-    """为单个设计系统生成消息块"""
+    """为单个设计系统生成 PM 友好的消息块"""
     commits     = get_commits_for_path(system["path"], since)
     by_category = get_changed_files_for_path(system["path"], since)
     total_c     = len(commits)
     total_f     = sum(len(v) for v in by_category.values())
 
-    blocks = [
-        [{"tag": "text", "text": f"▌ {system['name']}  —  {total_c} 条提交 / {total_f} 个文件"}],
-    ]
+    blocks = [[{"tag": "text", "text": f"▌ {system['name']}"}]]
 
     if total_c == 0:
-        blocks.append([{"tag": "text", "text": "   今日暂无提交"}])
+        blocks.append([{"tag": "text", "text": "   今日暂无更新"}])
         return blocks
 
-    for c in commits[:5]:
-        blocks.append([{"tag": "text", "text": f"   • {c['message']}（{c['author']}）"}])
-    if total_c > 5:
-        blocks.append([{"tag": "text", "text": f"   …… 共 {total_c} 条，详见仓库"}])
+    # 用自然语言描述更新内容
+    blocks.append([{"tag": "text", "text": f"   本次共更新了 {total_f} 个模块，具体如下："}])
 
-    if by_category:
-        for cat, files in by_category.items():
-            names = "、".join(files[:3])
-            if len(files) > 3:
-                names += f" 等{len(files)}个"
-            blocks.append([{"tag": "text", "text": f"   📂 [{cat}] {names}"}])
+    for cat, files in by_category.items():
+        friendly_names = "、".join(friendly_filename(f) for f in files[:3])
+        if len(files) > 3:
+            friendly_names += f" 等 {len(files)} 项"
+        blocks.append([{"tag": "text", "text": f"   • {friendly_filename(cat)}：{friendly_names}"}])
+
+    # 把 commit message 作为更新说明展示（去掉技术前缀如 fix:/feat:）
+    if commits:
+        blocks.append([{"tag": "text", "text": " "}])
+        blocks.append([{"tag": "text", "text": "   更新说明："}])
+        for c in commits[:4]:
+            msg = c["message"]
+            # 去掉 conventional commit 前缀
+            for prefix in ["feat:", "fix:", "chore:", "refactor:", "docs:", "style:", "update:"]:
+                msg = msg.replace(prefix, "").strip()
+            blocks.append([{"tag": "text", "text": f"   「{msg}」"}])
 
     return blocks
 
 
 def format_message(since: str) -> dict:
-    today      = datetime.now(timezone(timedelta(hours=8))).strftime("%Y年%m月%d日")
-    hour       = datetime.now(timezone(timedelta(hours=8))).hour
-    period     = "上午" if hour < 12 else "下午"
-    issues_url = f"{GITHUB_REPO_URL}/issues"
+    tz_cst     = timezone(timedelta(hours=8))
+    now_cst    = datetime.now(tz_cst)
+    today      = now_cst.strftime("%Y年%m月%d日")
+    period     = "上午" if now_cst.hour < 12 else "下午"
+
+    # 统计是否有任何更新
+    total_updates = sum(
+        len(get_commits_for_path(s["path"], since)) for s in SYSTEMS
+    )
+
+    if total_updates == 0:
+        greeting = f"今日{period}设计系统暂无更新，规范保持稳定 ✨"
+    else:
+        greeting = f"设计系统今日{period}有新内容更新，请大家留意同步！"
 
     content = [
-        [{"tag": "text", "text": f"🗓  {today} {period}更新播报"}],
+        [{"tag": "text", "text": f"🗓  {today}  {greeting}"}],
         [{"tag": "text", "text": " "}],
     ]
 
@@ -125,21 +147,20 @@ def format_message(since: str) -> dict:
         content.append([{"tag": "text", "text": " "}])
 
     content += [
-        [{"tag": "text", "text": "📥  请执行 git pull 拉取最新版本"}],
+        [{"tag": "text", "text": "📥  如何获取最新版本？联系设计同学同步文件，或自行前往下方链接下载。"}],
         [{"tag": "text", "text": " "}],
         [
-            {"tag": "text", "text": "💬  有疑问？"},
-            {"tag": "a",    "text": "查看 Issues",    "href": issues_url},
-            {"tag": "text", "text": "  或  "},
+            {"tag": "text", "text": "💬  有疑问或建议？"},
             {"tag": "a",    "text": "填写问题收集表", "href": FEEDBACK_DOC_URL},
+            {"tag": "text", "text": "，我们会及时跟进。"},
         ],
         [{"tag": "text", "text": " "}],
-        [{"tag": "text", "text": f"— 自动发送于 {today}"}],
+        [{"tag": "text", "text": f"— 设计系统自动播报 · {today}"}],
     ]
 
     return {
         "msg_type": "post",
-        "content": {"post": {"zh_cn": {"title": f"📦 {SYSTEM_NAME}", "content": content}}},
+        "content": {"post": {"zh_cn": {"title": f"📦 设计系统更新播报", "content": content}}},
     }
 
 

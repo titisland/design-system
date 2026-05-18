@@ -14,27 +14,23 @@
    Pair with colors_and_type.css. */
 
 :root {
-  /* ── Status palette specific to prompts ──────────────── */
-  /* All status colors come from the global tokens in
-     colors_and_type.css; only the tinted backgrounds (rgba) are
-     defined locally because they're component-specific. */
-  --pr-success-fg:   var(--color-success);        /* #00DF93 */
-  --pr-success-bg:   rgba(0, 223, 147, 0.18);
+  /* ── Status palette — aligned to 提示 feedback standard ─ */
+  --pr-success-fg:   #00CD88;
+  --pr-success-bg:   #CCF9E9;
 
-  --pr-fail-fg:      var(--color-error);          /* #FF5543 */
-  --pr-fail-bg:      rgba(255, 85, 67, 0.18);
+  --pr-fail-fg:      #FF5543;
+  --pr-fail-bg:      #FFDDD9;
 
-  --pr-warning-fg:   var(--color-warning);          /* #FFCC00 — yellow per new spec */
-  --pr-warning-bg:   var(--color-warning-light-2);  /* 15% yellow tint */
+  --pr-warning-fg:   #F7981D;                     /* brand orange, not yellow */
+  --pr-warning-bg:   #FFF5CC;
 
-  --pr-hint-fg:      #7788a2;                     /* slate body text (Toast hint only) */
-  --pr-hint-icon:    var(--color-fg-placeholder);   /* matches Modal Confirm icon */
-  --pr-hint-bg:      rgba(119, 136, 162, 0.14);
+  --pr-hint-fg:      #7788A2;                     /* slate, icon + text same color */
+  --pr-hint-bg:      #D6DAE0;
 
   /* Bottom-fixed prompt fills */
-  --pr-bottom-gray:  var(--color-fg-placeholder);
-  --pr-bottom-warn:  var(--color-warning);
-  --pr-bottom-fail:  var(--color-error);
+  --pr-bottom-gray:  #AAAAAA;
+  --pr-bottom-warn:  #F6A950;                     /* warm orange, not yellow */
+  --pr-bottom-fail:  #FA9489;                     /* soft pink-red, not vivid red */
 
   /* Modal */
   --pr-dialog-w:      300px;
@@ -45,9 +41,9 @@
   --pr-dialog-bg:     var(--color-bg-white);
   --pr-dialog-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
 
-  /* Field-level pop-inline tint (light blue wash) */
-  --pr-pop-bg:       var(--color-bg-extra-blue-2);   /* 5% #007AFF wash */
-  --pr-pop-fg:       var(--color-blue);
+  /* Field-level pop-inline — neutral gray bg per 提示 standard */
+  --pr-pop-bg:       #F2F2F2;
+  --pr-pop-fg:       #0064FF;
 
   /* Inpage reminder */
   --pr-reminder-bg:  var(--color-bg-f5);
@@ -102,29 +98,10 @@
 
 .ea-toast__text { flex: 1 1 auto; min-width: 0; word-break: break-word; }
 
-.ea-toast--success {
-  background: var(--pr-success-bg);
-  color: var(--pr-success-fg);
-}
-.ea-toast--success .ea-toast__text { color: var(--fg-default); }
-
-.ea-toast--fail {
-  background: var(--pr-fail-bg);
-  color: var(--pr-fail-fg);
-}
-.ea-toast--fail .ea-toast__text { color: var(--fg-default); }
-
-.ea-toast--warning {
-  background: var(--pr-warning-bg);
-  color: var(--pr-warning-fg);
-}
-.ea-toast--warning .ea-toast__text { color: var(--fg-default); }
-
-.ea-toast--hint {
-  background: var(--pr-hint-bg);
-  color: var(--pr-hint-icon);
-}
-.ea-toast--hint .ea-toast__text { color: var(--pr-hint-fg); }
+.ea-toast--success { background: var(--pr-success-bg); color: var(--pr-success-fg); }
+.ea-toast--fail    { background: var(--pr-fail-bg);    color: var(--pr-fail-fg); }
+.ea-toast--warning { background: var(--pr-warning-bg); color: var(--pr-warning-fg); }
+.ea-toast--hint    { background: var(--pr-hint-bg);    color: var(--pr-hint-fg); }
 
 
 /* ============================================================
@@ -138,7 +115,7 @@
      • alert           — red ! icon  + title + (optional desc)
                           + single full-width [主按钮名称]
      • custom-message  — gray ! icon + title + desc
-                          + stacked primary buttons, then 取消
+                          + stacked buttons (all .ea-dialog__btn--primary)
 
      (• prompt — title + .ea-dialog__input + actions; kept as a
         utility variant beyond the 3 canonical Figma ones.)
@@ -201,10 +178,10 @@
      .ea-dialog__icon--error     →  面性/面性-Toast-报错.svg
      .ea-dialog__icon--success   →  面性/面性-Toast-成功.svg
 */
-.ea-dialog__icon--confirm { background-color: var(--color-fg-placeholder); }   /* #B5B5B5 */
-.ea-dialog__icon--alert   { background-color: var(--color-error); }            /* #FF5543 */
-.ea-dialog__icon--error   { background-color: var(--color-error); }            /* #FF5543 */
-.ea-dialog__icon--success { background-color: var(--color-success); }          /* #00DF93 */
+.ea-dialog__icon--confirm { background-color: var(--color-brand-veeva); }     /* #F7981D */
+.ea-dialog__icon--alert   { background-color: var(--color-brand-veeva); }     /* #F7981D */
+.ea-dialog__icon--error   { background-color: var(--color-brand-veeva); }     /* #F7981D */
+.ea-dialog__icon--success { background-color: var(--color-brand-veeva); }     /* #F7981D */
 
 .ea-dialog__title {
   font-size: var(--fs-body);            /* 14px (Figma) */
@@ -266,8 +243,12 @@
 .ea-dialog__btn--primary { color: var(--color-brand-veeva); }
 .ea-dialog__btn--danger  { color: var(--color-error); }
 
-/* Stacked actions (多个按钮): each on its own row, divided */
+/* Stacked actions (多个按钮): each on its own row, divided.
+   All buttons are treated as primary options — no cancel/dark styling. */
 .ea-dialog__actions--stack { flex-direction: column; }
+.ea-dialog__actions--stack .ea-dialog__btn {
+  color: var(--color-brand-veeva);
+}
 .ea-dialog__actions--stack .ea-dialog__btn + .ea-dialog__btn {
   border-left: 0;
   border-top: var(--pr-dialog-divider);
@@ -349,7 +330,7 @@
           mask-repeat: no-repeat;
 }
 
-.ea-field-prompt--inline { color: var(--color-veeva-blue); }   /* #007AFF */
+.ea-field-prompt--inline { color: var(--pr-pop-fg); }          /* #0064FF */
 
 .ea-field-prompt--pop {
   padding: 2px 8px;
@@ -409,4 +390,107 @@
   height: 6px;
   border-radius: 50%;
   background: var(--pr-reminder-dot);
+}
+
+/* ============================================================
+   Motion — Toast & Dialog enter / exit animations
+   Source: 提示 design system motion spec (README.md)
+   ============================================================
+
+   Toast
+   -----
+   Enter : fade-in + 8px upward translate, 200ms,
+           cubic-bezier(0.2, 0.0, 0.0, 1.0)
+   Exit  : fade-out only, 160ms linear
+
+   Dialog (Modal)
+   --------------
+   Scrim  : opacity 0→1, 160ms ease-out (enter)
+            opacity 1→0, 160ms ease-out (exit)
+   Card   : scale(0.96)→scale(1) + opacity 0→1, 200ms ease-out (enter)
+            reverse, 160ms ease-out (exit)
+
+   Usage
+   -----
+   Add `.ea-toast--entering` / `.ea-toast--exiting` on the toast
+   wrapper via JS to trigger the correct keyframe.
+   Add `.ea-dialog--open` on .ea-dialog-backdrop to trigger modal
+   enter; remove it to trigger exit.
+   ============================================================ */
+
+/* ── Toast animations ─────────────────────────────────────── */
+@keyframes ea-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ea-toast-exit {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.ea-toast--entering {
+  animation: ea-toast-enter 200ms cubic-bezier(0.2, 0.0, 0.0, 1.0) both;
+}
+
+.ea-toast--exiting {
+  animation: ea-toast-exit 160ms linear both;
+}
+
+/* ── Dialog / Modal animations ────────────────────────────── */
+@keyframes ea-scrim-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ea-scrim-exit {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes ea-card-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ea-card-exit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* Backdrop: apply .ea-dialog--open to trigger enter */
+.ea-dialog-backdrop.ea-dialog--open {
+  animation: ea-scrim-enter 160ms ease-out both;
+}
+
+/* Card inside the backdrop */
+.ea-dialog-backdrop.ea-dialog--open .ea-dialog {
+  animation: ea-card-enter 200ms ease-out both;
+}
+
+/* Exit: apply .ea-dialog--closing (JS removes --open, adds --closing) */
+.ea-dialog-backdrop.ea-dialog--closing {
+  animation: ea-scrim-exit 160ms ease-out both;
+}
+
+.ea-dialog-backdrop.ea-dialog--closing .ea-dialog {
+  animation: ea-card-exit 160ms ease-out both;
 }

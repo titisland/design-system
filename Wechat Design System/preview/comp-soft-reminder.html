@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>In-page soft reminder</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin: 0; padding: 22px; background: #FFF; font-family: var(--font-han-sans); }
+  .wrap {
+    width: 355px; background: #F5F5F5; padding: 8px;
+  }
+  .header { color: #DEA96D; font-size: 14px; line-height: 1; padding: 10px 0; }
+  .list { display: flex; flex-direction: column; gap: 10px; }
+  .item {
+    display: flex; align-items: flex-start; gap: 5px;
+    font-size: 13px; line-height: 1.5; color: #666;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #F7981D;
+         margin-top: 7px; flex: 0 0 6px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">提示</div>
+    <div class="list">
+      <div class="item"><div class="dot"></div><div>费用总额超过限制（8000 元），请注意</div></div>
+      <div class="item"><div class="dot"></div><div>提示内容提示内容提示内容提示内容提示内容提示内容提示内容提示内容提示内容</div></div>
+      <div class="item"><div class="dot"></div><div>多个提醒内容需要同时展示</div></div>
+    </div>
+  </div>
+</body>
+</html>

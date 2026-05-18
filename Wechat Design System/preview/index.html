@@ -251,7 +251,14 @@ const ITEMS = {
     { name: "Navbar",         file: "component-navbar.html" },
     { name: "Buttons",        file: "buttons.html" },
     { name: "Badges",         file: "badges.html" },
-    { name: "Prompts / Toast",file: "prompts.html" },
+    { group: "提示组件 Feedback" },
+    { name: "Toast",                file: "comp-toast.html" },
+    { name: "Modal — Confirm/Alert",file: "comp-modal-confirm-alert.html" },
+    { name: "Modal — with Desc",    file: "comp-modal-desc.html" },
+    { name: "Modal — Multi/Prompt", file: "comp-modal-multi-prompt.html" },
+    { name: "Bottom Banner",        file: "comp-banner.html" },
+    { name: "Field Hint",           file: "comp-field-hint.html" },
+    { name: "Soft Reminder",        file: "comp-soft-reminder.html" },
     { name: "Lists",          file: "lists.html" },
     { name: "List actions",   file: "list-actions.html" },
     { name: "List shell",     file: "list-shell.html" },
@@ -334,7 +341,7 @@ function loadPreview(file, name, el) {
   const openLink = document.getElementById('previewOpen');
   openLink.href = file;
   openLink.style.display = '';
-  document.getElementById('previewFrame').src = file;
+  document.getElementById('previewFrame').src = file + '?v=' + Date.now();
 
   // Persist to URL hash so refresh restores position
   location.hash = currentAgent + '/' + file;

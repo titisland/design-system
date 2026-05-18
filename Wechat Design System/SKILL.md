@@ -63,3 +63,27 @@ Anywhere a glyph is needed (button affix, list row, FAB, tab, status badge, empt
 ```
 
 图标：魔法棒 — `面性/面性-魔法棒.svg`（18×18，白色 mask）；右箭头 — `线性/线性-向右方向.svg`（14×14，白色 mask）。吉祥物图片 — `assets/voice-call-mascot.png`（36×36，`<img>` 渲染）。
+
+## 反馈提示组件 (Feedback / 提示)
+
+**CSS：** `prompts.css`（全部五类组件的样式 + 末尾的 Motion 动效 keyframe）
+
+**React JSX UI Kit：** `ui_kits/tishi-mobile/`（可交互 playground，见 `index.html`）
+
+五类反馈组件及对应关系：
+
+| 场景 | CSS 类 | JSX 组件 | 独立 preview |
+|---|---|---|---|
+| 全局轻量反馈 | `.ea-toast--{success\|fail\|warning\|hint}` | `Toast` + `ToastHost` | `preview/comp-toast.html` |
+| 标准弹窗 | `.ea-dialog` + variant icon classes | `Modal` (confirm/alert/multi/prompt) | `preview/comp-modal-*.html` |
+| 底部固定提示 | `.ea-fixed-prompt--{gray\|warn\|fail}` | `BottomBanner` | `preview/comp-banner.html` |
+| 字段级提示 | `.ea-field-prompt--{inline\|pop}` | `FieldHintInline` / `FieldHintPop` | `preview/comp-field-hint.html` |
+| 页内软提醒 | `.ea-reminder` | `SoftReminder` | `preview/comp-soft-reminder.html` |
+
+**动效规则（CSS keyframe，`prompts.css` 末尾 `/* === Motion ===*/` 区块）：**
+- Toast 入场：`.ea-toast--entering` → fade + 上移 8px，200ms，cubic-bezier(0.2, 0, 0, 1)
+- Toast 出场：`.ea-toast--exiting` → fade，160ms linear
+- Modal 入场：`.ea-dialog-backdrop.ea-dialog--open` → scrim fade 160ms + card scale(0.96→1) 200ms ease-out
+- Modal 出场：`.ea-dialog-backdrop.ea-dialog--closing` → 反向，160ms
+
+**图标例外：** 提示类组件（Toast、Dialog、FieldHint）内部的状态图标使用 `Icons.jsx` 中的 Lucide 风格重绘 SVG（`IconCheck` / `IconX` / `IconAlert` / `IconAlertSolid`），**不从 `assets/icons/` 取**。主系统 491 图标集仅用于 UI chrome（列表、导航、表单等），不包含这四个状态 icon。
