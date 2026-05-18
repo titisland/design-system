@@ -85,38 +85,29 @@ def friendly_filename(name: str) -> str:
     return name.title()
 
 
+def clean_commit_message(msg: str) -> str:
+    """去掉技术前缀，返回干净的更新说明"""
+    for prefix in ["feat:", "fix:", "chore:", "refactor:", "docs:", "style:", "update:", "init:"]:
+        msg = msg.replace(prefix, "").strip()
+    return msg
+
+
 def build_system_block(system: dict, since: str) -> list[list]:
-    """为单个设计系统生成 PM 友好的消息块"""
-    commits     = get_commits_for_path(system["path"], since)
-    by_category = get_changed_files_for_path(system["path"], since)
-    total_c     = len(commits)
-    total_f     = sum(len(v) for v in by_category.values())
+    """为单个设计系统生成 PM 友好的消息块，只展示更新说明"""
+    commits = get_commits_for_path(system["path"], since)
 
     blocks = [[{"tag": "text", "text": f"▌ {system['name']}"}]]
 
-    if total_c == 0:
+    if not commits:
         blocks.append([{"tag": "text", "text": "   今日暂无更新"}])
         return blocks
 
-    # 用自然语言描述更新内容
-    blocks.append([{"tag": "text", "text": f"   本次共更新了 {total_f} 个模块，具体如下："}])
+    for c in commits[:6]:
+        msg = clean_commit_message(c["message"])
+        blocks.append([{"tag": "text", "text": f"   • {msg}"}])
 
-    for cat, files in by_category.items():
-        friendly_names = "、".join(friendly_filename(f) for f in files[:3])
-        if len(files) > 3:
-            friendly_names += f" 等 {len(files)} 项"
-        blocks.append([{"tag": "text", "text": f"   • {friendly_filename(cat)}：{friendly_names}"}])
-
-    # 把 commit message 作为更新说明展示（去掉技术前缀如 fix:/feat:）
-    if commits:
-        blocks.append([{"tag": "text", "text": " "}])
-        blocks.append([{"tag": "text", "text": "   更新说明："}])
-        for c in commits[:4]:
-            msg = c["message"]
-            # 去掉 conventional commit 前缀
-            for prefix in ["feat:", "fix:", "chore:", "refactor:", "docs:", "style:", "update:"]:
-                msg = msg.replace(prefix, "").strip()
-            blocks.append([{"tag": "text", "text": f"   「{msg}」"}])
+    if len(commits) > 6:
+        blocks.append([{"tag": "text", "text": f"   …… 以及另外 {len(commits) - 6} 项更新"}])
 
     return blocks
 
