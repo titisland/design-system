@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Veeva CRM — Layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  body { background: #f8f8f8; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 32px; }
+  .page-head { }
+  .page-head h1 { font-size: 32px; font-weight: 700; color: var(--text-h1); margin: 0 0 8px; letter-spacing: -0.5px; }
+  .page-head p { color: var(--text-h3); margin: 0; max-width: 720px; line-height: 22px; }
+  .demo-frame {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lighter);
+    overflow: hidden;
+    position: relative;
+  }
+  .demo-label {
+    font-size: 12px;
+    color: var(--text-h4);
+    font-family: var(--font-mono);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .demo-label em { font-style: normal; color: var(--text-h3); }
+  /* Simulated 1366-wide app in a 100% container */
+  .app-sim {
+    background: #f8f8f8;
+    width: 100%;
+    height: 640px;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 52px 1fr;
+  }
+  .topbar-sim {
+    background: #fff;
+    border-bottom: 1px solid var(--border-base);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+  }
+  .topbar-sim .v-topbar__logo { height: 22px; width: auto; }
+  .topbar-sim__nav { display: flex; gap: 4px; margin-left: 48px; }
+  .topbar-sim__nav a {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 52px; padding: 0 16px;
+    text-decoration: none;
+    color: var(--text-h2);
+    font-size: 14px;
+  }
+  .topbar-sim__nav a.is-active {
+    color: var(--veeva-orange);
+    box-shadow: inset 0 -2px 0 var(--veeva-orange);
+  }
+  .topbar-sim__right {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 20px;
+    font-size: 14px; color: var(--text-h2);
+  }
+  .body-sim { display: grid; grid-template-columns: 52px 1fr; }
+  .rail-sim {
+    background: #F8F8F8;
+    box-shadow: var(--shadow-sidebar);
+    padding: 12px 0;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .rail-sim__item {
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-h2);
+    position: relative;
+    cursor: pointer;
+  }
+  .rail-sim__item img { width: 20px; height: 20px; opacity: .7; }
+  .rail-sim__item:hover { background: #F0E6D8; }
+  .rail-sim__item.is-active {
+    background: #FFF0D6;
+  }
+  .rail-sim__item.is-active::before {
+    content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+    width: 3px; background: var(--veeva-orange); border-radius: 0 2px 2px 0;
+  }
+  .rail-sim__item.is-active img { filter: invert(62%) sepia(84%) saturate(1392%) hue-rotate(358deg) brightness(98%) contrast(96%); opacity: 1; }
+  .rail-sim__collapse {
+    margin-top: auto;
+    border-top: 1px solid var(--border-base);
+    width: 100%;
+    display: flex; justify-content: center;
+  }
+  .workspace-sim { padding: 24px 32px; overflow: auto; min-width: 0; }
+
+  /* Empty state */
+  .empty {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 64px 0;
+  }
+  .empty img { width: 120px; height: 90px; }
+  .empty__msg { color: var(--text-disabled); font-size: 14px; }
+
+  /* Home recent card grid */
+  .recent {
+    background: #fff; border-radius: 4px; box-shadow: var(--shadow-lighter);
+    padding: 16px 20px;
+  }
+  .recent__head { display:flex; align-items:center; gap: 8px; margin-bottom: 14px; font-size:14px; font-weight:500; color: var(--text-h2); }
+  .recent__head::before { content:""; display:block; width:14px; height:14px; background: var(--veeva-orange); border-radius: 3px; transform: rotate(45deg); }
+  .recent__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .recent__item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    font-size: 13px; color: var(--text-h2);
+    min-width: 120px;
+  }
+  .recent__item::before {
+    content: ""; width: 18px; height: 18px;
+    background: linear-gradient(135deg, #6CB6FF, #3F89E0);
+    border-radius: 3px;
+    flex: none;
+  }
+  .recent__item:hover { background: #EEF3F9; }
+
+  /* Page title strip */
+  .page-strip { background: #fff; border-radius:4px; box-shadow: var(--shadow-lighter); padding: 16px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .page-strip h2 { margin: 0; font-size: 16px; font-weight: 500; color: var(--text-h2); }
+
+  /* Drawer mock */
+  .drawer-mock {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 480px;
+    background: #fff;
+    box-shadow: -8px 0 24px rgba(0,0,0,.12);
+    display: flex; flex-direction: column;
+  }
+  .drawer-head { padding: 16px 24px; border-bottom: 2px solid var(--veeva-orange); display:flex; justify-content: space-between; align-items:center; }
+  .drawer-body { flex: 1; padding: 24px; overflow:auto; }
+  .drawer-foot { padding: 16px 24px; border-top: 1px solid var(--border-base); display:flex; gap:8px; justify-content: flex-end; }
+
+  /* Skeleton */
+  @keyframes sk { 0% { background-position: 0% 0 } 100% { background-position: -200% 0 } }
+  .sk {
+    background: linear-gradient(90deg, #EEEEEE 0%, #F6F6F6 50%, #EEEEEE 100%);
+    background-size: 200% 100%;
+    animation: sk 1.4s linear infinite;
+    height: 14px; border-radius: 4px;
+  }
+  .sk--row { height: 40px; }
+
+  .dual { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="page-head">
+    <h1>Layout</h1>
+    <p>The app shell and the canonical region compositions — home, list view, detail view, empty, loading. Each demo is a real simulation at 1280&nbsp;px (roughly the 1366 design canvas minus scrollbars) so you can read the density.</p>
+  </header>
+
+  <!-- App shell – list view -->
+  <section>
+    <div class="demo-label"><span>App shell · list view</span><em>top bar 52 · rail 52 · workspace #F4F6F8</em></div>
+    <div class="demo-frame">
+      <div class="app-sim">
+        <!-- top bar -->
+        <div class="topbar-sim">
+          <img class="v-topbar__logo" src="../assets/veeva-logo.svg" alt="Veeva">
+          <nav class="topbar-sim__nav">
+            <a href="#" class="is-active"><img src="../assets/icons/home.svg" width="16" height="16" alt=""> 首页</a>
+            <a href="#"><img src="../assets/icons/workspace.svg" width="16" height="16" alt=""> 工作</a>
+            <a href="#"><img src="../assets/icons/schedule.svg" width="16" height="16" alt=""> 任务队列</a>
+          </nav>
+          <div class="topbar-sim__right">
+            <a href="#" style="color: var(--text-h2); text-decoration:none;">帮助中心</a>
+            <span class="v-avatar v-avatar--sm">ZL</span>
+            <span>at_sfe@veeva.com</span>
+            <img src="../assets/icons/chevron-down.svg" width="10" height="10" alt="">
+          </div>
+        </div>
+        <!-- body -->
+        <div class="body-sim">
+          <aside class="rail-sim">
+            <div class="rail-sim__item"><img src="../assets/icons/home.svg" alt=""></div>
+            <div class="rail-sim__item is-active"><img src="../assets/icons/doctor.svg" alt=""></div>
+            <div class="rail-sim__item"><img src="../assets/icons/hospital.svg" alt=""></div>
+            <div class="rail-sim__item"><img src="../assets/icons/pharmacy.svg" alt=""></div>
+            <div class="rail-sim__item"><img src="../assets/icons/my-events.svg" alt=""></div>
+            <div class="rail-sim__item"><img src="../assets/icons/sales.svg" alt=""></div>
+            <div class="rail-sim__item"><img src="../assets/icons/bar-chart.svg" alt=""></div>
+            <div class="rail-sim__collapse rail-sim__item"><img src="../assets/icons/expand.svg" width="12" height="12" alt=""></div>
+          </aside>
+          <main class="workspace-sim">
+            <div class="v-crumb" style="margin-bottom:16px">
+              <a href="#">首页</a><span class="v-crumb__sep"></span>
+              <a href="#">拜访管理</a><span class="v-crumb__sep"></span>
+              <span>拜访列表</span>
+            </div>
+            <div class="v-data-card">
+              <div class="v-data-card__title">
+                <span>拜访列表</span>
+                <span style="display:flex; gap:8px;">
+                  <button class="v-btn v-btn--secondary v-btn--sm"><img src="../assets/icons/search.svg" width="12" height="12" alt=""></button>
+                  <button class="v-btn v-btn--secondary v-btn--sm">导出</button>
+                  <button class="v-btn v-btn--primary v-btn--sm"><img class="v-icon-invert" src="../assets/icons/plus.svg" width="10" height="10" alt=""> 新建拜访</button>
+                </span>
+              </div>
+              <table class="v-table">
+                <thead>
+                  <tr>
+                    <th>拜访医生</th><th>医院</th><th>拜访类型</th><th>拜访时间</th><th>状态</th><th style="width:90px">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>张建国</td><td>北京中日友好医院</td><td>医学拜访</td><td class="v-mono">2023-03-07 14:30</td><td><span class="v-tag v-tag--success"><span class="v-tag__dot"></span>已完成</span></td><td><button class="v-btn v-btn--link">查看</button></td></tr>
+                  <tr><td>李雪</td><td>上海瑞金医院</td><td>样品发放</td><td class="v-mono">2023-03-07 10:15</td><td><span class="v-tag v-tag--brand">进行中</span></td><td><button class="v-btn v-btn--link">查看</button></td></tr>
+                  <tr><td>王文波</td><td>广州中山一院</td><td>市场调研</td><td class="v-mono">2023-03-06 16:00</td><td><span class="v-tag v-tag--warning"><span class="v-tag__dot"></span>待审核</span></td><td><button class="v-btn v-btn--link">查看</button></td></tr>
+                  <tr><td>陈美丽</td><td>深圳市人民医院</td><td>医学拜访</td><td class="v-mono">2023-03-06 09:30</td><td><span class="v-tag v-tag--success"><span class="v-tag__dot"></span>已完成</span></td><td><button class="v-btn v-btn--link">查看</button></td></tr>
+                  <tr><td>刘大为</td><td>成都华西医院</td><td>医学拜访</td><td class="v-mono">2023-03-05 11:00</td><td><span class="v-tag v-tag--error"><span class="v-tag__dot"></span>已拒绝</span></td><td><button class="v-btn v-btn--link">查看</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Home / empty -->
+  <section class="dual">
+    <div>
+      <div class="demo-label"><span>Home · recent visits</span><em>entry tiles, 4-up grid</em></div>
+      <div class="demo-frame" style="padding:24px; background: #F4F6F8;">
+        <div class="recent">
+          <div class="recent__head">最近访问</div>
+          <div class="recent__grid">
+            <div class="recent__item">预算报表导出</div>
+            <div class="recent__item">活动管理</div>
+            <div class="recent__item">客户变更申请</div>
+            <div class="recent__item">区域外时间管理</div>
+            <div class="recent__item">Vault资料同步管理</div>
+            <div class="recent__item">共享规则列表</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="demo-label"><span>Empty state</span><em>full-pane, box illustration</em></div>
+      <div class="demo-frame" style="padding:24px; background: #F4F6F8;">
+        <div class="v-data-card">
+          <div class="v-data-card__title">
+            <span>拜访列表</span>
+            <button class="v-btn v-btn--primary v-btn--sm">新建</button>
+          </div>
+          <div class="v-table__empty empty">
+            <img src="../assets/empty-state.svg" alt="">
+            <div class="empty__msg">没有更多数据</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form / Detail -->
+  <section>
+    <div class="demo-label"><span>Form detail</span><em>label-left layout, 2-col fields, orange accent under title</em></div>
+    <div class="demo-frame" style="padding:24px; background: #F4F6F8;">
+      <div class="v-data-card" style="padding: 0;">
+        <div class="v-data-card__title">
+          <span>拜访报告详情</span>
+          <span style="display:flex; gap:8px;">
+            <button class="v-btn v-btn--secondary v-btn--sm">取消</button>
+            <button class="v-btn v-btn--primary v-btn--sm">保存</button>
+          </span>
+        </div>
+        <div style="padding: 24px 32px;">
+          <div class="v-section-title"><span class="v-section-title__mark">✦</span>基本信息</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; column-gap: 48px; row-gap: 4px;">
+            <div class="v-field">
+              <label class="v-field__label">拜访状态</label>
+              <div class="v-field__control"><span class="v-tag v-tag--brand">进行中</span></div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label">拜访类型</label>
+              <div class="v-field__control" style="padding-top:6px;">医学拜访</div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label v-field__label--required">拜访医院</label>
+              <div class="v-field__control">
+                <div class="v-input-group">
+                  <input class="v-input" value="北京中日友好医院">
+                  <img class="v-input-group__icon v-input-group__icon--clickable" src="../assets/icons/x.svg" width="12" height="12" alt="clear">
+                </div>
+              </div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label v-field__label--required">拜访医生</label>
+              <div class="v-field__control">
+                <div class="v-input-group">
+                  <input class="v-input v-input--error" placeholder="请选择">
+                  <img class="v-input-group__icon" src="../assets/icons/search.svg" width="14" height="14" alt="">
+                </div>
+                <div class="v-field__error">必填项不能为空</div>
+              </div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label v-field__label--required">拜访时间</label>
+              <div class="v-field__control">
+                <div class="v-input-group">
+                  <input class="v-input" placeholder="请选择">
+                  <img class="v-input-group__icon" src="../assets/icons/schedule.svg" width="14" height="14" alt="">
+                </div>
+              </div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label v-field__label--required">拜访目的</label>
+              <div class="v-field__control"><select class="v-select"><option>请选择</option><option>产品推广</option><option>学术交流</option></select></div>
+            </div>
+          </div>
+
+          <div class="v-section-title" style="margin-top: 16px;"><span class="v-section-title__mark">✦</span>关键信息</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; column-gap: 48px;">
+            <div class="v-field">
+              <label class="v-field__label v-field__label--required">关键信息</label>
+              <div class="v-field__control">
+                <button class="v-btn v-btn--secondary" style="width:100%; justify-content: flex-start; color: var(--text-placeholder)"><img src="../assets/icons/plus.svg" width="12" height="12" alt=""> 请选择</button>
+              </div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label">同行人</label>
+              <div class="v-field__control"><input class="v-input" placeholder="请输入想要共享人的姓名"></div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label">相关产品资料</label>
+              <div class="v-field__control">
+                <button class="v-btn v-btn--secondary" style="width:100%; justify-content: flex-start; color: var(--text-placeholder)"><img src="../assets/icons/plus.svg" width="12" height="12" alt=""> 请选择</button>
+              </div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label">医学讨论</label>
+              <div class="v-field__control">
+                <button class="v-btn v-btn--secondary" style="width:100%; justify-content: flex-start; color: var(--text-placeholder)"><img src="../assets/icons/plus.svg" width="12" height="12" alt=""> 请选择</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal / Drawer -->
+  <section class="dual">
+    <div>
+      <div class="demo-label"><span>Confirm modal</span><em>scrim + 480 card, warning icon + plain-verb primary</em></div>
+      <div class="demo-frame" style="height: 360px; display: grid; place-items: center; background: rgba(0,0,0,0.45);">
+        <div class="v-modal">
+          <div class="v-modal__body">
+            <img class="v-modal__body-icon" src="../assets/icons/circle-warn.svg" width="20" height="20" alt="">
+            <div>
+              <div class="v-modal__title">当前问卷所选分配岗位近期有变更，是否移除后发布？</div>
+              <ul style="margin: 4px 0 0; padding-left: 20px; color: var(--text-h3); font-size: 14px; line-height: 22px;">
+                <li>销售总监</li>
+                <li>区域经理</li>
+                <li>医学联络员</li>
+              </ul>
+            </div>
+          </div>
+          <div class="v-modal__actions">
+            <button class="v-btn v-btn--secondary">取消</button>
+            <button class="v-btn v-btn--primary">移除并继续</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="demo-label"><span>Drawer</span><em>right-anchored, header w/ orange accent, sticky footer</em></div>
+      <div class="demo-frame" style="height: 360px; background: #F4F6F8; position: relative;">
+        <div class="drawer-mock">
+          <div class="drawer-head">
+            <div style="font-size:16px; font-weight:500; color: var(--text-h2);">新建拜访</div>
+            <img src="../assets/icons/x.svg" width="14" height="14" alt="" style="cursor:pointer; opacity:.7">
+          </div>
+          <div class="drawer-body">
+            <div class="v-field">
+              <label class="v-field__label v-field__label--required">拜访医院</label>
+              <div class="v-field__control"><input class="v-input" placeholder="请输入"></div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label v-field__label--required">拜访医生</label>
+              <div class="v-field__control"><input class="v-input" placeholder="请选择"></div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label">拜访目的</label>
+              <div class="v-field__control"><select class="v-select"><option>请选择</option></select></div>
+            </div>
+            <div class="v-field">
+              <label class="v-field__label">备注</label>
+              <div class="v-field__control"><textarea class="v-textarea" placeholder="请输入"></textarea></div>
+            </div>
+          </div>
+          <div class="drawer-foot">
+            <button class="v-btn v-btn--secondary">取消</button>
+            <button class="v-btn v-btn--primary">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  <section>
+    <div class="demo-label"><span>Loading · skeleton rows</span><em>neutral #EEE → #F6F6F6 shimmer, match final row height</em></div>
+    <div class="demo-frame" style="padding: 24px; background: #F4F6F8;">
+      <div class="v-data-card">
+        <div class="v-data-card__title"><span>拜访列表</span></div>
+        <div style="padding: 0 20px;">
+          <div style="display:grid; grid-template-columns: 1fr 1.5fr 1fr 1fr 100px; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border-base);">
+            <div class="sk" style="width:60%"></div>
+            <div class="sk" style="width:80%"></div>
+            <div class="sk" style="width:40%"></div>
+            <div class="sk" style="width:50%"></div>
+            <div class="sk" style="width:70%"></div>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1.5fr 1fr 1fr 100px; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border-base);">
+            <div class="sk" style="width:70%"></div>
+            <div class="sk" style="width:90%"></div>
+            <div class="sk" style="width:35%"></div>
+            <div class="sk" style="width:55%"></div>
+            <div class="sk" style="width:70%"></div>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1.5fr 1fr 1fr 100px; gap: 16px; padding: 14px 0;">
+            <div class="sk" style="width:50%"></div>
+            <div class="sk" style="width:70%"></div>
+            <div class="sk" style="width:45%"></div>
+            <div class="sk" style="width:40%"></div>
+            <div class="sk" style="width:70%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

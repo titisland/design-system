@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Veeva CRM — Brand Themes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  body { background: #F4F6F8; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-size: 32px; font-weight: 700; color: var(--text-h1); margin: 0 0 8px; letter-spacing: -0.5px; }
+  .lede { color: var(--text-h3); max-width: 720px; line-height: 22px; margin: 0 0 40px; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .card {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: var(--shadow-lighter);
+    overflow: hidden;
+  }
+  .card__head {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-base);
+  }
+  .card__title { font-size: 15px; font-weight: 600; color: var(--text-h1); display: flex; align-items: center; gap: 10px; }
+  .card__swatch { width: 16px; height: 16px; border-radius: 3px; }
+  .card__hex { font-family: var(--font-mono); font-size: 12px; color: var(--text-h4); }
+
+  /* Mini app sim */
+  .mini {
+    display: grid; grid-template-rows: 44px 1fr; height: 360px;
+    background: #F4F6F8;
+  }
+  .mini__top {
+    background: #fff;
+    border-bottom: 1px solid var(--border-base);
+    display:flex; align-items: center; padding: 0 16px; gap: 16px;
+  }
+  .mini__top .logo { display:flex; align-items:center; gap:4px; font-weight:700; font-size: 15px; }
+  .mini__top .logo__dot { display:inline-block; width: 14px; height:14px; border-radius:50%; }
+  .mini__nav { display:flex; gap: 2px; margin-left: 16px; }
+  .mini__nav a {
+    padding: 0 12px; height: 44px; display:inline-flex; align-items:center; gap:6px;
+    color: var(--text-h2); font-size:13px; text-decoration:none;
+  }
+  .mini__nav a.is-active { box-shadow: inset 0 -2px 0 currentColor; font-weight: 500; }
+  .mini__body { display: grid; grid-template-columns: 40px 1fr; }
+  .mini__rail {
+    background: #F8F8F8; display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 2px;
+  }
+  .mini__rail .item {
+    width: 40px; height: 40px; display:flex; align-items: center; justify-content:center;
+    position: relative;
+  }
+  .mini__rail .item img { width: 16px; height: 16px; opacity: .6; }
+  .mini__rail .item.is-active::before {
+    content:""; position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:0 2px 2px 0;
+  }
+  .mini__main { padding: 16px; overflow: hidden; }
+  .mini__card {
+    background: #fff; border-radius: 4px; box-shadow: var(--shadow-lighter); overflow: hidden;
+  }
+  .mini__card-head {
+    padding: 10px 14px;
+    font-size: 13px; font-weight: 500; color: var(--text-h2);
+    display:flex; justify-content: space-between; align-items: center;
+  }
+  .mini__card-head--accent { border-bottom: 2px solid; }
+  .mini table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .mini thead th { background: var(--bg-f8); padding: 8px 12px; text-align:left; color: var(--text-h3); font-weight: 500; font-size: 11px; }
+  .mini tbody td { padding: 8px 12px; border-top: 1px solid var(--border-base); }
+  .mini .btn {
+    display:inline-flex; align-items:center; gap:4px;
+    height:24px; padding: 0 10px; border-radius: 3px; font-size: 12px;
+    color: #fff; border: 0; cursor: pointer;
+  }
+  .mini .pill { display:inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; }
+
+  /* Theme accent application — rail active, tab active, button, pill */
+  .theme-veeva .mini__top .logo__dot,
+  .theme-veeva .mini__rail .item.is-active::before,
+  .theme-veeva .mini__card-head--accent,
+  .theme-veeva .btn { background: #F7981D; border-color: #F7981D; }
+  .theme-veeva .mini__nav a.is-active,
+  .theme-veeva .mini__rail .item.is-active img,
+  .theme-veeva .logo { color: #F7981D; }
+  .theme-veeva .mini__rail .item.is-active { background: #FFF0D6; }
+  .theme-veeva .pill { background: #FFF1DF; color: #C57100; }
+
+  .theme-jj .mini__top .logo__dot,
+  .theme-jj .mini__rail .item.is-active::before,
+  .theme-jj .mini__card-head--accent,
+  .theme-jj .btn { background: #EB1700; border-color: #EB1700; }
+  .theme-jj .mini__nav a.is-active,
+  .theme-jj .mini__rail .item.is-active img,
+  .theme-jj .logo { color: #EB1700; }
+  .theme-jj .mini__rail .item.is-active { background: #FFE4E1; }
+  .theme-jj .pill { background: #FFE2DE; color: #A81100; }
+
+  .theme-msd .mini__top .logo__dot,
+  .theme-msd .mini__rail .item.is-active::before,
+  .theme-msd .mini__card-head--accent,
+  .theme-msd .btn { background: #00857C; border-color: #00857C; }
+  .theme-msd .mini__nav a.is-active,
+  .theme-msd .mini__rail .item.is-active img,
+  .theme-msd .logo { color: #00857C; }
+  .theme-msd .mini__rail .item.is-active { background: #D7EEEB; }
+  .theme-msd .pill { background: #D8EFEC; color: #006058; }
+
+  .theme-merck .mini__top .logo__dot,
+  .theme-merck .mini__rail .item.is-active::before,
+  .theme-merck .mini__card-head--accent,
+  .theme-merck .btn { background: #503191; border-color: #503191; }
+  .theme-merck .mini__nav a.is-active,
+  .theme-merck .mini__rail .item.is-active img,
+  .theme-merck .logo { color: #503191; }
+  .theme-merck .mini__rail .item.is-active { background: #E7DEF5; }
+  .theme-merck .pill { background: #E8DFF6; color: #3A2369; }
+
+  .rules {
+    margin-top: 48px;
+    padding: 24px 32px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: var(--shadow-lighter);
+  }
+  .rules h2 { margin-top: 0; font-size: 18px; color: var(--text-h1); }
+  .rules p { line-height: 22px; color: var(--text-h2); }
+  .rules pre {
+    background: #F4F6F8;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-h2);
+    overflow-x: auto;
+  }
+  .rules ul { line-height: 22px; color: var(--text-h2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Brand Themes</h1>
+  <p class="lede">Veeva CRM Online is re-skinned per pharma tenant. The same codebase runs under the house orange (default) and, in production, three customer themes: Johnson&nbsp;&amp;&nbsp;Johnson, Merck Sharp&nbsp;&amp;&nbsp;Dohme (MSD), and Merck KGaA. Only the brand accent changes — the neutral system, type, density, and component shapes are identical across themes.</p>
+
+  <div class="grid">
+    <!-- Veeva -->
+    <div class="card theme-veeva">
+      <div class="card__head">
+        <div class="card__title"><span class="card__swatch" style="background:#F7981D"></span>Veeva — house theme</div>
+        <div class="card__hex">#F7981D</div>
+      </div>
+      <div class="mini">
+        <div class="mini__top">
+          <div class="logo"><span class="logo__dot"></span> Veeva</div>
+          <nav class="mini__nav">
+            <a href="#" class="is-active">首页</a>
+            <a href="#">工作</a>
+            <a href="#">任务队列</a>
+          </nav>
+        </div>
+        <div class="mini__body">
+          <div class="mini__rail">
+            <div class="item"><img src="../assets/icons/home.svg" alt=""></div>
+            <div class="item is-active"><img src="../assets/icons/doctor.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/hospital.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/pharmacy.svg" alt=""></div>
+          </div>
+          <div class="mini__main">
+            <div class="mini__card">
+              <div class="mini__card-head mini__card-head--accent">
+                <span>拜访列表</span>
+                <button class="btn">+ 新建</button>
+              </div>
+              <table>
+                <thead><tr><th>医生</th><th>医院</th><th>状态</th></tr></thead>
+                <tbody>
+                  <tr><td>张建国</td><td>北京中日友好医院</td><td><span class="pill">进行中</span></td></tr>
+                  <tr><td>李雪</td><td>上海瑞金医院</td><td><span class="pill">已完成</span></td></tr>
+                  <tr><td>王文波</td><td>广州中山一院</td><td><span class="pill">已完成</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- J&J -->
+    <div class="card theme-jj">
+      <div class="card__head">
+        <div class="card__title"><span class="card__swatch" style="background:#EB1700"></span>Johnson &amp; Johnson</div>
+        <div class="card__hex">#EB1700</div>
+      </div>
+      <div class="mini">
+        <div class="mini__top">
+          <div class="logo"><span class="logo__dot"></span> Johnson &amp; Johnson</div>
+          <nav class="mini__nav">
+            <a href="#" class="is-active">首页</a>
+            <a href="#">工作</a>
+            <a href="#">任务队列</a>
+          </nav>
+        </div>
+        <div class="mini__body">
+          <div class="mini__rail">
+            <div class="item"><img src="../assets/icons/home.svg" alt=""></div>
+            <div class="item is-active"><img src="../assets/icons/doctor.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/hospital.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/pharmacy.svg" alt=""></div>
+          </div>
+          <div class="mini__main">
+            <div class="mini__card">
+              <div class="mini__card-head mini__card-head--accent">
+                <span>拜访列表</span>
+                <button class="btn">+ 新建</button>
+              </div>
+              <table>
+                <thead><tr><th>医生</th><th>医院</th><th>状态</th></tr></thead>
+                <tbody>
+                  <tr><td>张建国</td><td>北京中日友好医院</td><td><span class="pill">进行中</span></td></tr>
+                  <tr><td>李雪</td><td>上海瑞金医院</td><td><span class="pill">已完成</span></td></tr>
+                  <tr><td>王文波</td><td>广州中山一院</td><td><span class="pill">已完成</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MSD -->
+    <div class="card theme-msd">
+      <div class="card__head">
+        <div class="card__title"><span class="card__swatch" style="background:#00857C"></span>MSD — Merck Sharp &amp; Dohme</div>
+        <div class="card__hex">#00857C</div>
+      </div>
+      <div class="mini">
+        <div class="mini__top">
+          <div class="logo"><span class="logo__dot"></span> MSD</div>
+          <nav class="mini__nav">
+            <a href="#" class="is-active">首页</a>
+            <a href="#">工作</a>
+            <a href="#">任务队列</a>
+          </nav>
+        </div>
+        <div class="mini__body">
+          <div class="mini__rail">
+            <div class="item"><img src="../assets/icons/home.svg" alt=""></div>
+            <div class="item is-active"><img src="../assets/icons/doctor.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/hospital.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/pharmacy.svg" alt=""></div>
+          </div>
+          <div class="mini__main">
+            <div class="mini__card">
+              <div class="mini__card-head mini__card-head--accent">
+                <span>拜访列表</span>
+                <button class="btn">+ 新建</button>
+              </div>
+              <table>
+                <thead><tr><th>医生</th><th>医院</th><th>状态</th></tr></thead>
+                <tbody>
+                  <tr><td>张建国</td><td>北京中日友好医院</td><td><span class="pill">进行中</span></td></tr>
+                  <tr><td>李雪</td><td>上海瑞金医院</td><td><span class="pill">已完成</span></td></tr>
+                  <tr><td>王文波</td><td>广州中山一院</td><td><span class="pill">已完成</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Merck KGaA -->
+    <div class="card theme-merck">
+      <div class="card__head">
+        <div class="card__title"><span class="card__swatch" style="background:#503191"></span>Merck KGaA</div>
+        <div class="card__hex">#503191</div>
+      </div>
+      <div class="mini">
+        <div class="mini__top">
+          <div class="logo"><span class="logo__dot"></span> Merck</div>
+          <nav class="mini__nav">
+            <a href="#" class="is-active">首页</a>
+            <a href="#">工作</a>
+            <a href="#">任务队列</a>
+          </nav>
+        </div>
+        <div class="mini__body">
+          <div class="mini__rail">
+            <div class="item"><img src="../assets/icons/home.svg" alt=""></div>
+            <div class="item is-active"><img src="../assets/icons/doctor.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/hospital.svg" alt=""></div>
+            <div class="item"><img src="../assets/icons/pharmacy.svg" alt=""></div>
+          </div>
+          <div class="mini__main">
+            <div class="mini__card">
+              <div class="mini__card-head mini__card-head--accent">
+                <span>拜访列表</span>
+                <button class="btn">+ 新建</button>
+              </div>
+              <table>
+                <thead><tr><th>医生</th><th>医院</th><th>状态</th></tr></thead>
+                <tbody>
+                  <tr><td>张建国</td><td>北京中日友好医院</td><td><span class="pill">进行中</span></td></tr>
+                  <tr><td>李雪</td><td>上海瑞金医院</td><td><span class="pill">已完成</span></td></tr>
+                  <tr><td>王文波</td><td>广州中山一院</td><td><span class="pill">已完成</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <section class="rules">
+    <h2>Rules for themes</h2>
+    <p>A theme is a <strong>single accent swap</strong>. Structural neutrals — body text, borders, surfaces, row-hover warmth — stay the same so a Veeva rep, a J&amp;J rep, and an MSD rep all read the UI as "their CRM" without any single screen needing per-tenant redesign.</p>
+    <ul>
+      <li>Accent applies to: top-nav active tab, rail active icon, primary-button fill, orange accent line under list titles, focus ring, status-chip brand color.</li>
+      <li>Accent does <em>not</em> apply to: body text, links (stay <code>#007AFF</code>), success/warning/error status, tables, borders, shadows.</li>
+      <li>Logos are customer-supplied. Use their own mark in the top-left — don't colorize Veeva's V.</li>
+      <li>Row-hover tint shifts with the accent so hover reads as a warm version of the brand, not as orange on a purple theme.</li>
+    </ul>
+    <p>To apply a theme, set <code>data-theme</code> on <code>&lt;html&gt;</code> — the override block at the bottom of <code>colors_and_type.css</code> swaps the brand tokens:</p>
+    <pre>&lt;html data-theme="msd"&gt;
+  ...
+&lt;/html&gt;
+
+/* in colors_and_type.css */
+[data-theme="msd"] { --veeva-orange: #00857C; --border-accent: #00857C; --bg-row-hover: #E8F5F3; }</pre>
+  </section>
+</div>
+</body>
+</html>

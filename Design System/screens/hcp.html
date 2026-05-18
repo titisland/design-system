@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1366">
+<title>目标医生 — Veeva CRM Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../ui-kit/components.css">
+<link rel="stylesheet" href="../assets/iconfont/iconfont.css">
+<script src="../assets/iconfont/iconfont.js"></script>
+<style>
+/* ── Screen-level layout ──────────────────────────────────────── */
+html, body { height: 100%; }
+body { background: var(--bg-canvas); }
+
+.v-app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr;
+  overflow: hidden;
+}
+.v-app__body {
+  min-height: 0;
+  overflow: hidden;
+}
+.v-workspace {
+  padding: 0;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ── Topbar extras ──────────────────────────────────────────────── */
+.v-topbar__logo-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-h2);
+  letter-spacing: -.3px;
+  white-space: nowrap;
+}
+.v-topbar__logo-text span { color: var(--veeva-orange); }
+.v-topbar__divider { width: 1px; height: 20px; background: var(--border-base); }
+
+/* Nav item: hover + active states */
+.v-topbar__nav a {
+  color: var(--text-h3);
+}
+.v-topbar__nav a:hover {
+  color: var(--text-h2);
+  background: var(--bg-f5);
+}
+.v-topbar__nav a.is-active {
+  color: var(--veeva-orange);
+  box-shadow: inset 0 -2px 0 var(--veeva-orange);
+  background: transparent;
+}
+
+/* ── 帮助中心 link ─────────────────────────────────────────────── */
+.topbar-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  height: var(--topbar-h);
+  color: var(--text-h3);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+.topbar-help:hover { color: var(--text-h2); background: var(--bg-f5); }
+
+/* ── 个人中心 trigger ──────────────────────────────────────────── */
+.topbar-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  height: var(--topbar-h);
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+.topbar-user:hover { background: var(--bg-f5); }
+.topbar-user__name { font-size: var(--fs-sm); color: var(--text-h2); white-space: nowrap; }
+.topbar-user__arrow {
+  font-size: 10px;
+  color: var(--text-h4);
+  transition: transform .2s;
+}
+.topbar-user.is-open .topbar-user__arrow { transform: rotate(180deg); }
+
+/* ── 个人中心 dropdown ─────────────────────────────────────────── */
+.user-menu {
+  position: fixed;
+  top: var(--topbar-h);
+  right: 0;
+  width: 220px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-base);
+  border-top: none;
+  box-shadow: var(--shadow-base);
+  border-radius: 0 0 var(--radius-base) var(--radius-base);
+  z-index: 200;
+  display: none;
+}
+.user-menu.is-open { display: block; }
+
+.user-menu__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+}
+.user-menu__info { display: flex; flex-direction: column; gap: 2px; }
+.user-menu__name { font-size: var(--fs-base); font-weight: var(--fw-medium); color: var(--text-h2); }
+.user-menu__role { font-size: var(--fs-xs); color: var(--text-h4); }
+
+.user-menu__sep { height: 1px; background: var(--border-base); margin: 0; }
+
+.user-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: var(--fs-sm);
+  color: var(--text-h2);
+  cursor: pointer;
+}
+.user-menu__item:hover { background: var(--bg-f5); }
+.user-menu__item--danger { color: var(--error); }
+.user-menu__item--danger:hover { background: #FFEEEC; }
+
+.user-menu__lang {
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.user-menu__lang-label { font-size: var(--fs-sm); color: var(--text-h3); }
+.user-menu__lang-btns { display: flex; border: 1px solid var(--border-2); border-radius: var(--radius-base); overflow: hidden; }
+.user-menu__lang-btn {
+  padding: 3px 10px;
+  font-size: var(--fs-xs);
+  color: var(--text-h3);
+  background: var(--bg-white);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.user-menu__lang-btn:hover { background: var(--bg-f5); }
+.user-menu__lang-btn.is-active {
+  background: var(--veeva-orange);
+  color: #fff;
+}
+
+/* local sidebar overrides: nothing needed — all from components.css */
+
+/* ── Page toolbar (list / detail header) ────────────────────────── */
+.pg-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-8);
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-base);
+}
+.pg-toolbar__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+}
+.pg-toolbar__count {
+  font-size: var(--fs-sm);
+  color: var(--text-h4);
+  margin-right: auto;
+}
+.pg-toolbar__sep { flex: 1; }
+
+/* ── Filter bar ─────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-8);
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-base);
+}
+.filter-bar .v-input, .filter-bar .v-select {
+  width: auto;
+  height: 30px;
+  font-size: var(--fs-sm);
+}
+.filter-bar .v-input { width: 220px; }
+.filter-bar .v-select { width: 130px; }
+.filter-sep { width: 1px; height: 18px; background: var(--border-base); margin: 0 4px; }
+.filter-bar__right { margin-left: auto; display: flex; gap: var(--space-2); align-items: center; }
+
+/* ── Table container ────────────────────────────────────────────── */
+.table-wrap {
+  background: var(--bg-white);
+  margin: var(--space-5) var(--space-8);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  overflow: hidden;
+}
+
+/* ── Avatar + name cell ─────────────────────────────────────────── */
+.cell-hcp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cell-hcp__info { display: flex; flex-direction: column; gap: 2px; }
+.cell-hcp__name { font-size: var(--fs-base); color: var(--text-h2); font-weight: var(--fw-medium); }
+.cell-hcp__id   { font-size: var(--fs-xs); color: var(--text-h4); }
+
+/* ── Table actions ──────────────────────────────────────────────── */
+.cell-actions { display: flex; gap: 4px; opacity: 0; transition: opacity .15s; }
+tr:hover .cell-actions { opacity: 1; }
+.cell-btn {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--radius-base);
+  font-size: var(--fs-xs);
+  border: 1px solid var(--border-2);
+  background: var(--bg-white);
+  color: var(--text-h2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.cell-btn:hover { color: var(--veeva-orange); border-color: var(--veeva-orange); }
+.cell-btn--primary { background: var(--veeva-orange); border-color: var(--veeva-orange); color: #fff; }
+.cell-btn--primary:hover { background: #E7871A; }
+
+/* ── Detail layout ──────────────────────────────────────────────── */
+.detail-wrap { padding: var(--space-5) var(--space-8); }
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+  background: var(--bg-white);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  padding: var(--space-6);
+  margin-bottom: var(--space-5);
+}
+.detail-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: var(--veeva-orange-2);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 22px;
+  font-weight: var(--fw-medium);
+  flex: none;
+}
+.detail-meta { flex: 1; min-width: 0; }
+.detail-name {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-h2);
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.detail-sub {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: var(--fs-sm);
+  color: var(--text-h3);
+  margin-bottom: 10px;
+}
+.detail-sub-item { display: flex; align-items: center; gap: 4px; }
+.detail-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.detail-actions { display: flex; gap: var(--space-2); align-items: flex-start; flex: none; }
+
+/* ── Detail stats row ────────────────────────────────────────────── */
+.detail-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+.stat-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat-card__label { font-size: var(--fs-xs); color: var(--text-h4); }
+.stat-card__value {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-h2);
+  line-height: 1;
+}
+.stat-card__value span { font-size: var(--fs-sm); font-weight: var(--fw-regular); color: var(--text-h4); margin-left: 4px; }
+.stat-card__sub { font-size: var(--fs-xs); color: var(--text-h3); }
+
+/* detail-tab-bar and v-section are now fully in components.css */
+
+/* Edit form */
+.edit-form .v-field__label { width: 100px; flex: 0 0 100px; }
+.edit-form .v-select {
+  background-image: none;
+  padding-right: 12px;
+}
+
+/* ── Timeline ────────────────────────────────────────────────────── */
+.timeline { padding: var(--space-2) 0; }
+.tl-item {
+  display: flex;
+  gap: var(--space-4);
+  padding-bottom: var(--space-5);
+  position: relative;
+}
+.tl-item::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 36px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-base);
+}
+.tl-item:last-child::before { display: none; }
+.tl-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+}
+.tl-icon--call    { background: #FFF1DF; color: var(--veeva-orange); }
+.tl-icon--event   { background: #E8F0FA; color: var(--blue); }
+.tl-icon--phone   { background: #E5FBF2; color: var(--success); }
+.tl-icon--note    { background: #F0F0F0; color: var(--text-h3); }
+.tl-body { flex: 1; min-width: 0; }
+.tl-body__row1 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: 4px;
+}
+.tl-type { font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--text-h2); }
+.tl-date { font-size: var(--fs-xs); color: var(--text-h4); margin-left: auto; }
+.tl-desc { font-size: var(--fs-sm); color: var(--text-h3); line-height: 20px; }
+.tl-pills { display: flex; gap: 6px; margin-top: 6px; }
+
+/* ── Meeting history ─────────────────────────────────────────────── */
+.mtg-table-wrap {
+  background: var(--bg-white);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  overflow: hidden;
+}
+
+/* ── Save toast ──────────────────────────────────────────────────── */
+#save-toast {
+  position: fixed;
+  top: 72px; right: 32px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-base);
+  border-left: 3px solid var(--success);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-base);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--fs-sm);
+  color: var(--text-h2);
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity .2s, transform .2s;
+  pointer-events: none;
+  z-index: 200;
+}
+#save-toast.show { opacity: 1; transform: translateX(0); }
+
+/* ── View visibility ─────────────────────────────────────────────── */
+#view-list   { display: block; }
+#view-detail { display: none; }
+
+/* Edit mode: hide section edit button while in edit */
+#view-detail.is-editing #section-basic-actions { display: none; }
+#view-detail.is-editing #btn-edit-top { display: none; }
+</style>
+</head>
+<body>
+
+<div class="v-app">
+
+  <!-- ── Topbar ─────────────────────────────────────────────────── -->
+  <header class="v-topbar">
+    <span class="v-topbar__logo-text"><span>Veeva</span> CRM</span>
+    <div class="v-topbar__divider"></div>
+    <nav class="v-topbar__nav">
+      <a href="#">
+        <span class="veev veev-home-outline" style="font-size:16px;"></span>首页
+      </a>
+      <a href="#" class="is-active">
+        <span class="veev veev-work" style="font-size:16px;"></span>工作
+      </a>
+      <a href="#">
+        <span class="veev veev-task-outline" style="font-size:16px;"></span>任务队列
+      </a>
+    </nav>
+    <div class="v-topbar__right" style="gap:0;">
+      <a href="#" class="topbar-help">
+        <span class="veev veev-help" style="font-size:16px;"></span>帮助中心
+      </a>
+      <div class="topbar-user" id="user-trigger" onclick="toggleUserMenu()">
+        <div class="v-avatar v-avatar--sm">吴</div>
+        <span class="topbar-user__name">吴梅</span>
+        <span class="veev veev-popover-down topbar-user__arrow"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 个人中心下拉面板 -->
+  <div class="user-menu" id="user-menu">
+    <div class="user-menu__header">
+      <div class="v-avatar" style="width:40px;height:40px;font-size:16px;flex:none;">吴</div>
+      <div class="user-menu__info">
+        <span class="user-menu__name">吴梅</span>
+        <span class="user-menu__role">医药代表 · 华北区</span>
+      </div>
+    </div>
+    <div class="user-menu__sep"></div>
+    <div class="user-menu__item">
+      <span class="veev veev-user" style="font-size:14px;color:var(--text-h4);"></span>个人设置
+    </div>
+    <div class="user-menu__item">
+      <span class="veev veev-notice" style="font-size:14px;color:var(--text-h4);"></span>消息通知
+    </div>
+    <div class="user-menu__sep"></div>
+    <div class="user-menu__lang">
+      <span class="user-menu__lang-label">语言</span>
+      <div class="user-menu__lang-btns">
+        <button class="user-menu__lang-btn is-active" onclick="setLang(this)">中文</button>
+        <button class="user-menu__lang-btn" onclick="setLang(this)">English</button>
+      </div>
+    </div>
+    <div class="user-menu__sep"></div>
+    <div class="user-menu__item user-menu__item--danger" onclick="alert('退出登录')">
+      <span class="veev veev-shut-down" style="font-size:14px;"></span>退出登录
+    </div>
+  </div>
+
+  <div class="v-app__body">
+
+    <!-- ── Sidebar ───────────────────────────────────────────────── -->
+    <nav class="v-sidebar" id="v-sidebar">
+
+      <!-- Search (visible only when expanded) -->
+      <div class="v-sidebar__search-wrap">
+        <input class="v-sidebar__search" placeholder="搜索菜单…">
+      </div>
+
+      <div class="v-sidebar__body">
+
+        <!-- Category: 客户管理 -->
+        <div class="v-sidebar__category has-active is-expanded" id="cat-customer">
+          <div class="v-sidebar__cat-head" onclick="toggleCategory('cat-customer')">
+            <span class="v-sidebar__cat-icon veev veev-professional"></span>
+            <span class="v-sidebar__cat-name">客户管理</span>
+            <span class="v-sidebar__cat-arrow veev veev-right"></span>
+          </div>
+          <div class="v-sidebar__items">
+            <div class="v-sidebar__item is-active" onclick="navTo('目标医生')">目标医生</div>
+            <div class="v-sidebar__item" onclick="navTo('医疗机构')">医疗机构</div>
+            <div class="v-sidebar__item" onclick="navTo('药店')">药店</div>
+            <div class="v-sidebar__item" onclick="navTo('医学会')">医学会</div>
+          </div>
+          <!-- Flyout for collapsed state -->
+          <div class="v-sidebar__flyout" id="flyout-customer">
+            <div class="v-sidebar__flyout-title">客户管理</div>
+            <div class="v-sidebar__flyout-items">
+              <div class="v-sidebar__flyout-item is-active">目标医生</div>
+              <div class="v-sidebar__flyout-item">医疗机构</div>
+              <div class="v-sidebar__flyout-item">药店</div>
+              <div class="v-sidebar__flyout-item">医学会</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category: 拜访管理 -->
+        <div class="v-sidebar__category" id="cat-call">
+          <div class="v-sidebar__cat-head" onclick="toggleCategory('cat-call')">
+            <span class="v-sidebar__cat-icon veev veev-call"></span>
+            <span class="v-sidebar__cat-name">拜访管理</span>
+            <span class="v-sidebar__cat-arrow veev veev-right"></span>
+          </div>
+          <div class="v-sidebar__items">
+            <div class="v-sidebar__item" onclick="navTo('拜访记录')">拜访记录</div>
+            <div class="v-sidebar__item" onclick="navTo('同行拜访')">同行拜访</div>
+            <div class="v-sidebar__item" onclick="navTo('辅导记录')">辅导记录</div>
+          </div>
+          <div class="v-sidebar__flyout" id="flyout-call">
+            <div class="v-sidebar__flyout-title">拜访管理</div>
+            <div class="v-sidebar__flyout-items">
+              <div class="v-sidebar__flyout-item">拜访记录</div>
+              <div class="v-sidebar__flyout-item">同行拜访</div>
+              <div class="v-sidebar__flyout-item">辅导记录</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category: 活动管理 -->
+        <div class="v-sidebar__category" id="cat-event">
+          <div class="v-sidebar__cat-head" onclick="toggleCategory('cat-event')">
+            <span class="v-sidebar__cat-icon veev veev-event"></span>
+            <span class="v-sidebar__cat-name">活动管理</span>
+            <span class="v-sidebar__cat-arrow veev veev-right"></span>
+          </div>
+          <div class="v-sidebar__items">
+            <div class="v-sidebar__item" onclick="navTo('活动列表')">活动列表</div>
+            <div class="v-sidebar__item" onclick="navTo('系列活动')">系列活动</div>
+          </div>
+          <div class="v-sidebar__flyout" id="flyout-event">
+            <div class="v-sidebar__flyout-title">活动管理</div>
+            <div class="v-sidebar__flyout-items">
+              <div class="v-sidebar__flyout-item">活动列表</div>
+              <div class="v-sidebar__flyout-item">系列活动</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category: 报表 -->
+        <div class="v-sidebar__category" id="cat-report">
+          <div class="v-sidebar__cat-head" onclick="toggleCategory('cat-report')">
+            <span class="v-sidebar__cat-icon veev veev-dashbord-outline"></span>
+            <span class="v-sidebar__cat-name">报表</span>
+            <span class="v-sidebar__cat-arrow veev veev-right"></span>
+          </div>
+          <div class="v-sidebar__items">
+            <div class="v-sidebar__item" onclick="navTo('销售看板')">销售看板</div>
+            <div class="v-sidebar__item" onclick="navTo('拜访分析')">拜访分析</div>
+            <div class="v-sidebar__item" onclick="navTo('目标完成率')">目标完成率</div>
+          </div>
+          <div class="v-sidebar__flyout" id="flyout-report">
+            <div class="v-sidebar__flyout-title">报表</div>
+            <div class="v-sidebar__flyout-items">
+              <div class="v-sidebar__flyout-item">销售看板</div>
+              <div class="v-sidebar__flyout-item">拜访分析</div>
+              <div class="v-sidebar__flyout-item">目标完成率</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.v-sidebar__body -->
+
+      <!-- Bottom toggle -->
+      <div class="v-sidebar__footer">
+        <button class="v-sidebar__toggle" onclick="toggleSidebar()">
+          <span class="v-sidebar__toggle-icon veev veev-collapse toggle-arrow"></span>
+          <span class="v-sidebar__toggle-text">收起导航</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── Workspace ─────────────────────────────────────────────── -->
+    <main class="v-workspace">
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW: LIST
+      ════════════════════════════════════════════════════════════ -->
+      <div id="view-list">
+
+        <!-- Page toolbar -->
+        <div class="pg-toolbar">
+          <span class="veev veev-professional" style="font-size:18px;color:var(--veeva-orange);"></span>
+          <span class="pg-toolbar__title">目标医生</span>
+          <span class="pg-toolbar__count">共 8 位</span>
+          <button class="v-btn v-btn--secondary v-btn--sm" onclick="alert('导入功能')">
+            <span class="veev veev-download" style="font-size:13px;"></span>导入
+          </button>
+          <button class="v-btn v-btn--secondary v-btn--sm" onclick="alert('导出功能')">
+            <span class="veev veev-share" style="font-size:13px;"></span>导出
+          </button>
+          <button class="v-btn v-btn--primary v-btn--sm" onclick="alert('新建医生')">
+            <span class="veev veev-add" style="font-size:13px;"></span>新建
+          </button>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <div style="position:relative;">
+            <span class="veev veev-search" style="position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--text-h4);pointer-events:none;"></span>
+            <input class="v-input" style="padding-left:30px;height:30px;" placeholder="搜索医生姓名 / 医院">
+          </div>
+          <select class="v-select" style="background-image:none;">
+            <option value="">全部科室</option>
+            <option>心内科</option>
+            <option>内分泌科</option>
+            <option>神经内科</option>
+            <option>呼吸科</option>
+            <option>消化内科</option>
+          </select>
+          <select class="v-select" style="background-image:none;">
+            <option value="">全部职称</option>
+            <option>主任医师</option>
+            <option>副主任医师</option>
+            <option>主治医师</option>
+          </select>
+          <select class="v-select" style="background-image:none;">
+            <option value="">全部目标级别</option>
+            <option>目标 A</option>
+            <option>目标 B</option>
+            <option>目标 C</option>
+          </select>
+          <div class="filter-sep"></div>
+          <span style="font-size:13px;color:var(--text-h3);">
+            <span class="veev veev-sort" style="font-size:13px;"></span> 排序：最近更新
+          </span>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+          <table class="v-table">
+            <thead>
+              <tr>
+                <th style="width:40px;"><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></th>
+                <th>姓名</th>
+                <th>医院</th>
+                <th>科室</th>
+                <th>职称</th>
+                <th>目标级别</th>
+                <th>本季拜访</th>
+                <th>最近拜访</th>
+                <th style="width:88px;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-id="1">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#E8A87C;">张</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">张明辉</span>
+                      <span class="cell-hcp__id">HCP-00421</span>
+                    </div>
+                  </div>
+                </td>
+                <td>北京协和医院</td>
+                <td>心内科</td>
+                <td>主任医师</td>
+                <td><span class="v-tag v-tag--brand">目标 A</span></td>
+                <td>4 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-28</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(1)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(1, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="2">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#82C5A0;">李</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">李晓雪</span>
+                      <span class="cell-hcp__id">HCP-00389</span>
+                    </div>
+                  </div>
+                </td>
+                <td>上海仁济医院</td>
+                <td>内分泌科</td>
+                <td>副主任医师</td>
+                <td><span class="v-tag v-tag--brand">目标 A</span></td>
+                <td>3 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-22</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(2)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(2, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="3">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#7BAFD4;">王</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">王建国</span>
+                      <span class="cell-hcp__id">HCP-00356</span>
+                    </div>
+                  </div>
+                </td>
+                <td>广州中山医院</td>
+                <td>神经内科</td>
+                <td>主治医师</td>
+                <td><span class="v-tag">目标 B</span></td>
+                <td>2 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-18</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(3)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(3, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="4">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#C48BB8;">陈</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">陈美玲</span>
+                      <span class="cell-hcp__id">HCP-00312</span>
+                    </div>
+                  </div>
+                </td>
+                <td>深圳人民医院</td>
+                <td>呼吸科</td>
+                <td>主任医师</td>
+                <td><span class="v-tag v-tag--brand">目标 A</span></td>
+                <td>5 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-25</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(4)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(4, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="5">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#8E9BAD;">刘</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">刘志远</span>
+                      <span class="cell-hcp__id">HCP-00278</span>
+                    </div>
+                  </div>
+                </td>
+                <td>成都华西医院</td>
+                <td>消化内科</td>
+                <td>副主任医师</td>
+                <td><span class="v-tag">目标 B</span></td>
+                <td>2 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-10</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(5)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(5, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="6">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#D4907A;">赵</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">赵丽华</span>
+                      <span class="cell-hcp__id">HCP-00245</span>
+                    </div>
+                  </div>
+                </td>
+                <td>南京鼓楼医院</td>
+                <td>风湿免疫科</td>
+                <td>主治医师</td>
+                <td><span class="v-tag v-tag--ghost">目标 C</span></td>
+                <td>1 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-05</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(6)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(6, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="7">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#6AB0A0;">黄</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">黄伟明</span>
+                      <span class="cell-hcp__id">HCP-00198</span>
+                    </div>
+                  </div>
+                </td>
+                <td>杭州第一人民医院</td>
+                <td>骨科</td>
+                <td>主任医师</td>
+                <td><span class="v-tag">目标 B</span></td>
+                <td>3 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-20</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(7)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(7, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr data-id="8">
+                <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+                <td>
+                  <div class="cell-hcp">
+                    <div class="v-avatar" style="background:#B09AC8;">吴</div>
+                    <div class="cell-hcp__info">
+                      <span class="cell-hcp__name">吴 梅</span>
+                      <span class="cell-hcp__id">HCP-00167</span>
+                    </div>
+                  </div>
+                </td>
+                <td>武汉协和医院</td>
+                <td>肿瘤科</td>
+                <td>副主任医师</td>
+                <td><span class="v-tag v-tag--brand">目标 A</span></td>
+                <td>4 次</td>
+                <td><span style="color:var(--text-h3);font-size:13px;">2024-04-26</span></td>
+                <td>
+                  <div class="v-row-actions">
+                    <span class="v-row-action v-row-action--view veev veev-eye-open-outline" title="查看" onclick="showDetail(8)"></span>
+                    <span class="v-row-action v-row-action--edit veev veev-edit" title="编辑" onclick="showDetail(8, true)"></span>
+                    <span class="v-row-action v-row-action--delete veev veev-delete" title="删除" onclick="alert('确认删除？')"></span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination -->
+          <div class="v-pager">
+            <button class="v-pager__btn"><span class="veev veev-left" style="font-size:11px;"></span></button>
+            <button class="v-pager__btn v-pager__btn--active">1</button>
+            <button class="v-pager__btn">2</button>
+            <button class="v-pager__btn">3</button>
+            <span class="v-pager__sep">…</span>
+            <button class="v-pager__btn">12</button>
+            <button class="v-pager__btn"><span class="veev veev-right" style="font-size:11px;"></span></button>
+            <span style="font-size:13px;color:var(--text-h4);margin:0 4px;">跳至</span>
+            <input class="v-pager__input" value="1">
+            <span style="font-size:13px;color:var(--text-h4);">页</span>
+            <span class="v-pager__total">共 98 条 / 每页 10 条</span>
+          </div>
+        </div>
+
+      </div><!-- /#view-list -->
+
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW: DETAIL
+      ════════════════════════════════════════════════════════════ -->
+      <div id="view-detail">
+
+        <!-- ── Page toolbar (scrolls away with hero) ──────────────── -->
+        <div class="pg-toolbar">
+          <button class="v-btn v-btn--ghost v-btn--sm" style="padding:0 8px;" onclick="showList()">
+            <span class="veev veev-left" style="font-size:12px;"></span>返回
+          </button>
+          <div class="v-crumb">
+            <a href="#" onclick="showList();return false;">目标医生</a>
+            <span class="v-crumb__sep"></span>
+            <span id="crumb-name">张明辉</span>
+          </div>
+          <div class="pg-toolbar__sep"></div>
+          <button class="v-btn v-btn--secondary v-btn--sm" onclick="alert('新建拜访')">
+            <span class="veev veev-call" style="font-size:13px;"></span>新建拜访
+          </button>
+          <button class="v-btn v-btn--secondary v-btn--sm" onclick="alert('发送邮件')">
+            <span class="veev veev-email" style="font-size:13px;"></span>发送邮件
+          </button>
+          <button class="v-btn v-btn--primary v-btn--sm" id="btn-edit-top" onclick="enterEditMode()">
+            <span class="veev veev-edit" style="font-size:13px;"></span>编辑
+          </button>
+        </div>
+
+        <!-- ── Hero area (scrolls away) ────────────────────────────── -->
+        <!-- JS watches this div's bottom edge; when it leaves view, tab bar gets .is-stuck -->
+        <div id="detail-hero-area" class="detail-wrap" style="padding-bottom:8px;">
+
+
+          <!-- Hero card (scrolls away) -->
+          <div class="detail-header">
+            <div class="detail-avatar" id="detail-avatar">张</div>
+            <div class="detail-meta">
+              <h1 class="detail-name">
+                <span id="detail-name">张明辉</span>
+                <span class="v-tag v-tag--brand" id="detail-level">目标 A</span>
+                <span class="v-tag v-tag--success">已激活</span>
+              </h1>
+              <div class="detail-sub">
+                <div class="detail-sub-item">
+                  <span class="veev veev-hospital" style="font-size:13px;color:var(--text-h4);"></span>
+                  <span id="detail-hospital">北京协和医院</span>
+                </div>
+                <div class="detail-sub-item">
+                  <span class="veev veev-department" style="font-size:13px;color:var(--text-h4);"></span>
+                  <span id="detail-dept">心内科</span>
+                </div>
+                <div class="detail-sub-item">
+                  <span class="veev veev-user" style="font-size:13px;color:var(--text-h4);"></span>
+                  <span id="detail-title">主任医师</span>
+                </div>
+                <div class="detail-sub-item">
+                  <span class="veev veev-phone" style="font-size:13px;color:var(--text-h4);"></span>
+                  <span>138-0010-0421</span>
+                </div>
+              </div>
+              <div class="detail-tags">
+                <span class="v-tag v-tag--info">心血管</span>
+                <span class="v-tag v-tag--info">KOL</span>
+                <span class="v-tag">二级甲等</span>
+                <span class="v-tag">已签约讲者</span>
+              </div>
+            </div>
+            <div class="detail-actions">
+              <button class="v-btn v-btn--ghost v-btn--sm" onclick="alert('更多操作')">
+                <span class="veev veev-more" style="font-size:14px;"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats row (scrolls away) -->
+          <div class="detail-stats">
+            <div class="stat-card">
+              <span class="stat-card__label">本季拜访</span>
+              <span class="stat-card__value">4 <span>次</span></span>
+              <span class="stat-card__sub">目标 6 次，完成 67%</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__label">最近拜访</span>
+              <span class="stat-card__value" style="font-size:var(--fs-xl);">14 <span>天前</span></span>
+              <span class="stat-card__sub">2024-04-28</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__label">参会次数（年）</span>
+              <span class="stat-card__value">3 <span>次</span></span>
+              <span class="stat-card__sub">最近：华中心内科峰会</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__label">满意度评分</span>
+              <span class="stat-card__value" style="color:var(--veeva-orange);">4.2 <span>/ 5</span></span>
+              <span class="stat-card__sub">基于 8 次拜访反馈</span>
+            </div>
+          </div>
+        </div><!-- /#detail-hero-area -->
+
+        <!-- ── Sticky tab bar (position:sticky; top:0) ────────────── -->
+        <!-- JS adds .is-stuck when hero scrolls out → back button shown -->
+        <!-- JS adds .has-overflow when tabs overflow → arrows shown    -->
+        <div class="detail-tab-bar" id="detail-tab-bar">
+          <button class="detail-tab-bar__back" onclick="showList()">
+            <span class="veev veev-left" style="font-size:12px;"></span>
+          </button>
+          <button class="detail-tab-bar__nav detail-tab-bar__nav--left" onclick="scrollTabBar(-200)">
+            <span class="veev veev-left" style="font-size:10px;"></span>
+          </button>
+          <div class="detail-tab-bar__scroll" id="detail-tabs-scroll">
+            <div class="detail-tab-bar__item is-active" data-target="section-basic" onclick="navToSection('basic')">基本信息</div>
+            <div class="detail-tab-bar__item" data-target="section-patient" onclick="navToSection('patient')">新增患者数据记录</div>
+            <div class="detail-tab-bar__item" data-target="section-competition" onclick="navToSection('competition')">客户分档</div>
+            <div class="detail-tab-bar__item" data-target="section-timeline" onclick="navToSection('timeline')">联系历史</div>
+            <div class="detail-tab-bar__item" data-target="section-meetings" onclick="navToSection('meetings')">参会历史</div>
+          </div>
+          <button class="detail-tab-bar__nav detail-tab-bar__nav--right" onclick="scrollTabBar(200)">
+            <span class="veev veev-right" style="font-size:10px;"></span>
+          </button>
+        </div><!-- /.detail-tab-bar -->
+
+        <!-- ── All accordion sections ─────────────────────────────── -->
+        <div class="detail-wrap" style="padding-top:16px;">
+
+          <!-- ── Accordion: 基本信息 ──────────────────────────────── -->
+          <div class="v-section is-open" id="section-basic">
+            <div class="v-section__head" onclick="toggleSection('basic')">
+              <span class="v-section__title">基本信息</span>
+              <div class="v-section__head-extra" id="section-basic-actions">
+                <button class="v-btn v-btn--secondary v-btn--sm" onclick="event.stopPropagation();enterEditMode()">
+                  <span class="veev veev-edit" style="font-size:13px;"></span>编辑
+                </button>
+              </div>
+              <span class="veev veev-right v-section__arrow"></span>
+            </div>
+            <div class="v-section__body">
+
+              <!-- Read mode -->
+              <div id="mode-read">
+                <div class="v-info-grid" style="margin-bottom:var(--space-6);">
+                  <div class="v-info-item">
+                    <span class="v-info-label">姓名</span>
+                    <span class="v-info-value" id="ri-name">张明辉</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">性别</span>
+                    <span class="v-info-value">男</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">医院</span>
+                    <span class="v-info-value" id="ri-hospital">北京协和医院</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">科室</span>
+                    <span class="v-info-value" id="ri-dept">心内科</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">职称</span>
+                    <span class="v-info-value" id="ri-title">主任医师</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">目标级别</span>
+                    <span class="v-info-value" id="ri-level">目标 A</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">手机</span>
+                    <span class="v-info-value">138-0010-0421</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">电子邮件</span>
+                    <span class="v-info-value">zh.minghui@pumch.cn</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">专科领域</span>
+                    <span class="v-info-value">心血管疾病、冠心病介入</span>
+                  </div>
+                  <div class="v-info-item">
+                    <span class="v-info-label">学术职务</span>
+                    <span class="v-info-value">中华心血管病学会委员</span>
+                  </div>
+                  <div class="v-info-item v-info-item--full">
+                    <span class="v-info-label">备注</span>
+                    <span class="v-info-value" style="color:var(--text-h3);line-height:1.6;">对新型抗凝药物有较高兴趣，建议优先安排临床数据分享；每周二上午有门诊。</span>
+                  </div>
+                </div>
+
+                <!-- Sub-section: 所属团队 -->
+                <div style="border-top:1px solid var(--border-base);padding-top:var(--space-5);">
+                  <div style="font-size:var(--fs-sm);font-weight:var(--fw-medium);color:var(--text-h3);margin-bottom:var(--space-4);">所属团队</div>
+                  <div class="v-info-grid">
+                    <div class="v-info-item">
+                      <span class="v-info-label">负责代表</span>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="v-avatar v-avatar--sm">吴</div>
+                        <span class="v-info-value">吴梅 / 华北区-北京</span>
+                      </div>
+                    </div>
+                    <div class="v-info-item">
+                      <span class="v-info-label">地区经理</span>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="v-avatar v-avatar--sm" style="background:#6AB0A0;">孙</div>
+                        <span class="v-info-value">孙志刚 / 华北大区</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- /#mode-read -->
+
+              <!-- Edit mode -->
+              <div id="mode-edit" style="display:none;">
+                <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:var(--space-4);">
+                  <button class="v-btn v-btn--ghost v-btn--sm" onclick="exitEditMode()">取消</button>
+                  <button class="v-btn v-btn--primary v-btn--sm" onclick="saveEdit()">
+                    <span class="veev veev-save" style="font-size:13px;"></span>保存
+                  </button>
+                </div>
+                <div class="edit-form">
+                  <div class="v-field">
+                    <label class="v-field__label v-field__label--required">姓名</label>
+                    <div class="v-field__control">
+                      <input class="v-input" id="ef-name" value="张明辉">
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label">性别</label>
+                    <div class="v-field__control" style="display:flex;gap:24px;align-items:center;padding-top:5px;">
+                      <label class="v-check"><input type="radio" name="gender" checked><span class="v-check__dot"></span>男</label>
+                      <label class="v-check"><input type="radio" name="gender"><span class="v-check__dot"></span>女</label>
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label v-field__label--required">医院</label>
+                    <div class="v-field__control">
+                      <input class="v-input" id="ef-hospital" value="北京协和医院">
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label v-field__label--required">科室</label>
+                    <div class="v-field__control">
+                      <select class="v-select" id="ef-dept" style="background-image:none;">
+                        <option selected>心内科</option>
+                        <option>内分泌科</option>
+                        <option>神经内科</option>
+                        <option>呼吸科</option>
+                        <option>消化内科</option>
+                        <option>骨科</option>
+                        <option>肿瘤科</option>
+                        <option>风湿免疫科</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label v-field__label--required">职称</label>
+                    <div class="v-field__control">
+                      <select class="v-select" id="ef-title" style="background-image:none;">
+                        <option selected>主任医师</option>
+                        <option>副主任医师</option>
+                        <option>主治医师</option>
+                        <option>住院医师</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label">目标级别</label>
+                    <div class="v-field__control">
+                      <select class="v-select" id="ef-level" style="background-image:none;">
+                        <option selected>目标 A</option>
+                        <option>目标 B</option>
+                        <option>目标 C</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label">手机</label>
+                    <div class="v-field__control">
+                      <input class="v-input" value="138-0010-0421">
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label">电子邮件</label>
+                    <div class="v-field__control">
+                      <input class="v-input" value="zh.minghui@pumch.cn">
+                      <span class="v-field__hint">用于发送电子文件和活动邀请</span>
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label">专科领域</label>
+                    <div class="v-field__control">
+                      <input class="v-input" value="心血管疾病、冠心病介入">
+                    </div>
+                  </div>
+                  <div class="v-field">
+                    <label class="v-field__label">备注</label>
+                    <div class="v-field__control">
+                      <textarea class="v-textarea" rows="3">对新型抗凝药物有较高兴趣，建议优先安排临床数据分享；每周二上午有门诊。</textarea>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- /#mode-edit -->
+
+            </div><!-- /.v-section__body -->
+          </div><!-- /#section-basic -->
+
+          <!-- ── Accordion: 新增患者数据记录 ──────────────────────── -->
+          <div class="v-section" id="section-patient">
+            <div class="v-section__head" onclick="toggleSection('patient')">
+              <span class="v-section__title">新增患者数据记录</span>
+              <span class="veev veev-right v-section__arrow"></span>
+            </div>
+            <div class="v-section__body">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <select class="v-select" style="width:90px;height:28px;font-size:12px;background-image:none;">
+                    <option>2024 年</option>
+                    <option>2023 年</option>
+                    <option>2022 年</option>
+                  </select>
+                  <select class="v-select" style="width:110px;height:28px;font-size:12px;background-image:none;">
+                    <option>预计拜访人数</option>
+                    <option>全部</option>
+                  </select>
+                </div>
+                <button class="v-btn v-btn--primary v-btn--sm" onclick="alert('添加患者数据条目')">
+                  <span class="veev veev-add" style="font-size:12px;"></span>添加患者数据条目
+                </button>
+              </div>
+              <div style="text-align:center;padding:48px 0;color:var(--text-h4);font-size:13px;">
+                <span class="veev veev-files" style="font-size:36px;display:block;margin-bottom:10px;opacity:.3;"></span>
+                暂无患者数据记录
+              </div>
+            </div>
+          </div><!-- /#section-patient -->
+
+          <!-- ── Accordion: 客户分档 — 竞争地位 ───────────────────── -->
+          <div class="v-section" id="section-competition">
+            <div class="v-section__head" onclick="toggleSection('competition')">
+              <span class="v-section__title">竞争地位</span>
+              <span class="veev veev-right v-section__arrow"></span>
+            </div>
+            <div class="v-section__body">
+              <table class="v-table" style="margin:0;">
+                <thead>
+                  <tr>
+                    <th>竞争产品名称</th>
+                    <th>患者占比</th>
+                    <th>推广次数</th>
+                    <th>客户对产品认知度</th>
+                    <th>所属产品系列</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>竞品 A（通用名）</td>
+                    <td>35%</td>
+                    <td>8</td>
+                    <td><span class="v-tag v-tag--warning">认知了解</span></td>
+                    <td>心血管系列</td>
+                  </tr>
+                  <tr>
+                    <td>竞品 B（通用名）</td>
+                    <td>20%</td>
+                    <td>3</td>
+                    <td><span class="v-tag">初步认知</span></td>
+                    <td>心血管系列</td>
+                  </tr>
+                  <tr>
+                    <td>竞品 C（通用名）</td>
+                    <td>12%</td>
+                    <td>1</td>
+                    <td><span class="v-tag v-tag--ghost">未认知</span></td>
+                    <td>其他</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div><!-- /#section-competition -->
+
+          <!-- ── Accordion: 客户分档 — 数字化轨迹 ─────────────────── -->
+          <div class="v-section" id="section-digital">
+            <div class="v-section__head" onclick="toggleSection('digital')">
+              <span class="v-section__title">数字化轨迹</span>
+              <span class="veev veev-right v-section__arrow"></span>
+            </div>
+            <div class="v-section__body">
+              <div class="v-info-grid" style="margin-bottom:20px;">
+                <div class="v-info-item">
+                  <span class="v-info-label">邮件域名</span>
+                  <span class="v-info-value">veeva.com</span>
+                </div>
+                <div class="v-info-item">
+                  <span class="v-info-label">邮箱地址</span>
+                  <span class="v-info-value">si_zh@veeva.com</span>
+                </div>
+                <div class="v-info-item">
+                  <span class="v-info-label">总互动次数</span>
+                  <span class="v-info-value">12 次</span>
+                </div>
+                <div class="v-info-item">
+                  <span class="v-info-label">最近互动</span>
+                  <span class="v-info-value">2024-04-20</span>
+                </div>
+                <div class="v-info-item">
+                  <span class="v-info-label">邮件打开率</span>
+                  <span class="v-info-value">75%</span>
+                </div>
+                <div class="v-info-item">
+                  <span class="v-info-label">内容点击率</span>
+                  <span class="v-info-value">42%</span>
+                </div>
+              </div>
+              <div style="font-size:12px;color:var(--text-h4);">数据周期：2024 年 1 月 — 4 月</div>
+            </div>
+          </div><!-- /#section-digital -->
+
+          <!-- ── Accordion: 客户分档 — 历史积分 ───────────────────── -->
+          <div class="v-section" id="section-points">
+            <div class="v-section__head" onclick="toggleSection('points')">
+              <span class="v-section__title">历史积分</span>
+              <span class="veev veev-right v-section__arrow"></span>
+            </div>
+            <div class="v-section__body">
+              <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+                <div style="background:var(--bg-f5);border-radius:var(--radius-base);padding:12px 20px;display:flex;flex-direction:column;gap:2px;">
+                  <span style="font-size:11px;color:var(--text-h4);">当前积分</span>
+                  <span style="font-size:22px;font-weight:700;color:var(--veeva-orange);line-height:1;">850</span>
+                </div>
+                <div style="background:var(--bg-f5);border-radius:var(--radius-base);padding:12px 20px;display:flex;flex-direction:column;gap:2px;">
+                  <span style="font-size:11px;color:var(--text-h4);">年度累计</span>
+                  <span style="font-size:22px;font-weight:700;color:var(--text-h2);line-height:1;">+70</span>
+                </div>
+              </div>
+              <table class="v-table" style="margin:0;">
+                <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>积分类型</th>
+                    <th>积分变动</th>
+                    <th>当前积分</th>
+                    <th>备注</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span style="color:var(--text-h3);font-size:13px;">2024-04-28</span></td>
+                    <td>拜访积分</td>
+                    <td style="color:var(--success);font-weight:500;">+10</td>
+                    <td>850</td>
+                    <td>完成一次面诊拜访</td>
+                  </tr>
+                  <tr>
+                    <td><span style="color:var(--text-h3);font-size:13px;">2024-04-15</span></td>
+                    <td>参会积分</td>
+                    <td style="color:var(--success);font-weight:500;">+50</td>
+                    <td>840</td>
+                    <td>参加华中心内科峰会 2024</td>
+                  </tr>
+                  <tr>
+                    <td><span style="color:var(--text-h3);font-size:13px;">2024-03-30</span></td>
+                    <td>拜访积分</td>
+                    <td style="color:var(--success);font-weight:500;">+10</td>
+                    <td>790</td>
+                    <td>完成一次面诊拜访</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div><!-- /#section-points -->
+
+          <!-- ── Accordion: 联系历史 ──────────────────────────────── -->
+          <div class="v-section" id="section-timeline">
+            <div class="v-section__head" onclick="toggleSection('timeline')">
+              <span class="v-section__title">联系历史</span>
+              <span class="veev veev-right v-section__arrow"></span>
+            </div>
+            <div class="v-section__body">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                <span style="font-size:14px;color:var(--text-h3);">近 90 天活动记录</span>
+                <div style="display:flex;gap:8px;">
+                  <button class="v-btn v-btn--ghost v-btn--sm">全部类型</button>
+                  <button class="v-btn v-btn--ghost v-btn--sm">
+                    <span class="veev veev-filter" style="font-size:12px;"></span>筛选
+                  </button>
+                </div>
+              </div>
+
+              <div class="timeline">
+                <div class="tl-item">
+                  <div class="tl-icon tl-icon--call"><span class="veev veev-call" style="font-size:14px;"></span></div>
+                  <div class="tl-body">
+                    <div class="tl-body__row1">
+                      <span class="tl-type">拜访记录</span>
+                      <span class="v-tag v-tag--success" style="font-size:11px;height:18px;">已完成</span>
+                      <span class="tl-date">2024-04-28</span>
+                    </div>
+                    <div class="tl-desc">产品临床数据分享，重点介绍新适应症临床研究结果。医生对 Phase III 数据表现出浓厚兴趣，询问了用药剂量调整方案。</div>
+                    <div class="tl-pills">
+                      <span class="v-tag">产品A</span>
+                      <span class="v-tag">新适应症</span>
+                      <span style="font-size:12px;color:var(--text-h4);margin-left:4px;">时长 35 分钟</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon tl-icon--event"><span class="veev veev-event" style="font-size:14px;"></span></div>
+                  <div class="tl-body">
+                    <div class="tl-body__row1">
+                      <span class="tl-type">参会记录</span>
+                      <span class="v-tag v-tag--info" style="font-size:11px;height:18px;">演讲者</span>
+                      <span class="tl-date">2024-04-15</span>
+                    </div>
+                    <div class="tl-desc">华中心内科峰会 2024（北京国家会议中心）。担任主题演讲嘉宾，报告题目：《新型口服抗凝药在房颤治疗中的循证证据》。</div>
+                    <div class="tl-pills">
+                      <span class="v-tag v-tag--info">医学会议</span>
+                      <span class="v-tag">北京</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon tl-icon--call"><span class="veev veev-call" style="font-size:14px;"></span></div>
+                  <div class="tl-body">
+                    <div class="tl-body__row1">
+                      <span class="tl-type">拜访记录</span>
+                      <span class="v-tag v-tag--success" style="font-size:11px;height:18px;">已完成</span>
+                      <span class="tl-date">2024-03-30</span>
+                    </div>
+                    <div class="tl-desc">产品详解及样品提供。医生对适应症扩展方向表示关注，反馈上个月使用效果良好，无明显不良反应报告。</div>
+                    <div class="tl-pills">
+                      <span class="v-tag">产品A</span>
+                      <span class="v-tag">样品</span>
+                      <span style="font-size:12px;color:var(--text-h4);margin-left:4px;">时长 28 分钟</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon tl-icon--phone"><span class="veev veev-phone" style="font-size:14px;"></span></div>
+                  <div class="tl-body">
+                    <div class="tl-body__row1">
+                      <span class="tl-type">电话沟通</span>
+                      <span class="v-tag v-tag--success" style="font-size:11px;height:18px;">已完成</span>
+                      <span class="tl-date">2024-03-10</span>
+                    </div>
+                    <div class="tl-desc">确认下次拜访时间及内容，医生要求重点介绍长期用药安全性数据。</div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon tl-icon--call"><span class="veev veev-call" style="font-size:14px;"></span></div>
+                  <div class="tl-body">
+                    <div class="tl-body__row1">
+                      <span class="tl-type">拜访记录</span>
+                      <span class="v-tag v-tag--success" style="font-size:11px;height:18px;">已完成</span>
+                      <span class="tl-date">2024-02-20</span>
+                    </div>
+                    <div class="tl-desc">初次产品介绍，提供样品 × 2 盒，医生对安全性档案表示关注并索取相关文献。</div>
+                    <div class="tl-pills">
+                      <span class="v-tag">产品A</span>
+                      <span class="v-tag">首次拜访</span>
+                      <span style="font-size:12px;color:var(--text-h4);margin-left:4px;">时长 42 分钟</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon tl-icon--note"><span class="veev veev-edit" style="font-size:14px;"></span></div>
+                  <div class="tl-body">
+                    <div class="tl-body__row1">
+                      <span class="tl-type">备注更新</span>
+                      <span class="tl-date">2024-02-18</span>
+                    </div>
+                    <div class="tl-desc">由地区经理孙志刚添加：本医生为科室 KOL，建议纳入年度讲者培训项目。</div>
+                  </div>
+                </div>
+              </div><!-- /.timeline -->
+            </div><!-- /.v-section__body -->
+          </div><!-- /#section-timeline -->
+
+          <!-- ── Accordion: 参会历史 ────────────────────────────── -->
+          <div class="v-section" id="section-meetings">
+            <div class="v-section__head" onclick="toggleSection('meetings')">
+              <span class="v-section__title">参会历史</span>
+              <span class="veev veev-right v-section__arrow"></span>
+            </div>
+            <div class="v-section__body">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                <span style="font-size:14px;color:var(--text-h3);">近 12 个月，共参会 3 次</span>
+                <button class="v-btn v-btn--secondary v-btn--sm">
+                  <span class="veev veev-share" style="font-size:12px;"></span>导出
+                </button>
+              </div>
+              <div class="mtg-table-wrap">
+                <table class="v-table">
+                  <thead>
+                    <tr>
+                      <th>活动名称</th>
+                      <th>日期</th>
+                      <th>地点</th>
+                      <th>角色</th>
+                      <th>活动类型</th>
+                      <th>状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><a href="#" style="color:var(--text-link);text-decoration:none;font-weight:500;">华中心内科峰会 2024</a></td>
+                      <td><span style="color:var(--text-h3);font-size:13px;">2024-04-15</span></td>
+                      <td>北京</td>
+                      <td><span class="v-tag v-tag--brand">主讲嘉宾</span></td>
+                      <td>医学会议</td>
+                      <td><span class="v-tag v-tag--success">已出席</span></td>
+                    </tr>
+                    <tr>
+                      <td><a href="#" style="color:var(--text-link);text-decoration:none;font-weight:500;">心脑血管学术论坛 2024</a></td>
+                      <td><span style="color:var(--text-h3);font-size:13px;">2024-03-05</span></td>
+                      <td>上海</td>
+                      <td><span class="v-tag">参会嘉宾</span></td>
+                      <td>学术论坛</td>
+                      <td><span class="v-tag v-tag--success">已出席</span></td>
+                    </tr>
+                    <tr>
+                      <td><a href="#" style="color:var(--text-link);text-decoration:none;font-weight:500;">2024 年度产品发布会</a></td>
+                      <td><span style="color:var(--text-h3);font-size:13px;">2024-01-20</span></td>
+                      <td>深圳</td>
+                      <td><span class="v-tag v-tag--brand">主讲嘉宾</span></td>
+                      <td>产品发布</td>
+                      <td><span class="v-tag v-tag--success">已出席</span></td>
+                    </tr>
+                    <tr>
+                      <td><a href="#" style="color:var(--text-link);text-decoration:none;font-weight:500;">华北区医生研讨会</a></td>
+                      <td><span style="color:var(--text-h3);font-size:13px;">2023-11-12</span></td>
+                      <td>北京</td>
+                      <td><span class="v-tag">参会嘉宾</span></td>
+                      <td>内部研讨</td>
+                      <td><span class="v-tag v-tag--success">已出席</span></td>
+                    </tr>
+                    <tr>
+                      <td><a href="#" style="color:var(--text-link);text-decoration:none;font-weight:500;">全国心血管年会</a></td>
+                      <td><span style="color:var(--text-h3);font-size:13px;">2023-09-08</span></td>
+                      <td>成都</td>
+                      <td><span class="v-tag">参会嘉宾</span></td>
+                      <td>年度大会</td>
+                      <td><span class="v-tag v-tag--warning">已邀请</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="v-pager" style="padding:12px 0;">
+                <button class="v-pager__btn"><span class="veev veev-left" style="font-size:11px;"></span></button>
+                <button class="v-pager__btn v-pager__btn--active">1</button>
+                <button class="v-pager__btn"><span class="veev veev-right" style="font-size:11px;"></span></button>
+                <span class="v-pager__total">共 5 条</span>
+              </div>
+            </div><!-- /.v-section__body -->
+          </div><!-- /#section-meetings -->
+
+        </div><!-- /.detail-wrap -->
+      </div><!-- /#view-detail -->
+
+    </main>
+  </div><!-- /.v-app__body -->
+</div><!-- /.v-app -->
+
+<!-- Save toast -->
+<div id="save-toast">
+  <span class="veev veev-circle-correct" style="font-size:16px;color:var(--success);"></span>
+  保存成功
+</div>
+
+<script>
+/* ── Doctor data ─────────────────────────────────────────────── */
+const doctors = {
+  1: { name:'张明辉', hospital:'北京协和医院', dept:'心内科', title:'主任医师', level:'目标 A', avatar:'张' },
+  2: { name:'李晓雪', hospital:'上海仁济医院', dept:'内分泌科', title:'副主任医师', level:'目标 A', avatar:'李' },
+  3: { name:'王建国', hospital:'广州中山医院', dept:'神经内科', title:'主治医师', level:'目标 B', avatar:'王' },
+  4: { name:'陈美玲', hospital:'深圳人民医院', dept:'呼吸科', title:'主任医师', level:'目标 A', avatar:'陈' },
+  5: { name:'刘志远', hospital:'成都华西医院', dept:'消化内科', title:'副主任医师', level:'目标 B', avatar:'刘' },
+  6: { name:'赵丽华', hospital:'南京鼓楼医院', dept:'风湿免疫科', title:'主治医师', level:'目标 C', avatar:'赵' },
+  7: { name:'黄伟明', hospital:'杭州第一人民医院', dept:'骨科', title:'主任医师', level:'目标 B', avatar:'黄' },
+  8: { name:'吴 梅', hospital:'武汉协和医院', dept:'肿瘤科', title:'副主任医师', level:'目标 A', avatar:'吴' },
+};
+
+/* ── Section IDs known by this screen ──────────────────────── */
+const ALL_SECTIONS = ['basic','patient','competition','digital','points','timeline','meetings'];
+
+/* ── View switching ──────────────────────────────────────────── */
+function showDetail(id, editMode) {
+  const d = doctors[id];
+  if (!d) return;
+
+  // Populate hero header
+  document.getElementById('detail-avatar').textContent = d.avatar;
+  document.getElementById('detail-name').textContent = d.name;
+  document.getElementById('crumb-name').textContent = d.name;
+  document.getElementById('detail-hospital').textContent = d.hospital;
+  document.getElementById('detail-dept').textContent = d.dept;
+  document.getElementById('detail-title').textContent = d.title;
+
+  const levelTag = document.getElementById('detail-level');
+  levelTag.textContent = d.level;
+  levelTag.className = 'v-tag ' + (d.level === '目标 A' ? 'v-tag--brand' : d.level === '目标 C' ? 'v-tag--ghost' : '');
+
+  // Populate read fields
+  document.getElementById('ri-name').textContent = d.name;
+  document.getElementById('ri-hospital').textContent = d.hospital;
+  document.getElementById('ri-dept').textContent = d.dept;
+  document.getElementById('ri-title').textContent = d.title;
+  document.getElementById('ri-level').textContent = d.level;
+
+  // Populate edit fields
+  document.getElementById('ef-name').value = d.name;
+  document.getElementById('ef-hospital').value = d.hospital;
+  document.getElementById('ef-dept').value = d.dept;
+  document.getElementById('ef-title').value = d.title;
+  document.getElementById('ef-level').value = d.level;
+
+  // Reset: open basic, collapse everything else, clear edit mode
+  exitEditMode();
+  ALL_SECTIONS.forEach(n => {
+    const s = document.getElementById('section-' + n);
+    if (s) s.classList.toggle('is-open', n === 'basic');
+  });
+  setTabBarActive('basic');
+
+  // Reset tab bar state
+  const tabBar = document.getElementById('detail-tab-bar');
+  if (tabBar) tabBar.classList.remove('is-stuck');
+
+  // Show detail, reset scroll
+  document.getElementById('view-list').style.display = 'none';
+  document.getElementById('view-detail').style.display = 'block';
+  document.querySelector('.v-workspace').scrollTop = 0;
+
+  if (editMode) enterEditMode();
+
+  // Check tab overflow once layout is painted
+  requestAnimationFrame(updateTabOverflow);
+}
+
+function showList() {
+  document.getElementById('view-detail').style.display = 'none';
+  document.getElementById('view-list').style.display = 'block';
+}
+
+/* ── Tab bar: active state helper ───────────────────────────── */
+function setTabBarActive(name) {
+  document.querySelectorAll('.detail-tab-bar__item').forEach(el => {
+    el.classList.toggle('is-active', el.dataset.target === 'section-' + name);
+  });
+}
+
+/* ── Tab bar: navigate to section ───────────────────────────── */
+/* Expand target, scroll to it offset by tab bar height.         */
+function navToSection(name) {
+  const section = document.getElementById('section-' + name);
+  if (!section) return;
+
+  section.classList.add('is-open');
+  setTabBarActive(name);
+
+  requestAnimationFrame(() => {
+    const workspace = document.querySelector('.v-workspace');
+    const tabBar    = document.getElementById('detail-tab-bar');
+    const tabH      = tabBar ? tabBar.offsetHeight : 0;
+    const wsRect    = workspace.getBoundingClientRect();
+    const secRect   = section.getBoundingClientRect();
+    const target    = workspace.scrollTop + secRect.top - wsRect.top - tabH;
+    workspace.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+  });
+}
+
+/* ── Section head click: toggle open/close ──────────────────── */
+function toggleSection(name) {
+  const section = document.getElementById('section-' + name);
+  if (!section) return;
+  section.classList.toggle('is-open');
+  // Update tab bar highlight to the open section (or clear if collapsed)
+  const open = document.querySelector('.detail-tab-bar__item[data-target="section-' + name + '"]');
+  if (open) setTabBarActive(section.classList.contains('is-open') ? name : null);
+}
+
+/* ── Tab bar: scroll arrows ─────────────────────────────────── */
+function scrollTabBar(delta) {
+  const scroll = document.getElementById('detail-tabs-scroll');
+  if (scroll) scroll.scrollLeft += delta;
+}
+
+/* ── Tab bar: overflow detection ────────────────────────────── */
+function updateTabOverflow() {
+  const scroll = document.getElementById('detail-tabs-scroll');
+  const tabBar = document.getElementById('detail-tab-bar');
+  if (!scroll || !tabBar) return;
+  tabBar.classList.toggle('has-overflow', scroll.scrollWidth > scroll.clientWidth + 2);
+}
+
+/* ── Tab bar: stuck detection (scroll event) ────────────────── */
+/* "Stuck" = hero area has scrolled above the workspace viewport.
+   We reveal the back-button and add a shadow. */
+function updateTabStuck() {
+  const viewDetail = document.getElementById('view-detail');
+  if (!viewDetail || viewDetail.style.display === 'none') return;
+  const workspace = document.querySelector('.v-workspace');
+  const tabBar    = document.getElementById('detail-tab-bar');
+  const heroArea  = document.getElementById('detail-hero-area');
+  if (!tabBar || !heroArea) return;
+
+  const wsRect   = workspace.getBoundingClientRect();
+  const heroRect = heroArea.getBoundingClientRect();
+  // Hero is "out of view" when its bottom edge is at or above workspace top
+  tabBar.classList.toggle('is-stuck', heroRect.bottom <= wsRect.top + 1);
+}
+
+/* Attach scroll listener once */
+document.querySelector('.v-workspace').addEventListener('scroll', updateTabStuck, { passive: true });
+window.addEventListener('resize', updateTabOverflow);
+
+/* ── Edit mode ───────────────────────────────────────────────── */
+function enterEditMode() {
+  document.getElementById('mode-read').style.display = 'none';
+  document.getElementById('mode-edit').style.display = 'block';
+  document.getElementById('view-detail').classList.add('is-editing');
+  document.getElementById('section-basic').classList.add('is-open');
+  setTabBarActive('basic');
+}
+
+function exitEditMode() {
+  document.getElementById('mode-edit').style.display = 'none';
+  document.getElementById('mode-read').style.display = 'block';
+  document.getElementById('view-detail').classList.remove('is-editing');
+}
+
+function saveEdit() {
+  // Read values back
+  const name = document.getElementById('ef-name').value.trim();
+  const hospital = document.getElementById('ef-hospital').value.trim();
+  const dept = document.getElementById('ef-dept').value;
+  const title = document.getElementById('ef-title').value;
+  const level = document.getElementById('ef-level').value;
+
+  // Update read view
+  document.getElementById('ri-name').textContent = name;
+  document.getElementById('ri-hospital').textContent = hospital;
+  document.getElementById('ri-dept').textContent = dept;
+  document.getElementById('ri-title').textContent = title;
+  document.getElementById('ri-level').textContent = level;
+
+  // Update header
+  document.getElementById('detail-name').textContent = name;
+  document.getElementById('detail-hospital').textContent = hospital;
+  document.getElementById('detail-dept').textContent = dept;
+  document.getElementById('detail-title').textContent = title;
+
+  const levelTag = document.getElementById('detail-level');
+  levelTag.textContent = level;
+  levelTag.className = 'v-tag ' + (level === '目标 A' ? 'v-tag--brand' : level === '目标 C' ? 'v-tag--ghost' : '');
+
+  exitEditMode();
+  showToast();
+}
+
+/* ── Toast ───────────────────────────────────────────────────── */
+function showToast() {
+  const t = document.getElementById('save-toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+function toggleSidebar() {
+  const sb   = document.getElementById('v-sidebar');
+  const body = sb.closest('.v-app__body');
+  const isExpanding = !sb.classList.contains('is-expanded');
+  sb.classList.toggle('is-expanded', isExpanding);
+  body.classList.toggle('sidebar-expanded', isExpanding);
+  // hide any open flyout when expanding
+  closeFlyout();
+}
+
+function toggleCategory(id) {
+  const cat = document.getElementById(id);
+  cat.classList.toggle('is-expanded');
+}
+
+function navTo(name) {
+  // placeholder navigation
+  console.log('Navigate to:', name);
+}
+
+/* Flyout (collapsed state) */
+let activeFlyout = null;
+
+document.querySelectorAll('.v-sidebar__cat-head').forEach(head => {
+  const cat    = head.parentElement;
+  const flyout = cat.querySelector('.v-sidebar__flyout');
+  if (!flyout) return;
+
+  head.addEventListener('mouseenter', () => {
+    const sb = document.getElementById('v-sidebar');
+    if (sb.classList.contains('is-expanded')) return;
+    closeFlyout();
+    const rect = head.getBoundingClientRect();
+    flyout.style.top = rect.top + 'px';
+    flyout.classList.add('is-visible');
+    activeFlyout = flyout;
+  });
+
+  // Keep flyout open while hovering over it
+  flyout.addEventListener('mouseenter', () => {
+    flyout.classList.add('is-visible');
+  });
+  flyout.addEventListener('mouseleave', closeFlyout);
+  head.addEventListener('mouseleave', (e) => {
+    if (!flyout.contains(e.relatedTarget)) closeFlyout();
+  });
+});
+
+function closeFlyout() {
+  if (activeFlyout) {
+    activeFlyout.classList.remove('is-visible');
+    activeFlyout = null;
+  }
+}
+
+/* ── 个人中心 dropdown ──────────────────────────────────────── */
+function toggleUserMenu() {
+  const menu   = document.getElementById('user-menu');
+  const trigger = document.getElementById('user-trigger');
+  const isOpen = menu.classList.toggle('is-open');
+  trigger.classList.toggle('is-open', isOpen);
+}
+
+// 点击页面其他区域关闭
+document.addEventListener('click', function(e) {
+  const trigger = document.getElementById('user-trigger');
+  const menu    = document.getElementById('user-menu');
+  if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.remove('is-open');
+    trigger.classList.remove('is-open');
+  }
+});
+
+/* ── 语言切换 ────────────────────────────────────────────────── */
+function setLang(btn) {
+  btn.closest('.user-menu__lang-btns')
+     .querySelectorAll('.user-menu__lang-btn')
+     .forEach(b => b.classList.remove('is-active'));
+  btn.classList.add('is-active');
+}
+</script>
+</body>
+</html>

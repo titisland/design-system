@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Veeva — Colors</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { background: #fff; padding: 32px; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 4px; color: var(--text-h1); }
+  .sub { color: var(--text-h3); font-size: 13px; margin: 0 0 24px; }
+  .group { margin-bottom: 24px; }
+  .group h2 { font-size: 12px; font-weight: 500; color: var(--text-h4); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .sw { background: #fff; border: 1px solid var(--border-base); border-radius: 4px; overflow: hidden; }
+  .sw__fill { height: 64px; }
+  .sw__body { padding: 8px 10px; }
+  .sw__name { font-size: 12px; font-weight: 500; color: var(--text-h2); }
+  .sw__hex { font-family: var(--font-mono); font-size: 11px; color: var(--text-h4); margin-top: 2px; }
+</style>
+</head>
+<body>
+  <h1>Colors</h1>
+  <p class="sub">Orange is the house brand. Structural neutrals carry the UI. Category palette for data-viz only.</p>
+
+  <div class="group">
+    <h2>Brand &amp; tenant accents</h2>
+    <div class="grid">
+      <div class="sw"><div class="sw__fill" style="background:#F7981D"></div><div class="sw__body"><div class="sw__name">Veeva</div><div class="sw__hex">#F7981D</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#F8A83A"></div><div class="sw__body"><div class="sw__name">Orange 2</div><div class="sw__hex">#F8A83A</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#EB1700"></div><div class="sw__body"><div class="sw__name">J&amp;J</div><div class="sw__hex">#EB1700</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#00857C"></div><div class="sw__body"><div class="sw__name">MSD</div><div class="sw__hex">#00857C</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#503191"></div><div class="sw__body"><div class="sw__name">Merck KGaA</div><div class="sw__hex">#503191</div></div></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <h2>Status</h2>
+    <div class="grid">
+      <div class="sw"><div class="sw__fill" style="background:#007AFF"></div><div class="sw__body"><div class="sw__name">Link / Info</div><div class="sw__hex">#007AFF</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#00DF93"></div><div class="sw__body"><div class="sw__name">Success</div><div class="sw__hex">#00DF93</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#FFCC00"></div><div class="sw__body"><div class="sw__name">Warning</div><div class="sw__hex">#FFCC00</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#FF5543"></div><div class="sw__body"><div class="sw__name">Error</div><div class="sw__hex">#FF5543</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#7788A2"></div><div class="sw__body"><div class="sw__name">Info (slate)</div><div class="sw__hex">#7788A2</div></div></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <h2>Text</h2>
+    <div class="grid">
+      <div class="sw"><div class="sw__fill" style="background:#000000"></div><div class="sw__body"><div class="sw__name">H1</div><div class="sw__hex">#000000</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#333333"></div><div class="sw__body"><div class="sw__name">H2 / body</div><div class="sw__hex">#333333</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#666666"></div><div class="sw__body"><div class="sw__name">H3</div><div class="sw__hex">#666666</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#999999"></div><div class="sw__body"><div class="sw__name">H4</div><div class="sw__hex">#999999</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#CCCCCC"></div><div class="sw__body"><div class="sw__name">Disabled</div><div class="sw__hex">#CCCCCC</div></div></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <h2>Surface &amp; border</h2>
+    <div class="grid">
+      <div class="sw"><div class="sw__fill" style="background:#FFFFFF; border-bottom: 1px solid var(--border-base);"></div><div class="sw__body"><div class="sw__name">White</div><div class="sw__hex">#FFFFFF</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#F8F8F8"></div><div class="sw__body"><div class="sw__name">Rail / toolbar</div><div class="sw__hex">#F8F8F8</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#F4F6F8"></div><div class="sw__body"><div class="sw__name">Workspace</div><div class="sw__hex">#F4F6F8</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#FFF6E8"></div><div class="sw__body"><div class="sw__name">Row hover</div><div class="sw__hex">#FFF6E8</div></div></div>
+      <div class="sw"><div class="sw__fill" style="background:#EEEEEE"></div><div class="sw__body"><div class="sw__name">Border</div><div class="sw__hex">#EEEEEE</div></div></div>
+    </div>
+  </div>
+</body>
+</html>

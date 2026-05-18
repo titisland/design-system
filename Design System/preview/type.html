@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Veeva — Type</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { background: #fff; padding: 32px; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 4px; color: var(--text-h1); }
+  .sub { color: var(--text-h3); font-size: 13px; margin: 0 0 24px; max-width: 640px; line-height: 20px; }
+  .stack-head { display: flex; gap: 32px; padding: 20px 0; border-top: 1px solid var(--border-base); border-bottom: 1px solid var(--border-base); margin-bottom: 20px; }
+  .stack-head__col { flex: 1; }
+  .stack-head__label { font-size: 12px; color: var(--text-h4); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .stack-head__name { font-size: 20px; font-weight: 500; color: var(--text-h1); }
+  .stack-head__meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-h4); margin-top: 4px; }
+  .specimen-row { display: grid; grid-template-columns: 110px 78px 1fr; gap: 24px; padding: 12px 0; border-bottom: 1px dashed var(--border-base); align-items: baseline; }
+  .specimen-row__name { font-family: var(--font-mono); font-size: 11px; color: var(--text-h4); }
+  .specimen-row__meta { font-size: 11px; color: var(--text-h4); font-family: var(--font-mono); }
+</style>
+</head>
+<body>
+  <h1>Typography</h1>
+  <p class="sub">Inter for Latin, Noto Sans SC (≈ Source Han Sans SC) for CJK. Mixed strings like "同步到 Vault" line up on the same baseline because both families are tuned for similar x-heights.</p>
+
+  <div class="stack-head">
+    <div class="stack-head__col">
+      <div class="stack-head__label">Latin</div>
+      <div class="stack-head__name" style="font-family: 'Inter', sans-serif;">Inter · Aa Bb 0123</div>
+      <div class="stack-head__meta">400 · 500 · 700</div>
+    </div>
+    <div class="stack-head__col">
+      <div class="stack-head__label">CJK</div>
+      <div class="stack-head__name" style="font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;">思源黑体 · 列表名称</div>
+      <div class="stack-head__meta">400 · 500 · 700</div>
+    </div>
+  </div>
+
+  <div class="specimen-row"><div class="specimen-row__name">.v-h1</div><div class="specimen-row__meta">24 / 100%</div><div class="v-h1">列表名称列表名称 / List heading</div></div>
+  <div class="specimen-row"><div class="specimen-row__name">.v-h2</div><div class="specimen-row__meta">20 / 26</div><div class="v-h2">拜访报告详情 / Visit report detail</div></div>
+  <div class="specimen-row"><div class="specimen-row__name">.v-h3</div><div class="specimen-row__meta">18 / 26</div><div class="v-h3">基本信息 / Basic information</div></div>
+  <div class="specimen-row"><div class="specimen-row__name">.v-body-lg</div><div class="specimen-row__meta">16 / 24</div><div class="v-body-lg">主体文字 Body large — modal titles and key metric labels.</div></div>
+  <div class="specimen-row"><div class="specimen-row__name">.v-body</div><div class="specimen-row__meta">14 / 22</div><div class="v-body">正文文字 Body — the base for tables, cards, form controls, and paragraphs. 同步到 Vault 的记录将在 5 分钟内可见。</div></div>
+  <div class="specimen-row"><div class="specimen-row__name">.v-body-sm</div><div class="specimen-row__meta">13 / 22</div><div class="v-body-sm">次要说明 Secondary — hints, metadata, filter counts</div></div>
+  <div class="specimen-row"><div class="specimen-row__name">.v-caption</div><div class="specimen-row__meta">12 / 20</div><div class="v-caption">脚注与小标签 Caption — pagination, timestamps, chips</div></div>
+  <div class="specimen-row"><div class="specimen-row__name">.v-mono</div><div class="specimen-row__meta">14 / 22</div><div class="v-mono">2023-01-04 &nbsp;·&nbsp; ¥ 1,234.00 &nbsp;·&nbsp; ID a4b30f</div></div>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图标库 — Veeva CRM Online Design System</title>
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <link rel="stylesheet" href="../assets/iconfont/iconfont.css">
+  <script src="../assets/iconfont/iconfont.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--fs-base);
+      background: var(--bg-canvas);
+      color: var(--text-h2);
+    }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .pg-header {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-base);
+      padding: var(--space-4) var(--space-8);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .pg-header a {
+      color: var(--text-h4);
+      text-decoration: none;
+      font-size: var(--fs-sm);
+    }
+    .pg-header a:hover { color: var(--veeva-orange); }
+    .pg-header .sep { color: var(--text-placeholder); }
+    .pg-title {
+      font-size: var(--fs-xl);
+      font-weight: var(--fw-bold);
+      color: var(--text-h2);
+    }
+    .pg-badge {
+      background: var(--veeva-orange);
+      color: #fff;
+      border-radius: var(--radius-round);
+      padding: 2px 10px;
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-medium);
+    }
+
+    /* ── Toolbar ─────────────────────────────────────────────────── */
+    .toolbar {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-base);
+      padding: var(--space-3) var(--space-8);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .toolbar-label { font-size: var(--fs-sm); color: var(--text-h3); white-space: nowrap; }
+
+    .search-wrap { position: relative; }
+    .search-wrap input {
+      height: 32px;
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius-base);
+      padding: 0 var(--space-4) 0 32px;
+      font-size: var(--fs-sm);
+      color: var(--text-h2);
+      background: var(--bg-white);
+      width: 240px;
+      outline: none;
+    }
+    .search-wrap input:focus { border-color: var(--veeva-orange); }
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 10px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--text-h4);
+    }
+
+    .size-btns { display: flex; gap: 2px; }
+    .size-btn {
+      height: 28px;
+      padding: 0 var(--space-3);
+      border: 1px solid var(--border-2);
+      background: var(--bg-white);
+      border-radius: var(--radius-base);
+      font-size: var(--fs-xs);
+      cursor: pointer;
+      color: var(--text-h3);
+    }
+    .size-btn.active, .size-btn:hover {
+      border-color: var(--veeva-orange);
+      color: var(--veeva-orange);
+      background: #FFF6E8;
+    }
+
+    .count-info { font-size: var(--fs-xs); color: var(--text-h4); margin-left: auto; }
+
+    /* ── Body ─────────────────────────────────────────────────────── */
+    .pg-body { padding: var(--space-6) var(--space-8); }
+
+    /* ── Section ─────────────────────────────────────────────────── */
+    .icon-section { margin-bottom: var(--space-8); }
+    .icon-section-head {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-2);
+      border-bottom: 2px solid var(--veeva-orange);
+    }
+    .icon-section-title {
+      font-size: var(--fs-md);
+      font-weight: var(--fw-medium);
+      color: var(--text-h2);
+    }
+    .icon-section-count {
+      font-size: var(--fs-xs);
+      color: var(--text-h4);
+      background: var(--bg-f5);
+      border-radius: var(--radius-round);
+      padding: 2px 8px;
+    }
+
+    /* ── Icon grid ─────────────────────────────────────────────── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--space-2);
+    }
+    .icon-grid.size-sm { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+    .icon-grid.size-lg { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+
+    .icon-item {
+      background: var(--bg-white);
+      border: 1px solid var(--border-base);
+      border-radius: var(--radius-base);
+      padding: var(--space-4) var(--space-2) var(--space-3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .icon-item:hover {
+      border-color: var(--veeva-orange);
+      box-shadow: var(--shadow-base);
+      z-index: 1;
+    }
+    .icon-item:hover .icon-copy-hint { opacity: 1; }
+    .icon-item.hidden { display: none; }
+
+    .icon-glyph {
+      font-size: 24px;
+      color: var(--text-h2);
+      line-height: 1;
+    }
+    .icon-glyph.size-sm { font-size: 16px; }
+    .icon-glyph.size-lg { font-size: 32px; }
+
+    .icon-name {
+      font-size: 11px;
+      color: var(--text-h3);
+      text-align: center;
+      word-break: break-all;
+      line-height: 1.4;
+      max-width: 100%;
+    }
+
+    .icon-copy-hint {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: var(--veeva-orange);
+      color: #fff;
+      font-size: 10px;
+      text-align: center;
+      padding: 3px 0;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    /* ── SVG icon helper ─────────────────────────────────────────── */
+    .v-icon {
+      width: 1em; height: 1em;
+      fill: currentColor;
+      vertical-align: -0.15em;
+      overflow: hidden;
+    }
+
+    /* ── Usage panel ─────────────────────────────────────────────── */
+    .usage-bar {
+      background: var(--bg-white);
+      border: 1px solid var(--border-base);
+      border-radius: var(--radius-base);
+      padding: var(--space-4) var(--space-5);
+      margin-bottom: var(--space-6);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .usage-block { min-width: 200px; }
+    .usage-block h4 {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--text-h3);
+      margin-bottom: var(--space-2);
+    }
+    .usage-block pre {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--bg-f5);
+      border-radius: var(--radius-sm);
+      padding: var(--space-3);
+      color: var(--text-h2);
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* ── Size demo ───────────────────────────────────────────────── */
+    .size-demo {
+      background: var(--bg-white);
+      border: 1px solid var(--border-base);
+      border-radius: var(--radius-base);
+      padding: var(--space-4) var(--space-5);
+      margin-bottom: var(--space-6);
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .size-demo-item { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+    .size-demo-label { font-size: var(--fs-xs); color: var(--text-h4); }
+
+    /* ── Toast ───────────────────────────────────────────────────── */
+    #copy-toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      font-size: var(--fs-sm);
+      padding: var(--space-2) var(--space-5);
+      border-radius: var(--radius-round);
+      pointer-events: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      opacity: 0;
+      z-index: 999;
+    }
+    #copy-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* ── Empty state ─────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-16) 0;
+      color: var(--text-h4);
+      display: none;
+    }
+    .empty-state.show { display: block; }
+    .empty-state .veev { font-size: 48px; display: block; margin-bottom: var(--space-3); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="pg-header">
+  <a href="../index.html">Design System</a>
+  <span class="sep">/</span>
+  <span class="pg-title">图标库</span>
+  <span class="pg-badge" id="total-badge">loading…</span>
+</header>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="veev veev-search search-icon"></span>
+    <input type="text" id="search-input" placeholder="搜索图标名…" autocomplete="off">
+  </div>
+  <span class="toolbar-label">尺寸</span>
+  <div class="size-btns">
+    <button class="size-btn" data-size="sm" onclick="setSize('sm')">小</button>
+    <button class="size-btn active" data-size="md" onclick="setSize('md')">中</button>
+    <button class="size-btn" data-size="lg" onclick="setSize('lg')">大</button>
+  </div>
+  <span class="count-info" id="count-info"></span>
+</div>
+
+<!-- Body -->
+<div class="pg-body">
+
+  <!-- Usage -->
+  <div class="usage-bar">
+    <div class="usage-block">
+      <h4>Font-class 用法（推荐）</h4>
+      <pre>&lt;link rel="stylesheet" href="assets/iconfont/iconfont.css"&gt;
+
+&lt;span class="veev veev-home-outline"&gt;&lt;/span&gt;
+&lt;span class="veev veev-call-solid"&gt;&lt;/span&gt;</pre>
+    </div>
+    <div class="usage-block">
+      <h4>SVG Symbol 用法</h4>
+      <pre>&lt;script src="assets/iconfont/iconfont.js"&gt;&lt;/script&gt;
+
+&lt;svg class="v-icon" aria-hidden="true"&gt;
+  &lt;use xlink:href="#veev-home-outline"&gt;&lt;/use&gt;
+&lt;/svg&gt;</pre>
+    </div>
+    <div class="usage-block">
+      <h4>尺寸规范</h4>
+      <div class="size-demo" style="border:none;padding:0;margin:0;gap:var(--space-4)">
+        <div class="size-demo-item">
+          <span class="veev veev-home-outline" style="font-size:14px;color:var(--text-h2)"></span>
+          <span class="size-demo-label">14px 按钮内</span>
+        </div>
+        <div class="size-demo-item">
+          <span class="veev veev-home-outline" style="font-size:16px;color:var(--text-h2)"></span>
+          <span class="size-demo-label">16px 表格</span>
+        </div>
+        <div class="size-demo-item">
+          <span class="veev veev-home-outline" style="font-size:20px;color:var(--text-h2)"></span>
+          <span class="size-demo-label">20px 顶栏</span>
+        </div>
+        <div class="size-demo-item">
+          <span class="veev veev-home-outline" style="font-size:24px;color:var(--text-h2)"></span>
+          <span class="size-demo-label">24px 导航</span>
+        </div>
+        <div class="size-demo-item">
+          <span class="veev veev-home-solid" style="font-size:24px;color:var(--veeva-orange)"></span>
+          <span class="size-demo-label">激活态</span>
+        </div>
+        <div class="size-demo-item">
+          <span class="veev veev-home-outline" style="font-size:24px;color:var(--text-disabled)"></span>
+          <span class="size-demo-label">禁用态</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty search state -->
+  <div class="empty-state" id="empty-state">
+    <span class="veev veev-search"></span>
+    <p>没有找到匹配的图标</p>
+  </div>
+
+  <!-- ── 导航 & 应用框架 ── -->
+  <div class="icon-section" data-section="导航 & 应用框架">
+    <div class="icon-section-head">
+      <span class="icon-section-title">导航 &amp; 应用框架</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-nav">
+      <!-- generated by JS -->
+    </div>
+  </div>
+
+  <!-- ── HCP / 医疗域 ── -->
+  <div class="icon-section" data-section="HCP / 医疗域">
+    <div class="icon-section-head">
+      <span class="icon-section-title">HCP / 医疗域</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-hcp"></div>
+  </div>
+
+  <!-- ── 拜访 / 通话 ── -->
+  <div class="icon-section" data-section="拜访 / 通话">
+    <div class="icon-section-head">
+      <span class="icon-section-title">拜访 / 通话</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-call"></div>
+  </div>
+
+  <!-- ── 活动 / Events ── -->
+  <div class="icon-section" data-section="活动 / Events">
+    <div class="icon-section-head">
+      <span class="icon-section-title">活动 / Events</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-events"></div>
+  </div>
+
+  <!-- ── 销售计划 & 目标 ── -->
+  <div class="icon-section" data-section="销售计划 & 目标">
+    <div class="icon-section-head">
+      <span class="icon-section-title">销售计划 &amp; 目标</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-sales"></div>
+  </div>
+
+  <!-- ── 操作 / Actions ── -->
+  <div class="icon-section" data-section="操作 / Actions">
+    <div class="icon-section-head">
+      <span class="icon-section-title">操作 / Actions</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-actions"></div>
+  </div>
+
+  <!-- ── 审批 / Approval ── -->
+  <div class="icon-section" data-section="审批 / Approval">
+    <div class="icon-section-head">
+      <span class="icon-section-title">审批 / Approval</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-approval"></div>
+  </div>
+
+  <!-- ── 状态 / Status ── -->
+  <div class="icon-section" data-section="状态 / Status">
+    <div class="icon-section-head">
+      <span class="icon-section-title">状态 / Status</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-status"></div>
+  </div>
+
+  <!-- ── 通讯 / Communication ── -->
+  <div class="icon-section" data-section="通讯 / Communication">
+    <div class="icon-section-head">
+      <span class="icon-section-title">通讯 / Communication</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-comm"></div>
+  </div>
+
+  <!-- ── AI & 智能 ── -->
+  <div class="icon-section" data-section="AI & 智能">
+    <div class="icon-section-head">
+      <span class="icon-section-title">AI &amp; 智能</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-ai"></div>
+  </div>
+
+  <!-- ── 数据图表 ── -->
+  <div class="icon-section" data-section="数据图表">
+    <div class="icon-section-head">
+      <span class="icon-section-title">数据图表</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-chart"></div>
+  </div>
+
+  <!-- ── 文件 / 文档 ── -->
+  <div class="icon-section" data-section="文件 / 文档">
+    <div class="icon-section-head">
+      <span class="icon-section-title">文件 / 文档</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-file"></div>
+  </div>
+
+  <!-- ── 用户 / 组织 ── -->
+  <div class="icon-section" data-section="用户 / 组织">
+    <div class="icon-section-head">
+      <span class="icon-section-title">用户 / 组织</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-people"></div>
+  </div>
+
+  <!-- ── 布局 & 导航控件 ── -->
+  <div class="icon-section" data-section="布局 & 导航控件">
+    <div class="icon-section-head">
+      <span class="icon-section-title">布局 &amp; 导航控件</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-layout"></div>
+  </div>
+
+  <!-- ── 系统 & 设置 ── -->
+  <div class="icon-section" data-section="系统 & 设置">
+    <div class="icon-section-head">
+      <span class="icon-section-title">系统 &amp; 设置</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-system"></div>
+  </div>
+
+  <!-- ── 其他 ── -->
+  <div class="icon-section" data-section="其他">
+    <div class="icon-section-head">
+      <span class="icon-section-title">其他</span>
+      <span class="icon-section-count"></span>
+    </div>
+    <div class="icon-grid" id="grid-misc"></div>
+  </div>
+
+</div><!-- /.pg-body -->
+
+<div id="copy-toast">已复制类名</div>
+
+<script>
+/* ── Icon catalog, grouped ─────────────────────────────────────── */
+const ICONS = {
+  'grid-nav': [
+    'home-outline','home-solid','task-outline','task-solid',
+    'calendar','calendar-outline','calendar-solid','calendar-finished',
+    'dashbord-outline','dashbord-solid','hamburger','back-home','exit-left',
+    'overview-outline','daily-view-outline','weekly-view-outline',
+  ],
+  'grid-hcp': [
+    'professional','professional-color','professional-facet',
+    'target-prof','target-prof-color','target-hcp-tag',
+    'hospital','hospital-solid','hospital-color',
+    'hospital-listing','hospital-listing-color','hospital-listing-dcr',
+    'hospital-metrics','hospital-council-event','hospital-council-event-dcr',
+    'pharmacy','pharmacy-staff',
+    'dcr','dcr-color','dcr-movements-color','dcr-perspective-color',
+    'medical-inquiry','medical-inquiry-color',
+    'medical-association-color','medical-association-dcr-color',
+    'add-medical-association','nrdl',
+  ],
+  'grid-call': [
+    'call','call-solid','call-color','calling',
+    'call-amount','call-amount-orange','call-completion-outline','call-track',
+    'batch-create-call-outline','accompany-solid',
+    'detailing','audio-detailing','video-detailing','start-detailing',
+    'communication-solid','opening-solid','key-point-solid','target-solid','file-star-solid',
+  ],
+  'grid-events': [
+    'event','event-solid','event-color','serial-event','sub-event','close-event',
+    'secondary-meeting-outline','assist-meetting-outline',
+    'teamwork-council-event','teamwork-council-event-dcr','teamwork-council-event-solid',
+    'host','attendee','attendance-details','attendance-reconciliation-solid',
+    'attended-number-color','sign-in-attendee','participant-collection',
+    'canhuicishutongji','invitation',
+    'agenda','agenda-finished',
+    'speaker','speaker-color','new-speaker','main-speaker','common-speaker',
+    'set-common-speaker','speaker-change-request','speaker-change-request-color',
+    'coacher','coaching','coaching-color','coaching-coverd','last-coach',
+  ],
+  'grid-sales': [
+    'saletarget','saletarget-color','sales-data','sales-data-management',
+    'sales-forecast','sales-mark',
+    'mccp','mccp-dcr',
+    'weekly-plan','weekly-plan-color','weekly-plan-entry','weekly-plan-solid',
+    'customer-coverage','territory-map',
+    'road-plan','road-plan-color','account-plan-color',
+    'behavior-manage',
+  ],
+  'grid-actions': [
+    'add','add-solid','circle-add-solid','add-tag','add-prof','add-child',
+    'surface-add-solid',
+    'edit','edit-solid','corner-edit',
+    'delete','delete-solid','circle-delete-solid','surface-delete-solid','corner-delete',
+    'copy','copy-solid','clone','batch-copy-save',
+    'search','search-add','search-option',
+    'filter','filter-solid',
+    'sort','sort-asc','sort-desc',
+    'save','saving','save-back','save-complete','save-reject','save-submit',
+    'refresh','download','share',
+    'transfer','transfer-out-solid','exchange','reassign',
+    'rotate','erase','erase-solid','clean',
+    'set-top','pin-outline','unpin-outline','pushpin-outline','pushpin-solid',
+    'select-all','part-selected',
+    'fuzzy-match','match-professional','match-professional-solid',
+    'link','binding','generate-report','view-report',
+    'screenshot','cover-print','zoom-in','zoom-out',
+    'drag-solid',
+  ],
+  'grid-approval': [
+    'approval','approval-approved','approval-pending','approval-pending-words',
+    'approval-invalidation','approval-summary-color',
+    'apply-add','apply-feedback','appeal','appeal-color','acceptance',
+    'batch-reject','quota-adjust','quota-reject','withdraw','rolled-back',
+    'rejection-cancel','release-control',
+    'electronic-document-border','electronic-document-sending-request',
+    'request-switch','rule-detail','spot-check','review',
+    'cosign','signed','signature-outline','cancel-signature-outline',
+  ],
+  'grid-status': [
+    'circle-correct','circle-wrong','circle-alert',
+    'toast-success','toast-error','toast-info','warning',
+    'state-passed','state-pending','state-rejected','state-withdrawn',
+    'action-passed','action-rejected',
+    'completed','unfinished','finish-solid',
+    'suspend','suspend-solid','suspended','process-suspend',
+    'ban','list-confirm','list-cancel',
+    'circle-reset-solid','circle-play',
+  ],
+  'grid-comm': [
+    'message','email','email-solid','email-info-outline',
+    'phone','phone-solid','tel-outline','mobile',
+    'video','video-off','audio','voice','muted',
+    'hang-up','hang-up-facet',
+    'notice','bulletin','company-notice-color','reminder',
+    'weixin','work-weixin','channel-solid',
+    'at','small-trumpet',
+    'send','send-solid','send-survey-outline','new-session-outline',
+  ],
+  'grid-ai': [
+    'ai-solid','robot-color',
+    'magic-notes-color','magic-notes-outline','magic-stick-solid',
+    'lamp-color','lamp-solid','insights-outline',
+    'idea-solid','agent','agent-staff','intelligent-recognition',
+    'book-color','knowledge',
+  ],
+  'grid-chart': [
+    'line-chart-outline','table-chart-outline','pie-chart-outline','sector-outline',
+    'report-solid','view-solid','kanban','map-mode',
+    'daily-view-outline','weekly-view-outline',
+    'sales-data','sales-forecast',
+    'view-report','generate-report',
+  ],
+  'grid-file': [
+    'document','common-doc','pdf','word','excel','ppt',
+    'audio-file','video-file','email-file','zip-file','other-file','empty-file-solid',
+    'picture','pic-set','video-upload',
+    'library','library-color','content-solid','content-display',
+    'doc-opened','reading','switch-file-format','exist-version',
+    'xpages-outline','xpages-solid','template','electronic-learning',
+  ],
+  'grid-people': [
+    'user','user-facet','business-man-solid','create-staff','manager','department',
+    'group','group-solid','teamwork','teamwork-contributor','levels',
+    'dealer','dealer-staff','ext-contact','ext-contact-color',
+    'external-contact-management','account','service-account',
+    'homepage-avatar','homepage-avatar-pure',
+  ],
+  'grid-layout': [
+    'left','right','up','down','left-back','right-back',
+    'turn-left','turn-right',
+    'popover-down','popover-up','down-expend','expend',
+    'fold','collapse','collapse-all','expand-all','expand-solid',
+    'full-screen','exit-full-screen','minimize',
+    'first-page-outline','last-page-outline','previous-page','next-page',
+    'select-arrow','list-jump',
+    'section','layout-section','layer-outline',
+    'full-list','short-list','complex-list',
+  ],
+  'grid-system': [
+    'setting','setting-hover','setup','configure','help',
+    'language','password','verification-code',
+    'lock','locked','unlock',
+    'eye-open','eye-open-outline','eye-close',
+    'preview-solid','preview-disable-outline','preview-transfer',
+    'history','time','holiday','workday',
+    'sandbox-environment','platform-solid',
+    'shut-down','quit',
+    'mobile-move','online-move','maintenance-history','QRcode',
+    'pc',
+  ],
+  'grid-misc': [
+    'more','more-solid','more-line','more-function-outline','three-dot',
+    'star','hollow-star','thumbs-up','thumb',
+    'location','current-location','navigate',
+    'connection','relevance-outline',
+    'confirm','cancel','cancel-sign-in','cancel-meeting','cancel-target-professional',
+    'comment-outline','suggestion',
+    'product','product-color','sample-color','sample-solid',
+    'budget','expense-manage','own-expense','ticket',
+    'operation-m','cooperation',
+    'todo-invalid-outline','daily-report',
+    'create-target-solid','clinical-project','clinical-project-color',
+    'tthdata','tot','tot-color',
+    'work','workday',
+    'paint','paint-disable','recycle',
+    'play','circle-play','continue','resume','pristine',
+    'update','spinner',
+    'corner-marker','corner-new','corner-unregister',
+    'vc-config-solid',
+    'guide-edit-solid','guide-overview-solid','guide-submit-solid','guide-tab-solid',
+    'reference-index-solid',
+    'highlight-placeholder','highlight-button-solid','primary-button-solid',
+    'general-color','custom-color','custom2-color','custom3-color','custom4-color',
+    'default','main',
+    'survey','survey-color','survey-solid','disabled-survey',
+    'checkbox','checkbox-outline','radio','input','longtext','number','text',
+    'percentage','biaodashi-xianxing','select-solid',
+    'task-list-selected','task-list-unselected',
+    'camera',
+    'synchronize-application-phase-attendee','calculate-attendee-validity',
+    'batch-reject',
+    'add-tag','tag',
+  ],
+};
+
+/* ── Render ─────────────────────────────────────────────────────── */
+let currentSize = 'md';
+let allItems = [];
+
+function renderGrid(gridId, names) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  names.forEach(name => {
+    const item = document.createElement('div');
+    item.className = 'icon-item';
+    item.dataset.name = name;
+    item.innerHTML = `
+      <span class="icon-glyph veev veev-${name}"></span>
+      <span class="icon-name">${name}</span>
+      <span class="icon-copy-hint">点击复制</span>
+    `;
+    item.addEventListener('click', () => copyName(name));
+    grid.appendChild(item);
+    allItems.push(item);
+  });
+  // Update section count
+  const section = grid.closest('.icon-section');
+  if (section) {
+    section.querySelector('.icon-section-count').textContent = `${names.length} 个`;
+  }
+}
+
+function init() {
+  Object.entries(ICONS).forEach(([gridId, names]) => renderGrid(gridId, names));
+  updateTotalBadge();
+  updateCountInfo();
+}
+
+function updateTotalBadge() {
+  const total = Object.values(ICONS).reduce((s, arr) => s + arr.length, 0);
+  document.getElementById('total-badge').textContent = `${total} 个图标`;
+}
+
+function updateCountInfo() {
+  const visible = allItems.filter(i => !i.classList.contains('hidden')).length;
+  const total = allItems.length;
+  document.getElementById('count-info').textContent =
+    visible === total ? `共 ${total} 个` : `显示 ${visible} / ${total} 个`;
+}
+
+/* ── Search ─────────────────────────────────────────────────────── */
+document.getElementById('search-input').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  let anyVisible = false;
+
+  document.querySelectorAll('.icon-section').forEach(section => {
+    let sectionHasVisible = false;
+    section.querySelectorAll('.icon-item').forEach(item => {
+      const name = item.dataset.name.toLowerCase();
+      const match = !q || name.includes(q);
+      item.classList.toggle('hidden', !match);
+      if (match) { sectionHasVisible = true; anyVisible = true; }
+    });
+    section.style.display = sectionHasVisible ? '' : 'none';
+  });
+
+  document.getElementById('empty-state').classList.toggle('show', !anyVisible);
+  updateCountInfo();
+});
+
+/* ── Size ────────────────────────────────────────────────────────── */
+function setSize(size) {
+  currentSize = size;
+  document.querySelectorAll('.size-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.size === size);
+  });
+  document.querySelectorAll('.icon-grid').forEach(g => {
+    g.classList.remove('size-sm', 'size-lg');
+    if (size !== 'md') g.classList.add('size-' + size);
+  });
+  document.querySelectorAll('.icon-glyph').forEach(g => {
+    g.classList.remove('size-sm', 'size-lg');
+    if (size !== 'md') g.classList.add('size-' + size);
+  });
+}
+
+/* ── Copy ────────────────────────────────────────────────────────── */
+function copyName(name) {
+  const text = `veev veev-${name}`;
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const toast = document.getElementById('copy-toast');
+  toast.textContent = `已复制：${text}`;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+init();
+</script>
+</body>
+</html>

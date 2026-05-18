@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Veeva CRM — Components</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="../assets/iconfont/iconfont.css">
+<script src="../assets/iconfont/iconfont.js"></script>
+<style>
+  body { background: var(--bg-canvas); padding: 40px 48px 80px; }
+  .kit-wrap { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+  .kit-page-head { margin-bottom: 8px; }
+  .kit-page-head h1 { font-size: 32px; font-weight: 700; color: var(--text-h1); margin: 0 0 8px; letter-spacing: -0.5px; }
+  .kit-page-head p { color: var(--text-h3); margin: 0; max-width: 720px; line-height: 22px; }
+  .kit-sec { background: #fff; border-radius: 4px; box-shadow: var(--shadow-lighter); padding: 28px 32px; }
+  .kit-sec > h2 { font-size: 18px; font-weight: 600; color: var(--text-h1); margin: 0 0 4px; }
+  .kit-sec > .kit-sec__desc { font-size: 13px; color: var(--text-h3); margin: 0 0 20px; line-height: 20px; max-width: 640px; }
+  .kit-row { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 20px 0; border-top: 1px dashed var(--border-base); }
+  .kit-row:first-of-type { border-top: 0; padding-top: 0; }
+  .kit-row__label { font-size: 13px; color: var(--text-h3); padding-top: 4px; }
+  .kit-row__label code { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--text-h4); margin-top: 4px; word-break: break-all; }
+  .kit-row__demo { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .kit-row__demo--stack { flex-direction: column; align-items: flex-start; }
+  .swatch-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .swatch { background: #fff; border: 1px solid var(--border-base); border-radius: 4px; overflow: hidden; }
+  .swatch__fill { height: 56px; }
+  .swatch__body { padding: 8px 10px; }
+  .swatch__name { font-size: 12px; font-weight: 500; color: var(--text-h2); }
+  .swatch__hex { font-size: 11px; color: var(--text-h4); font-family: var(--font-mono); }
+  .type-row { display: grid; grid-template-columns: 120px 80px 1fr; gap: 24px; padding: 14px 0; border-top: 1px solid var(--border-base); align-items: baseline; }
+  .type-row:first-of-type { border-top: 0; }
+  .type-row__name { font-size: 12px; color: var(--text-h4); font-family: var(--font-mono); }
+  .type-row__meta { font-size: 12px; color: var(--text-h4); }
+  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .spec { padding: 16px; border: 1px solid var(--border-base); border-radius: 4px; }
+  .spec__name { font-size: 12px; font-family: var(--font-mono); color: var(--text-h4); margin-bottom: 8px; }
+  .spec__preview { height: 64px; display: grid; place-items: center; background: var(--bg-f8); border-radius: 4px; }
+  .kit-do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .kit-do, .kit-dont { padding: 16px 18px; border-radius: 4px; font-size: 13px; line-height: 20px; }
+  .kit-do  { background: #E5FBF2; color: #065F48; }
+  .kit-dont{ background: #FFEEEC; color: #82241A; }
+  .kit-do::before, .kit-dont::before { display: inline-block; margin-right: 6px; font-weight: 600; }
+  .kit-do::before  { content: "✓ 推荐"; color: #03A275; }
+  .kit-dont::before{ content: "✗ 避免"; color: #D13B2D; }
+</style>
+</head>
+<body>
+<div class="kit-wrap">
+
+  <header class="kit-page-head">
+    <h1>Components</h1>
+    <p>The working kit for Veeva CRM Online. Every control you see here is rendered with the same CSS you'd ship in the product — copy the markup into your screen, wire it to data, done.</p>
+  </header>
+
+  <!-- ─── COLORS ──────────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Color</h2>
+    <p class="kit-sec__desc">Orange is the house accent — one primary action per screen, one accent line per data region. Everything else is neutral. Sub-brands (J&amp;J, MSD, Merck KGaA) swap only the brand token; see <code>brand-themes.html</code>.</p>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Brand<code>--veeva-orange</code></div>
+      <div class="kit-row__demo" style="display:grid; grid-template-columns: repeat(5,1fr); gap:12px; flex: 1;">
+        <div class="swatch"><div class="swatch__fill" style="background:#F7981D"></div><div class="swatch__body"><div class="swatch__name">Veeva</div><div class="swatch__hex">#F7981D</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#F8A83A"></div><div class="swatch__body"><div class="swatch__name">Orange 2</div><div class="swatch__hex">#F8A83A</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#EB1700"></div><div class="swatch__body"><div class="swatch__name">J&amp;J</div><div class="swatch__hex">#EB1700</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#00857C"></div><div class="swatch__body"><div class="swatch__name">MSD</div><div class="swatch__hex">#00857C</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#503191"></div><div class="swatch__body"><div class="swatch__name">Merck</div><div class="swatch__hex">#503191</div></div></div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Status</div>
+      <div class="kit-row__demo" style="display:grid; grid-template-columns: repeat(5,1fr); gap:12px; flex: 1;">
+        <div class="swatch"><div class="swatch__fill" style="background:#007AFF"></div><div class="swatch__body"><div class="swatch__name">Blue (info)</div><div class="swatch__hex">#007AFF</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#00DF93"></div><div class="swatch__body"><div class="swatch__name">Success</div><div class="swatch__hex">#00DF93</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#FFCC00"></div><div class="swatch__body"><div class="swatch__name">Warning</div><div class="swatch__hex">#FFCC00</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#FF5543"></div><div class="swatch__body"><div class="swatch__name">Error</div><div class="swatch__hex">#FF5543</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#7788A2"></div><div class="swatch__body"><div class="swatch__name">Info</div><div class="swatch__hex">#7788A2</div></div></div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Text</div>
+      <div class="kit-row__demo" style="display:grid; grid-template-columns: repeat(6,1fr); gap:12px; flex: 1;">
+        <div class="swatch"><div class="swatch__fill" style="background:#000000"></div><div class="swatch__body"><div class="swatch__name">H1</div><div class="swatch__hex">#000000</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#333333"></div><div class="swatch__body"><div class="swatch__name">H2 / body</div><div class="swatch__hex">#333333</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#666666"></div><div class="swatch__body"><div class="swatch__name">H3</div><div class="swatch__hex">#666666</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#999999"></div><div class="swatch__body"><div class="swatch__name">H4</div><div class="swatch__hex">#999999</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#B5B5B5"></div><div class="swatch__body"><div class="swatch__name">placeholder</div><div class="swatch__hex">#B5B5B5</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#CCCCCC"></div><div class="swatch__body"><div class="swatch__name">disabled</div><div class="swatch__hex">#CCCCCC</div></div></div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Surface</div>
+      <div class="kit-row__demo" style="display:grid; grid-template-columns: repeat(6,1fr); gap:12px; flex: 1;">
+        <div class="swatch"><div class="swatch__fill" style="background:#FFFFFF; border-bottom:1px solid var(--border-base)"></div><div class="swatch__body"><div class="swatch__name">white</div><div class="swatch__hex">#FFFFFF</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#FAFAFA"></div><div class="swatch__body"><div class="swatch__name">fa</div><div class="swatch__hex">#FAFAFA</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#F8F8F8"></div><div class="swatch__body"><div class="swatch__name">rail / toolbar</div><div class="swatch__hex">#F8F8F8</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#F4F6F8"></div><div class="swatch__body"><div class="swatch__name">workspace</div><div class="swatch__hex">#F4F6F8</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#FFF6E8"></div><div class="swatch__body"><div class="swatch__name">row-hover</div><div class="swatch__hex">#FFF6E8</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#EEEEEE"></div><div class="swatch__body"><div class="swatch__name">border</div><div class="swatch__hex">#EEEEEE</div></div></div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Category<code>--cat-1 … --cat-8</code></div>
+      <div class="kit-row__demo" style="display:grid; grid-template-columns: repeat(8,1fr); gap:8px; flex:1;">
+        <div class="swatch"><div class="swatch__fill" style="background:#FF945A"></div><div class="swatch__body"><div class="swatch__hex">cat-1</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#FFCC00"></div><div class="swatch__body"><div class="swatch__hex">cat-2</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#C4E649"></div><div class="swatch__body"><div class="swatch__hex">cat-3</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#3EDDB1"></div><div class="swatch__body"><div class="swatch__hex">cat-4</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#43E3EB"></div><div class="swatch__body"><div class="swatch__hex">cat-5</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#39D3FF"></div><div class="swatch__body"><div class="swatch__hex">cat-6</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#88A8FF"></div><div class="swatch__body"><div class="swatch__hex">cat-7</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:#ACA3FF"></div><div class="swatch__body"><div class="swatch__hex">cat-8</div></div></div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Brand alpha<code>--brand-a05 … --brand-a65</code></div>
+      <div class="kit-row__demo" style="display:grid; grid-template-columns: repeat(6,1fr); gap:8px; flex:1;">
+        <div class="swatch"><div class="swatch__fill" style="background:rgba(247,152,29,0.65)"></div><div class="swatch__body"><div class="swatch__name">a65</div><div class="swatch__hex">65%</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:rgba(247,152,29,0.50)"></div><div class="swatch__body"><div class="swatch__name">a50</div><div class="swatch__hex">50%</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:rgba(247,152,29,0.40)"></div><div class="swatch__body"><div class="swatch__name">a40</div><div class="swatch__hex">40%</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:rgba(247,152,29,0.15)"></div><div class="swatch__body"><div class="swatch__name">a15</div><div class="swatch__hex">15%</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:rgba(247,152,29,0.10)"></div><div class="swatch__body"><div class="swatch__name">a10</div><div class="swatch__hex">10%</div></div></div>
+        <div class="swatch"><div class="swatch__fill" style="background:rgba(247,152,29,0.05); border:1px solid var(--border-base)"></div><div class="swatch__body"><div class="swatch__name">a05</div><div class="swatch__hex">5%</div></div></div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Data viz<code>--veeva-blue</code></div>
+      <div class="kit-row__demo" style="display:grid; grid-template-columns: repeat(6,1fr); gap:8px; flex:1;">
+        <div class="swatch"><div class="swatch__fill" style="background:#3D9BF2"></div><div class="swatch__body"><div class="swatch__name">Veeva Blue</div><div class="swatch__hex">#3D9BF2</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TYPE ────────────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Type</h2>
+    <p class="kit-sec__desc">Inter for Latin, Noto Sans SC (≈ Source Han Sans SC) for CJK. The two pair at the same x-height so mixed lines like <em>同步到 Vault</em> sit on the same baseline. 14&nbsp;px is the base — dense enough for tables, readable at 1366×768.</p>
+    <div class="type-row"><div class="type-row__name">.v-h1</div><div class="type-row__meta">24 / 100%</div><div class="v-h1">列表名称列表名称 / List title heading</div></div>
+    <div class="type-row"><div class="type-row__name">.v-h2</div><div class="type-row__meta">20 / 26</div><div class="v-h2">拜访报告详情 / Visit report detail</div></div>
+    <div class="type-row"><div class="type-row__name">.v-h3</div><div class="type-row__meta">18 / 26</div><div class="v-h3">基本信息 / Basic information</div></div>
+    <div class="type-row"><div class="type-row__name">.v-h4</div><div class="type-row__meta">16 / 24</div><div class="v-h4">关键信息 / Key information</div></div>
+    <div class="type-row"><div class="type-row__name">.v-body-lg</div><div class="type-row__meta">16 / 24</div><div class="v-body-lg">主体文字 Body large — used in modal titles and key metric labels</div></div>
+    <div class="type-row"><div class="type-row__name">.v-body</div><div class="type-row__meta">14 / 22</div><div class="v-body">正文文字 Body — the base for tables, cards, form controls, paragraphs</div></div>
+    <div class="type-row"><div class="type-row__name">.v-body-sm</div><div class="type-row__meta">13 / 22</div><div class="v-body-sm">次要说明 Secondary — hints under inputs, metadata strips</div></div>
+    <div class="type-row"><div class="type-row__name">.v-caption</div><div class="type-row__meta">12 / 20</div><div class="v-caption">脚注与小标签 Caption — pagination, timestamps, tag chips</div></div>
+    <div class="type-row"><div class="type-row__name">.v-mono</div><div class="type-row__meta">14 / 22</div><div class="v-mono">2023-01-04 &nbsp; ¥ 1,234.00 &nbsp; ID: a4b30f</div></div>
+  </section>
+
+  <!-- ─── SPACING / RADII / SHADOWS ───────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Spacing, Radii, Shadows</h2>
+    <p class="kit-sec__desc">Dense by design — 4-px increments. Don't invent new shadow values; pick from these four levels.</p>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Space scale<code>4 → 64 px</code></div>
+      <div class="kit-row__demo">
+        <div style="display:flex; align-items:flex-end; gap:8px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:4px;  height:40px; background:var(--veeva-orange)"></div><span class="v-caption">1 · 4</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:8px;  height:40px; background:var(--veeva-orange)"></div><span class="v-caption">2 · 8</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:12px; height:40px; background:var(--veeva-orange)"></div><span class="v-caption">3 · 12</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:16px; height:40px; background:var(--veeva-orange)"></div><span class="v-caption">4 · 16</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:20px; height:40px; background:var(--veeva-orange)"></div><span class="v-caption">5 · 20</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:24px; height:40px; background:var(--veeva-orange)"></div><span class="v-caption">6 · 24</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:32px; height:40px; background:var(--veeva-orange)"></div><span class="v-caption">8 · 32</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:40px; height:40px; background:var(--veeva-orange)"></div><span class="v-caption">10 · 40</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:64px; height:40px; background:var(--veeva-orange)"></div><span class="v-caption">16 · 64</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Radii</div>
+      <div class="kit-row__demo">
+        <div class="spec-grid" style="flex:1;">
+          <div class="spec"><div class="spec__name">--radius-sm · 2 px</div><div class="spec__preview"><div style="width:72px; height:40px; background:#fff; border:1px solid var(--border-3); border-radius:2px"></div></div></div>
+          <div class="spec"><div class="spec__name">--radius-base · 4 px</div><div class="spec__preview"><div style="width:72px; height:40px; background:#fff; border:1px solid var(--border-3); border-radius:4px"></div></div></div>
+          <div class="spec"><div class="spec__name">--radius-round · 20 px</div><div class="spec__preview"><div style="width:72px; height:28px; background:#fff; border:1px solid var(--border-3); border-radius:20px"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Shadows</div>
+      <div class="kit-row__demo">
+        <div class="spec-grid" style="flex:1; grid-template-columns: repeat(4,1fr);">
+          <div class="spec"><div class="spec__name">lighter · cards</div><div class="spec__preview" style="background:#fff"><div style="width:80px; height:40px; background:#fff; box-shadow: var(--shadow-lighter); border-radius: 4px"></div></div></div>
+          <div class="spec"><div class="spec__name">light · toolbars</div><div class="spec__preview" style="background:#fff"><div style="width:80px; height:40px; background:#fff; box-shadow: var(--shadow-light); border-radius: 4px"></div></div></div>
+          <div class="spec"><div class="spec__name">base · menus</div><div class="spec__preview" style="background:#fff"><div style="width:80px; height:40px; background:#fff; box-shadow: var(--shadow-base); border-radius: 4px"></div></div></div>
+          <div class="spec"><div class="spec__name">dark · modals</div><div class="spec__preview" style="background:#fff"><div style="width:80px; height:40px; background:#fff; box-shadow: var(--shadow-dark); border-radius: 4px"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BUTTONS ─────────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Buttons</h2>
+    <p class="kit-sec__desc">One primary per screen. Primary = orange fill, Secondary = white with gray border, Ghost for toolbar actions. Destructive primary keeps the orange fill — intent lives in the verb ("删除", "移除并继续"), never in a red fill button.</p>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Variants</div>
+      <div class="kit-row__demo">
+        <button class="v-btn v-btn--primary">保存</button>
+        <button class="v-btn v-btn--secondary">取消</button>
+        <button class="v-btn v-btn--ghost">更多操作</button>
+        <button class="v-btn v-btn--link">查看详情</button>
+        <button class="v-btn v-btn--danger">删除</button>
+        <button class="v-btn v-btn--primary" disabled>保存</button>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Sizes</div>
+      <div class="kit-row__demo">
+        <button class="v-btn v-btn--primary v-btn--lg">大号按钮</button>
+        <button class="v-btn v-btn--primary">默认</button>
+        <button class="v-btn v-btn--primary v-btn--sm">小号</button>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">With icon</div>
+      <div class="kit-row__demo">
+        <button class="v-btn v-btn--primary"><img class="v-icon v-icon-invert" src="../assets/icons/plus.svg" width="12" height="12" alt=""> 新建</button>
+        <button class="v-btn v-btn--secondary"><img class="v-icon" src="../assets/icons/search.svg" width="14" height="14" alt=""> 搜索</button>
+        <button class="v-btn v-btn--icon v-btn--secondary" aria-label="more"><img src="../assets/icons/more.svg" width="14" height="14" alt=""></button>
+      </div>
+    </div>
+
+    <div class="kit-do-dont">
+      <div class="kit-do">Use a single orange primary as the strongest action on the screen. Everything else steps down to secondary or ghost.</div>
+      <div class="kit-dont">Don't stack two orange primaries next to each other — pick one. Don't use a red fill for "delete"; keep the orange and change the verb.</div>
+    </div>
+  </section>
+
+  <!-- ─── INPUTS ──────────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Inputs &amp; forms</h2>
+    <p class="kit-sec__desc">Label-left layout. Labels are 120 px wide, right-aligned, so wet text lines up with the field baseline. Required fields carry a red asterisk <em>before</em> the label — never the word "必填".</p>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Text input</div>
+      <div class="kit-row__demo" style="flex:1;">
+        <div style="flex:1; max-width: 420px;">
+          <div class="v-field">
+            <label class="v-field__label v-field__label--required">拜访医院</label>
+            <div class="v-field__control">
+              <div class="v-input-group">
+                <input class="v-input" value="北京中日友好医院">
+                <img class="v-input-group__icon v-input-group__icon--clickable" src="../assets/icons/x.svg" width="12" height="12" alt="clear">
+              </div>
+            </div>
+          </div>
+          <div class="v-field">
+            <label class="v-field__label v-field__label--required">拜访医生</label>
+            <div class="v-field__control">
+              <div class="v-input-group">
+                <input class="v-input v-input--error" placeholder="请选择">
+                <img class="v-input-group__icon" src="../assets/icons/search.svg" width="14" height="14" alt="">
+              </div>
+              <div class="v-field__error">必填项不能为空</div>
+            </div>
+          </div>
+          <div class="v-field">
+            <label class="v-field__label">备注</label>
+            <div class="v-field__control">
+              <textarea class="v-textarea" placeholder="请输入" rows="3"></textarea>
+              <div class="v-field__hint">最多输入 200 个字符</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Select / Date</div>
+      <div class="kit-row__demo">
+        <div style="width:240px"><select class="v-select"><option>请选择</option><option>医学拜访</option><option>样品发放</option></select></div>
+        <div style="width:240px">
+          <div class="v-input-group">
+            <input class="v-input" placeholder="2023-01-01">
+            <img class="v-input-group__icon" src="../assets/icons/schedule.svg" width="14" height="14" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Checkbox &amp; radio</div>
+      <div class="kit-row__demo">
+        <label class="v-check"><input type="checkbox" checked><span class="v-check__box"></span> 医学拜访</label>
+        <label class="v-check"><input type="checkbox"><span class="v-check__box"></span> 样品发放</label>
+        <label class="v-check v-check--disabled"><input type="checkbox" disabled><span class="v-check__box"></span> 市场调研</label>
+        <span style="width:16px"></span>
+        <label class="v-check"><input type="radio" name="r1" checked><span class="v-check__dot"></span> 简体中文</label>
+        <label class="v-check"><input type="radio" name="r1"><span class="v-check__dot"></span> English</label>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Switch</div>
+      <div class="kit-row__demo">
+        <span class="v-switch" aria-checked="true" role="switch"></span>
+        <span class="v-switch" aria-checked="false" role="switch"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CHIPS / TAGS ────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Tags &amp; status chips</h2>
+    <p class="kit-sec__desc">Pills at 20 px radius — the deliberate exception to the 4 px radius rule. Status chips get a soft tint background (not a saturated fill) so a row of them doesn't overwhelm a cell.</p>
+    <div class="kit-row">
+      <div class="kit-row__label">Status chips</div>
+      <div class="kit-row__demo">
+        <span class="v-tag v-tag--brand">进行中</span>
+        <span class="v-tag v-tag--success"><span class="v-tag__dot"></span>已完成</span>
+        <span class="v-tag v-tag--warning"><span class="v-tag__dot"></span>待审核</span>
+        <span class="v-tag v-tag--error"><span class="v-tag__dot"></span>已拒绝</span>
+        <span class="v-tag v-tag--info">草稿</span>
+        <span class="v-tag v-tag--ghost">归档</span>
+        <span class="v-tag">默认</span>
+      </div>
+    </div>
+    <div class="kit-row">
+      <div class="kit-row__label">Domain labels</div>
+      <div class="kit-row__demo">
+        <span class="v-tag v-tag--info">医学拜访</span>
+        <span class="v-tag v-tag--info">样品发放</span>
+        <span class="v-tag v-tag--info">市场调研</span>
+        <span class="v-tag v-tag--ghost">销售总监</span>
+        <span class="v-tag v-tag--ghost">区域经理</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TABLE ───────────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Data table</h2>
+    <p class="kit-sec__desc">The workhorse of this app. Column headers sit in a <code>#F8F8F8</code> strip with filter affordances. Rows are 40&nbsp;px, hover tints to warm orange-gray. Orange accent bar hugs the top of the card title.</p>
+    <div class="v-data-card">
+      <div class="v-data-card__title">
+        <span>列表名称列表名称列表名称列表名称</span>
+        <span style="display:flex; gap:8px;">
+          <button class="v-btn v-btn--secondary v-btn--sm"><img src="../assets/icons/search.svg" width="12" height="12" alt=""></button>
+          <button class="v-btn v-btn--primary v-btn--sm">导入</button>
+        </span>
+      </div>
+      <table class="v-table">
+        <thead>
+          <tr>
+            <th style="width:36px"><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></th>
+            <th>列名称1 <img class="v-th-filter" src="../assets/icons/sort.svg" width="12" height="12" alt=""></th>
+            <th>列名称2</th>
+            <th>开始日期 <img class="v-th-filter" src="../assets/icons/sort.svg" width="12" height="12" alt=""></th>
+            <th>结束日期</th>
+            <th>创建人</th>
+            <th>负责人 <img class="v-th-filter" src="../assets/icons/sort.svg" width="12" height="12" alt=""></th>
+            <th>状态</th>
+            <th style="width:120px">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+            <td>列名称值列名称值1列名称值1</td>
+            <td>列名称2值</td>
+            <td class="v-mono">2023-01-01</td>
+            <td class="v-mono">2023-02-07</td>
+            <td>LiLi Zhao</td>
+            <td>关宁</td>
+            <td><span class="v-tag v-tag--success"><span class="v-tag__dot"></span>已完成</span></td>
+            <td>
+              <button class="v-btn v-btn--link">查看</button>
+              <button class="v-btn v-btn--link">编辑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><label class="v-check"><input type="checkbox" checked><span class="v-check__box"></span></label></td>
+            <td>列名称值2</td>
+            <td>列名称2值</td>
+            <td class="v-mono">2023-01-01</td>
+            <td class="v-mono">2023-02-07</td>
+            <td>LiLi Zhao</td>
+            <td>朱嘉</td>
+            <td><span class="v-tag v-tag--brand">进行中</span></td>
+            <td>
+              <button class="v-btn v-btn--link">查看</button>
+              <button class="v-btn v-btn--link">编辑</button>
+            </td>
+          </tr>
+          <tr class="is-selected">
+            <td><label class="v-check"><input type="checkbox" checked><span class="v-check__box"></span></label></td>
+            <td>列名称值3</td>
+            <td>列名称2值</td>
+            <td class="v-mono">2023-02-01</td>
+            <td class="v-mono">2023-03-07</td>
+            <td>LiLi Zhao</td>
+            <td>关宁</td>
+            <td><span class="v-tag v-tag--warning"><span class="v-tag__dot"></span>待审核</span></td>
+            <td>
+              <button class="v-btn v-btn--link">查看</button>
+              <button class="v-btn v-btn--link">编辑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><label class="v-check"><input type="checkbox"><span class="v-check__box"></span></label></td>
+            <td>列名称值4</td>
+            <td>列名称2值</td>
+            <td class="v-mono">2023-02-01</td>
+            <td class="v-mono">2023-03-07</td>
+            <td>LiLi Zhao</td>
+            <td>朱嘉</td>
+            <td><span class="v-tag v-tag--error"><span class="v-tag__dot"></span>已拒绝</span></td>
+            <td>
+              <button class="v-btn v-btn--link">查看</button>
+              <button class="v-btn v-btn--link">编辑</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="v-pager" style="border-top:1px solid var(--border-base)">
+        <button class="v-pager__btn"><img src="../assets/icons/chevron-left.svg" width="10" height="10" alt=""></button>
+        <button class="v-pager__btn v-pager__btn--active">1</button>
+        <button class="v-pager__btn">2</button>
+        <button class="v-pager__btn">3</button>
+        <span class="v-pager__sep">/ 8</span>
+        <button class="v-pager__btn" style="transform: scaleX(-1)"><img src="../assets/icons/chevron-left.svg" width="10" height="10" alt=""></button>
+        <span>每页</span>
+        <select class="v-select" style="width:72px; height:28px;"><option>20</option><option>50</option></select>
+        <span>条</span>
+        <span class="v-pager__total">共 156 条 · 1-4 / 156</span>
+      </div>
+
+      <!-- 增强版：智能省略 + 跳页 + 页码大小选择器 -->
+      <div class="v-pager" style="border-top:1px solid var(--border-base); margin-top:8px;">
+        <button class="v-pager__btn"><img src="../assets/icons/chevron-left.svg" width="10" height="10" alt=""></button>
+        <button class="v-pager__btn">1</button>
+        <span class="v-pager__sep">···</span>
+        <button class="v-pager__btn">4</button>
+        <button class="v-pager__btn v-pager__btn--active">5</button>
+        <button class="v-pager__btn">6</button>
+        <span class="v-pager__sep">···</span>
+        <button class="v-pager__btn">12</button>
+        <button class="v-pager__btn" style="transform: scaleX(-1)"><img src="../assets/icons/chevron-left.svg" width="10" height="10" alt=""></button>
+        <span style="margin-left:12px;">前往</span>
+        <input class="v-pager__input" type="text" value="5" style="width:40px; text-align:center;">
+        <span>页</span>
+        <div class="v-pager__size-select" style="margin-left:12px;">
+          <button class="v-pager__size-btn">
+            每页20条
+            <svg viewBox="0 0 8 5" width="8" height="5" fill="none" style="opacity:.6"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <span class="v-pager__total">共 232 条</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MODALS ─────────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Modal &amp; confirmations</h2>
+    <p class="kit-sec__desc">Modals are centered, 480 / 640 / 800&nbsp;px wide, never fullscreen. Title = the question. Body = the consequence. Buttons = the two verbs — not "确定".</p>
+    <div class="kit-row">
+      <div class="kit-row__label">Confirmation</div>
+      <div class="kit-row__demo" style="flex:1;">
+        <div style="width: 480px; box-shadow: var(--shadow-dark); border-radius: 4px; background: #fff; overflow: hidden;">
+          <div class="v-modal__body">
+            <img class="v-modal__body-icon" src="../assets/icons/circle-warn.svg" width="20" height="20" alt="">
+            <div>
+              <div class="v-modal__title">当前问卷所选分配岗位近期有变更，是否移除后发布？</div>
+              <ul style="margin: 4px 0 0; padding-left: 20px; color: var(--text-h3); font-size: 14px; line-height: 22px;">
+                <li>销售总监</li>
+                <li>销售总监</li>
+                <li>销售总监</li>
+              </ul>
+            </div>
+          </div>
+          <div class="v-modal__actions">
+            <button class="v-btn v-btn--secondary">取消</button>
+            <button class="v-btn v-btn--primary">移除并继续</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Banners / alerts</div>
+      <div class="kit-row__demo kit-row__demo--stack" style="align-items:stretch;">
+        <div class="v-banner v-banner--info"><img src="../assets/icons/circle-check.svg" width="16" height="16" alt=""> 新版本已发布，刷新页面即可使用。</div>
+        <div class="v-banner v-banner--warning"><img src="../assets/icons/circle-warn.svg" width="16" height="16" alt=""> 当前问卷所选分配岗位近期有变更，请检查后再发布。</div>
+        <div class="v-banner v-banner--error"><img src="../assets/icons/circle-error.svg" width="16" height="16" alt=""> 同步失败，请稍后重试。错误代码 E-5003。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NAV BITS ────────────────────────────────────────────── -->
+  <section class="kit-sec">
+    <h2>Navigation bits</h2>
+    <p class="kit-sec__desc">Tabs, breadcrumbs, avatars, pagination — the small pieces that decorate data regions.</p>
+    <div class="kit-row">
+      <div class="kit-row__label">Tabs</div>
+      <div class="kit-row__demo" style="flex:1;">
+        <div style="flex:1; width:100%;">
+          <div class="v-tabs">
+            <div class="v-tabs__item is-active">拜访记录</div>
+            <div class="v-tabs__item">样品发放</div>
+            <div class="v-tabs__item">市场调研</div>
+            <div class="v-tabs__item">共享规则</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="kit-row">
+      <div class="kit-row__label">Breadcrumb</div>
+      <div class="kit-row__demo">
+        <div class="v-crumb">
+          <a href="#">首页</a>
+          <span class="v-crumb__sep"></span>
+          <a href="#">拜访管理</a>
+          <span class="v-crumb__sep"></span>
+          <span>拜访报告详情</span>
+        </div>
+      </div>
+    </div>
+    <div class="kit-row">
+      <div class="kit-row__label">Avatars</div>
+      <div class="kit-row__demo">
+        <span class="v-avatar v-avatar--sm">ZL</span>
+        <span class="v-avatar">朱嘉</span>
+        <span class="v-avatar v-avatar--lg"><img src="../assets/icons/user.svg" width="24" height="24" class="v-icon-invert" alt=""></span>
+      </div>
+    </div>
+    <div class="kit-row">
+      <div class="kit-row__label">Section mark</div>
+      <div class="kit-row__demo">
+        <div class="v-section-title"><span class="v-section-title__mark">✦</span>基本信息</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Form row + Info field + Panel section ─────────────────── -->
+  <section class="kit-sec">
+    <h2>Form row &amp; Info field</h2>
+    <p class="kit-sec__desc">表单与详情页的字段布局组件。<code>.v-form-row</code> 用于可编辑表单（96px 标签）；<code>.v-info-field</code> 用于只读详情展示（144px 标签，支持多行）。</p>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Form row<code>.v-form-row</code></div>
+      <div class="kit-row__demo kit-row__demo--stack" style="width:100%; max-width:480px;">
+        <div class="v-form-row" style="width:100%;">
+          <label class="v-form-row__label v-form-row__label--required">活动名称</label>
+          <div class="v-form-row__control">
+            <input class="v-input" type="text" placeholder="请输入活动名称">
+          </div>
+        </div>
+        <div class="v-form-row" style="width:100%; margin-top:16px;">
+          <label class="v-form-row__label">备注</label>
+          <div class="v-form-row__control">
+            <textarea class="v-textarea" placeholder="选填备注内容"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Info field<code>.v-info-field</code></div>
+      <div class="kit-row__demo kit-row__demo--stack" style="width:100%; max-width:560px;">
+        <div class="v-info-field" style="width:100%;">
+          <div class="v-info-field__label">活动名称</div>
+          <div class="v-info-field__value">2025 Q2 糖尿病领域 KOL 拜访活动</div>
+        </div>
+        <div class="v-info-field" style="width:100%; margin-top:8px;">
+          <div class="v-info-field__label">活动目标</div>
+          <div class="v-info-field__value">提升品牌认知度<br>推进新药品处方意愿</div>
+        </div>
+        <div class="v-info-field" style="width:100%; margin-top:8px;">
+          <div class="v-info-field__label">负责人</div>
+          <div class="v-info-field__value v-info-field__value--empty">暂未填写</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">Panel section<code>.v-section.v-section--panel</code></div>
+      <div class="kit-row__demo kit-row__demo--stack" style="width:100%;">
+        <div class="v-section v-section--panel is-open" style="width:100%; max-width:680px;">
+          <div class="v-section__head">
+            <span class="v-section__arrow">▶</span>
+            <span class="v-section__title">基本信息</span>
+            <div class="v-section__head-extra">
+              <button class="v-btn v-btn--ghost v-btn--sm">编辑</button>
+            </div>
+          </div>
+          <div class="v-section__body">
+            <div class="v-info-field" style="width:100%; margin-bottom:12px;">
+              <div class="v-info-field__label">活动名称</div>
+              <div class="v-info-field__value">2025 Q2 糖尿病领域 KOL 拜访活动</div>
+            </div>
+            <div class="v-info-field" style="width:100%;">
+              <div class="v-info-field__label">活动状态</div>
+              <div class="v-info-field__value"><span class="v-tag v-tag--success">进行中</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="v-section v-section--panel" style="width:100%; max-width:680px; margin-top:8px;">
+          <div class="v-section__head">
+            <span class="v-section__arrow">▶</span>
+            <span class="v-section__title">目标设置（折叠状态）</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Icons ──────────────────────────────────────────────────── -->
+  <section class="kit-sec" id="icons">
+    <h2>Icons — Iconfont</h2>
+    <p class="kit-sec__desc">iconfont.cn 项目 291740，font-family <code>veev</code>，类名前缀 <code>.veev-</code>。双类名用法：<code>&lt;span class="veev veev-home-outline"&gt;&lt;/span&gt;</code>。<a href="../preview/icons.html" target="_blank" style="color:var(--text-link)">→ 完整图标预览页</a></p>
+
+    <div class="kit-row">
+      <div class="kit-row__label">尺寸规范<code>14 / 16 / 20 / 24 px</code></div>
+      <div class="kit-row__demo" style="gap:32px; align-items:flex-end;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span class="veev veev-home-outline" style="font-size:14px;color:var(--text-h2)"></span>
+          <span style="font-size:11px;color:var(--text-h4)">14 px<br>按钮内嵌</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span class="veev veev-home-outline" style="font-size:16px;color:var(--text-h2)"></span>
+          <span style="font-size:11px;color:var(--text-h4)">16 px<br>表格操作</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span class="veev veev-home-outline" style="font-size:20px;color:var(--text-h2)"></span>
+          <span style="font-size:11px;color:var(--text-h4)">20 px<br>顶栏/面包屑</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span class="veev veev-home-outline" style="font-size:24px;color:var(--text-h2)"></span>
+          <span style="font-size:11px;color:var(--text-h4)">24 px<br>导航栏</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span class="veev veev-home-solid" style="font-size:24px;color:var(--veeva-orange)"></span>
+          <span style="font-size:11px;color:var(--text-h4)">激活态<br>—orange</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span class="veev veev-home-outline" style="font-size:24px;color:var(--text-disabled)"></span>
+          <span style="font-size:11px;color:var(--text-h4)">禁用态<br>—disabled</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">导航图标<code>.veev .veev-*</code></div>
+      <div class="kit-row__demo" style="gap:20px; flex-wrap:wrap;">
+        <span class="veev veev-home-outline" style="font-size:24px;color:var(--text-h3)" title="home-outline"></span>
+        <span class="veev veev-task-outline" style="font-size:24px;color:var(--text-h3)" title="task-outline"></span>
+        <span class="veev veev-calendar-outline" style="font-size:24px;color:var(--text-h3)" title="calendar-outline"></span>
+        <span class="veev veev-dashbord-outline" style="font-size:24px;color:var(--text-h3)" title="dashbord-outline"></span>
+        <span class="veev veev-call" style="font-size:24px;color:var(--text-h3)" title="call"></span>
+        <span class="veev veev-event" style="font-size:24px;color:var(--text-h3)" title="event"></span>
+        <span class="veev veev-professional" style="font-size:24px;color:var(--text-h3)" title="professional"></span>
+        <span class="veev veev-hospital" style="font-size:24px;color:var(--text-h3)" title="hospital"></span>
+        <span class="veev veev-saletarget" style="font-size:24px;color:var(--text-h3)" title="saletarget"></span>
+        <span class="veev veev-home-solid" style="font-size:24px;color:var(--veeva-orange)" title="home-solid (active)"></span>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">操作图标<code>16 px 行内</code></div>
+      <div class="kit-row__demo" style="gap:16px; flex-wrap:wrap;">
+        <span class="veev veev-add" style="font-size:16px;color:var(--text-h2)" title="add"></span>
+        <span class="veev veev-edit" style="font-size:16px;color:var(--text-h2)" title="edit"></span>
+        <span class="veev veev-delete" style="font-size:16px;color:var(--text-h2)" title="delete"></span>
+        <span class="veev veev-copy" style="font-size:16px;color:var(--text-h2)" title="copy"></span>
+        <span class="veev veev-search" style="font-size:16px;color:var(--text-h2)" title="search"></span>
+        <span class="veev veev-filter" style="font-size:16px;color:var(--text-h2)" title="filter"></span>
+        <span class="veev veev-sort" style="font-size:16px;color:var(--text-h2)" title="sort"></span>
+        <span class="veev veev-download" style="font-size:16px;color:var(--text-h2)" title="download"></span>
+        <span class="veev veev-refresh" style="font-size:16px;color:var(--text-h2)" title="refresh"></span>
+        <span class="veev veev-more" style="font-size:16px;color:var(--text-h2)" title="more"></span>
+        <span class="veev veev-share" style="font-size:16px;color:var(--text-h2)" title="share"></span>
+        <span class="veev veev-cancel" style="font-size:16px;color:var(--text-h2)" title="cancel"></span>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">状态图标<code>toast / badge</code></div>
+      <div class="kit-row__demo" style="gap:16px; flex-wrap:wrap;">
+        <span class="veev veev-circle-correct" style="font-size:16px;color:var(--success)" title="circle-correct"></span>
+        <span class="veev veev-circle-alert" style="font-size:16px;color:var(--warning)" title="circle-alert"></span>
+        <span class="veev veev-circle-wrong" style="font-size:16px;color:var(--error)" title="circle-wrong"></span>
+        <span class="veev veev-toast-success" style="font-size:20px;color:var(--success)" title="toast-success"></span>
+        <span class="veev veev-toast-info" style="font-size:20px;color:var(--blue)" title="toast-info"></span>
+        <span class="veev veev-toast-error" style="font-size:20px;color:var(--error)" title="toast-error"></span>
+        <span class="veev veev-warning" style="font-size:20px;color:var(--warning)" title="warning"></span>
+        <span class="veev veev-state-passed" style="font-size:16px;color:var(--success)" title="state-passed"></span>
+        <span class="veev veev-state-pending" style="font-size:16px;color:var(--warning)" title="state-pending"></span>
+        <span class="veev veev-state-rejected" style="font-size:16px;color:var(--error)" title="state-rejected"></span>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">图标 + 按钮<code>.v-btn 内嵌</code></div>
+      <div class="kit-row__demo" style="gap:12px; flex-wrap:wrap;">
+        <button class="v-btn v-btn--primary" style="display:inline-flex;align-items:center;gap:4px;">
+          <span class="veev veev-add" style="font-size:14px;"></span>新建拜访
+        </button>
+        <button class="v-btn v-btn--secondary" style="display:inline-flex;align-items:center;gap:4px;">
+          <span class="veev veev-download" style="font-size:14px;color:var(--text-h2)"></span>导出
+        </button>
+        <button class="v-btn v-btn--ghost" style="display:inline-flex;align-items:center;gap:4px;">
+          <span class="veev veev-filter" style="font-size:14px;color:var(--text-h2)"></span>筛选
+        </button>
+        <button class="v-btn v-btn--danger" style="display:inline-flex;align-items:center;gap:4px;">
+          <span class="veev veev-delete" style="font-size:14px;"></span>删除
+        </button>
+        <button class="v-btn v-btn--primary" style="width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;">
+          <span class="veev veev-add" style="font-size:16px;"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">AI &amp; 彩色<code>-color 大尺寸</code></div>
+      <div class="kit-row__demo" style="gap:24px; flex-wrap:wrap;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span class="veev veev-robot-color" style="font-size:48px;"></span>
+          <span style="font-size:11px;color:var(--text-h4)">robot-color</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span class="veev veev-magic-notes-color" style="font-size:48px;"></span>
+          <span style="font-size:11px;color:var(--text-h4)">magic-notes-color</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span class="veev veev-lamp-color" style="font-size:48px;"></span>
+          <span style="font-size:11px;color:var(--text-h4)">lamp-color</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span class="veev veev-approval-summary-color" style="font-size:48px;"></span>
+          <span style="font-size:11px;color:var(--text-h4)">approval-summary-color</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span class="veev veev-call-color" style="font-size:48px;"></span>
+          <span style="font-size:11px;color:var(--text-h4)">call-color</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span class="veev veev-event-color" style="font-size:48px;"></span>
+          <span style="font-size:11px;color:var(--text-h4)">event-color</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-row">
+      <div class="kit-row__label">SVG Symbol 用法<code>&lt;use xlink:href&gt;</code></div>
+      <div class="kit-row__demo" style="gap:20px; align-items:center; flex-wrap:wrap;">
+        <svg style="width:24px;height:24px;fill:var(--text-h2);" aria-hidden="true"><use xlink:href="#veev-home-outline"></use></svg>
+        <svg style="width:24px;height:24px;fill:var(--veeva-orange);" aria-hidden="true"><use xlink:href="#veev-call-solid"></use></svg>
+        <svg style="width:24px;height:24px;fill:var(--success);" aria-hidden="true"><use xlink:href="#veev-circle-correct"></use></svg>
+        <svg style="width:24px;height:24px;fill:var(--error);" aria-hidden="true"><use xlink:href="#veev-circle-wrong"></use></svg>
+        <code style="font-size:12px;color:var(--text-h3);">&lt;svg style="width:24px;height:24px;fill:currentColor"&gt;<br>&nbsp;&nbsp;&lt;use xlink:href="#veev-home-outline"&gt;&lt;/use&gt;<br>&lt;/svg&gt;</code>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

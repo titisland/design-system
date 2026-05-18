@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Veeva — Spacing</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { background: #fff; padding: 32px; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 4px; color: var(--text-h1); }
+  .sub { color: var(--text-h3); font-size: 13px; margin: 0 0 24px; max-width: 640px; line-height: 20px; }
+  h2 { font-size: 12px; font-weight: 500; color: var(--text-h4); text-transform: uppercase; letter-spacing: 0.06em; margin: 24px 0 12px; }
+  .scale { display:flex; gap: 12px; align-items: flex-end; }
+  .scale__item { display:flex; flex-direction: column; align-items: center; gap: 6px; }
+  .scale__bar { background: var(--veeva-orange); }
+  .scale__caption { font-family: var(--font-mono); font-size: 11px; color: var(--text-h4); }
+  .radius { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .spec { padding: 18px; border: 1px solid var(--border-base); border-radius: 4px; text-align:center; }
+  .spec__name { font-family: var(--font-mono); font-size: 11px; color: var(--text-h4); margin-bottom: 10px; }
+  .spec__preview { display: grid; place-items: center; height: 64px; background: var(--bg-f8); border-radius: 4px; }
+  .shadows { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .shadow-card { background: #fff; height: 48px; border-radius: 4px; }
+</style>
+</head>
+<body>
+  <h1>Spacing, radii &amp; shadows</h1>
+  <p class="sub">Dense by design — 4-px grid. Four shadow levels, no more. Pills at 20 px are the only deliberate exception to the 4-px ceiling on radii.</p>
+
+  <h2>Space scale</h2>
+  <div class="scale">
+    <div class="scale__item"><div class="scale__bar" style="width:4px;  height:40px"></div><span class="scale__caption">4</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:8px;  height:40px"></div><span class="scale__caption">8</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:12px; height:40px"></div><span class="scale__caption">12</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:16px; height:40px"></div><span class="scale__caption">16</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:20px; height:40px"></div><span class="scale__caption">20</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:24px; height:40px"></div><span class="scale__caption">24</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:32px; height:40px"></div><span class="scale__caption">32</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:40px; height:40px"></div><span class="scale__caption">40</span></div>
+    <div class="scale__item"><div class="scale__bar" style="width:64px; height:40px"></div><span class="scale__caption">64</span></div>
+  </div>
+
+  <h2>Radii</h2>
+  <div class="radius">
+    <div class="spec"><div class="spec__name">--radius-sm · 2 px</div><div class="spec__preview"><div style="width:88px; height:40px; background:#fff; border:1px solid var(--border-3); border-radius:2px"></div></div></div>
+    <div class="spec"><div class="spec__name">--radius-base · 4 px</div><div class="spec__preview"><div style="width:88px; height:40px; background:#fff; border:1px solid var(--border-3); border-radius:4px"></div></div></div>
+    <div class="spec"><div class="spec__name">--radius-round · 20 px</div><div class="spec__preview"><div style="width:88px; height:28px; background:#fff; border:1px solid var(--border-3); border-radius:20px"></div></div></div>
+  </div>
+
+  <h2>Shadows</h2>
+  <div class="shadows">
+    <div class="spec"><div class="spec__name">lighter · cards</div><div class="spec__preview" style="background:#fff"><div class="shadow-card" style="width:120px; box-shadow: var(--shadow-lighter);"></div></div></div>
+    <div class="spec"><div class="spec__name">light · toolbars</div><div class="spec__preview" style="background:#fff"><div class="shadow-card" style="width:120px; box-shadow: var(--shadow-light);"></div></div></div>
+    <div class="spec"><div class="spec__name">base · menus</div><div class="spec__preview" style="background:#fff"><div class="shadow-card" style="width:120px; box-shadow: var(--shadow-base);"></div></div></div>
+    <div class="spec"><div class="spec__name">dark · modals</div><div class="spec__preview" style="background:#fff"><div class="shadow-card" style="width:120px; box-shadow: var(--shadow-dark);"></div></div></div>
+  </div>
+</body>
+</html>

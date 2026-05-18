@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WeChat CRM — Design System</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --veeva-orange: #F7981D;
+  --wechat-blue:  #3975C6;
+  --text-h1:      #000;
+  --text-h2:      #333;
+  --text-h3:      #666;
+  --text-h4:      #999;
+  --border-base:  #EEEEEE;
+  --bg-canvas:    #F5F5F5;
+  --shadow-lighter: 0 2px 4px rgba(0,0,0,0.04);
+  --radius-base:  4px;
+  --fs-xs:  12px;
+  --fs-sm:  13px;
+  --fs-base:14px;
+  --fs-md:  16px;
+  --fw-medium: 500;
+  --fw-bold:   700;
+}
+
+body {
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB",
+               "Microsoft YaHei", system-ui, sans-serif;
+  font-size: var(--fs-base);
+  color: var(--text-h2);
+  background: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────────────── */
+.ds-header {
+  background: var(--wechat-blue);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ds-header__logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+.ds-header__divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.3);
+}
+.ds-header__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  color: rgba(255,255,255,0.9);
+}
+.ds-header__meta {
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,0.55);
+  margin-left: auto;
+}
+
+/* ── Hero ─────────────────────────────────────────── */
+.ds-hero {
+  background: #fff;
+  border-bottom: 3px solid var(--veeva-orange);
+  padding: 48px 48px 44px;
+}
+.ds-hero__eyebrow {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--veeva-orange);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+.ds-hero__h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-h1);
+  line-height: 1.15;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.ds-hero__sub {
+  font-size: var(--fs-md);
+  color: var(--text-h3);
+  max-width: 680px;
+  line-height: 26px;
+}
+.ds-hero__meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.ds-hero__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ds-hero__meta-label {
+  font-size: var(--fs-xs);
+  color: var(--text-h4);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ds-hero__meta-val {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+}
+
+/* ── Layout ───────────────────────────────────────── */
+.ds-body {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 48px 80px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* ── Sidebar nav ──────────────────────────────────── */
+.ds-sidenav {
+  position: sticky;
+  top: 24px;
+  background: #fff;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  overflow: hidden;
+}
+.ds-sidenav__section {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-base);
+}
+.ds-sidenav__section:last-child { border-bottom: none; }
+.ds-sidenav__heading {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-h4);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 8px 16px 4px;
+}
+.ds-sidenav__link {
+  display: block;
+  padding: 8px 16px;
+  font-size: var(--fs-sm);
+  color: var(--text-h3);
+  text-decoration: none;
+  transition: background .1s, color .1s;
+}
+.ds-sidenav__link:hover {
+  background: var(--bg-canvas);
+  color: var(--veeva-orange);
+}
+.ds-sidenav__link--blue:hover { color: var(--wechat-blue); }
+.ds-sidenav__link.is-featured::after {
+  content: "入口";
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-weight: 600;
+  background: #FFF1DF;
+  color: #C57100;
+  border-radius: 3px;
+  vertical-align: 1px;
+}
+
+/* ── Main content ─────────────────────────────────── */
+.ds-main { display: flex; flex-direction: column; gap: 24px; }
+
+/* ── Cards ────────────────────────────────────────── */
+.ds-card {
+  background: #fff;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  overflow: hidden;
+}
+.ds-card__head {
+  padding: 20px 24px 16px;
+  border-bottom: 2px solid var(--veeva-orange);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ds-card__head--blue { border-bottom-color: var(--wechat-blue); }
+.ds-card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+}
+.ds-card__body { padding: 24px; }
+
+/* ── Agent banner ─────────────────────────────────── */
+.ds-agents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.ds-agent {
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  padding: 20px 20px 18px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color .15s, box-shadow .15s;
+  background: #fff;
+}
+.ds-agent:hover {
+  border-color: var(--veeva-orange);
+  box-shadow: 0 2px 8px rgba(247,152,29,.12);
+}
+.ds-agent--ea:hover { border-color: var(--wechat-blue); box-shadow: 0 2px 8px rgba(57,117,198,.12); }
+.ds-agent__icon { font-size: 28px; line-height: 1; margin-bottom: 4px; }
+.ds-agent__name {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--text-h2);
+}
+.ds-agent__cn {
+  font-size: var(--fs-sm);
+  color: var(--text-h3);
+}
+.ds-agent__desc {
+  font-size: var(--fs-sm);
+  color: var(--text-h4);
+  line-height: 20px;
+  margin-top: 4px;
+}
+.ds-agent__open {
+  margin-top: 8px;
+  font-size: var(--fs-xs);
+  color: var(--veeva-orange);
+  font-weight: var(--fw-medium);
+}
+.ds-agent--ea .ds-agent__open { color: var(--wechat-blue); }
+
+/* ── Section links grid ───────────────────────────── */
+.ds-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.ds-link-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  text-decoration: none;
+  transition: border-color .15s, box-shadow .15s;
+  background: #fff;
+}
+.ds-link-item:hover {
+  border-color: var(--veeva-orange);
+  box-shadow: 0 2px 8px rgba(247,152,29,.12);
+}
+.ds-link-item--blue:hover {
+  border-color: var(--wechat-blue);
+  box-shadow: 0 2px 8px rgba(57,117,198,.12);
+}
+.ds-link-item__icon { font-size: 20px; line-height: 1; }
+.ds-link-item__name {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+}
+.ds-link-item__desc {
+  font-size: var(--fs-sm);
+  color: var(--text-h4);
+  line-height: 20px;
+}
+
+/* ── Component status table ───────────────────────── */
+.ds-status-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.ds-status-table thead th {
+  text-align: left;
+  padding: 8px 12px;
+  color: var(--text-h4);
+  border-bottom: 1px solid var(--border-base);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ds-status-table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-base);
+  color: var(--text-h2);
+  vertical-align: middle;
+}
+.ds-status-table tbody tr:last-child td { border-bottom: none; }
+.ds-status-table tbody tr:hover td { background: var(--bg-canvas); }
+
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.ds-badge--done    { background: #E5FBF2; color: #03A275; }
+.ds-badge--ea      { background: rgba(57,117,198,0.10); color: var(--wechat-blue); }
+.ds-badge--vc      { background: rgba(247,152,29,0.10); color: #C57100; }
+.ds-badge--both    { background: #F0EBF8; color: #503191; }
+.ds-badge--todo    { background: var(--bg-canvas); color: var(--text-h4); }
+
+/* ── Color swatches ───────────────────────────────── */
+.ds-color-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.ds-swatch { display: flex; flex-direction: column; gap: 4px; }
+.ds-swatch__dot {
+  width: 32px; height: 32px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,.06);
+}
+.ds-swatch__label { font-size: 10px; color: var(--text-h4); text-align: center; font-family: "SF Mono", monospace; }
+</style>
+</head>
+<body>
+
+<!-- ─── Header ───────────────────────────────────────────────────── -->
+<header class="ds-header">
+  <span class="ds-header__logo">WeChat CRM</span>
+  <div class="ds-header__divider"></div>
+  <span class="ds-header__title">Design System</span>
+  <span class="ds-header__meta">v1.0 &nbsp;·&nbsp; 2026</span>
+</header>
+
+<!-- ─── Hero ─────────────────────────────────────────────────────── -->
+<section class="ds-hero">
+  <div class="ds-hero__eyebrow">Veeva China CRM · WeCom Mini-Program</div>
+  <h1 class="ds-hero__h1">WeChat CRM<br>Design System</h1>
+  <p class="ds-hero__sub">面向医药销售代表的企业微信小程序设计规范，涵盖 Event Agent（会议小助手）与 Voice Call Agent（拜访助手）两套 AI 对话界面，以及共享的基础组件库。</p>
+  <div class="ds-hero__meta">
+    <div class="ds-hero__meta-item">
+      <span class="ds-hero__meta-label">运行平台</span>
+      <span class="ds-hero__meta-val">WeCom 企业微信 Mini-Program</span>
+    </div>
+    <div class="ds-hero__meta-item">
+      <span class="ds-hero__meta-label">基准字号</span>
+      <span class="ds-hero__meta-val">13–14 px · PingFang SC</span>
+    </div>
+    <div class="ds-hero__meta-item">
+      <span class="ds-hero__meta-label">主要语言</span>
+      <span class="ds-hero__meta-val">简体中文</span>
+    </div>
+    <div class="ds-hero__meta-item">
+      <span class="ds-hero__meta-label">CSS 文件</span>
+      <span class="ds-hero__meta-val">29 个模块</span>
+    </div>
+    <div class="ds-hero__meta-item">
+      <span class="ds-hero__meta-label">Preview 页</span>
+      <span class="ds-hero__meta-val">63 个组件预览</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Body ──────────────────────────────────────────────────────── -->
+<div class="ds-body">
+
+  <!-- Sidebar nav -->
+  <nav class="ds-sidenav">
+    <div class="ds-sidenav__section">
+      <div class="ds-sidenav__heading">入口</div>
+      <a class="ds-sidenav__link is-featured" href="preview/index.html" target="_blank">组件浏览器</a>
+    </div>
+    <div class="ds-sidenav__section">
+      <div class="ds-sidenav__heading">基础 Token</div>
+      <a class="ds-sidenav__link" href="preview/colors.html" target="_blank">色彩</a>
+      <a class="ds-sidenav__link" href="preview/type-scale.html" target="_blank">字体</a>
+      <a class="ds-sidenav__link" href="preview/spacing.html" target="_blank">间距</a>
+      <a class="ds-sidenav__link" href="preview/radii.html" target="_blank">圆角</a>
+      <a class="ds-sidenav__link" href="preview/elevation.html" target="_blank">阴影</a>
+      <a class="ds-sidenav__link" href="preview/icons.html" target="_blank">图标</a>
+    </div>
+    <div class="ds-sidenav__section">
+      <div class="ds-sidenav__heading">WeChat Framework</div>
+      <a class="ds-sidenav__link" href="preview/home.html" target="_blank">首页</a>
+      <a class="ds-sidenav__link" href="preview/lists.html" target="_blank">列表</a>
+      <a class="ds-sidenav__link" href="preview/forms-edit.html" target="_blank">表单</a>
+      <a class="ds-sidenav__link" href="preview/filters.html" target="_blank">筛选</a>
+      <a class="ds-sidenav__link" href="preview/detail.html" target="_blank">详情页</a>
+    </div>
+    <div class="ds-sidenav__section">
+      <div class="ds-sidenav__heading">AI Agent</div>
+      <a class="ds-sidenav__link" href="preview/chat-shell.html" target="_blank">Chat Shell</a>
+      <a class="ds-sidenav__link" href="preview/voice-chrome.html" target="_blank">Voice Shell</a>
+      <a class="ds-sidenav__link" href="preview/chat-cards.html" target="_blank">AI 卡片</a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="ds-main">
+
+    <!-- Agent overview -->
+    <div class="ds-card">
+      <div class="ds-card__head">
+        <span class="ds-card__title">两个 AI Agent</span>
+        <a href="preview/index.html" target="_blank" style="font-size:13px; color:var(--veeva-orange); text-decoration:none;">打开组件浏览器 →</a>
+      </div>
+      <div class="ds-card__body">
+        <div class="ds-agents">
+          <a class="ds-agent ds-agent--ea" href="preview/index.html#ea/chat-shell.html" target="_blank">
+            <div class="ds-agent__icon">📅</div>
+            <div class="ds-agent__name">Event Agent</div>
+            <div class="ds-agent__cn">会议小助手</div>
+            <div class="ds-agent__desc">管理科室会、产品研讨会的 AI 助手。覆盖医生档案、活动列表、审批流程与浮层式 Chat AI。</div>
+            <div class="ds-agent__open">打开 Chat Shell 预览 →</div>
+          </a>
+          <a class="ds-agent" href="preview/index.html#vc/voice-chrome.html" target="_blank">
+            <div class="ds-agent__icon">🎙</div>
+            <div class="ds-agent__name">Voice Call Agent</div>
+            <div class="ds-agent__cn">拜访助手 Voice Call</div>
+            <div class="ds-agent__desc">语音优先的拜访报告录入界面。语音输入、实时转录、AI 追问面板、拜访报告卡片。</div>
+            <div class="ds-agent__open">打开 Voice Shell 预览 →</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Foundation quick links -->
+    <div class="ds-card">
+      <div class="ds-card__head">
+        <span class="ds-card__title">基础规范</span>
+      </div>
+      <div class="ds-card__body">
+        <div class="ds-links">
+          <a class="ds-link-item" href="preview/colors.html" target="_blank">
+            <span class="ds-link-item__icon">🎨</span>
+            <span class="ds-link-item__name">色彩 Token</span>
+            <span class="ds-link-item__desc">品牌橙、WeChat 蓝、状态色、中性色、AI 渐变色</span>
+          </a>
+          <a class="ds-link-item" href="preview/type-scale.html" target="_blank">
+            <span class="ds-link-item__icon">Aa</span>
+            <span class="ds-link-item__name">字体排版</span>
+            <span class="ds-link-item__desc">PingFang SC · 字号 ramp · 行高 · 权重</span>
+          </a>
+          <a class="ds-link-item" href="preview/spacing.html" target="_blank">
+            <span class="ds-link-item__icon">⬜</span>
+            <span class="ds-link-item__name">间距 & 网格</span>
+            <span class="ds-link-item__desc">4px 基础网格 · sp-1 … sp-8</span>
+          </a>
+          <a class="ds-link-item" href="preview/elevation.html" target="_blank">
+            <span class="ds-link-item__icon">🪞</span>
+            <span class="ds-link-item__name">阴影 & 圆角</span>
+            <span class="ds-link-item__desc">lighter / light / base / dark · 0 / 2 / 4 / 20 px</span>
+          </a>
+          <a class="ds-link-item" href="preview/icons.html" target="_blank">
+            <span class="ds-link-item__icon">☰</span>
+            <span class="ds-link-item__name">图标库</span>
+            <span class="ds-link-item__desc">线性 / 面性 SVG · AI sparkle · Homepage 图标</span>
+          </a>
+          <a class="ds-link-item" href="preview/badges.html" target="_blank">
+            <span class="ds-link-item__icon">🏷</span>
+            <span class="ds-link-item__name">标签 & 徽章</span>
+            <span class="ds-link-item__desc">状态 chip · 审批标签 · 数字角标</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WeChat Framework links -->
+    <div class="ds-card">
+      <div class="ds-card__head ds-card__head--blue">
+        <span class="ds-card__title">WeChat Framework — 基础组件</span>
+      </div>
+      <div class="ds-card__body">
+        <div class="ds-links">
+          <a class="ds-link-item ds-link-item--blue" href="preview/component-navbar.html" target="_blank">
+            <span class="ds-link-item__icon">📱</span>
+            <span class="ds-link-item__name">Navbar</span>
+            <span class="ds-link-item__desc">88px 顶栏 · WeChat 蓝 · 白色图标</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/home.html" target="_blank">
+            <span class="ds-link-item__icon">🏠</span>
+            <span class="ds-link-item__name">首页</span>
+            <span class="ds-link-item__desc">Banner · 功能入口网格 · 数据卡 · Tab Bar</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/lists.html" target="_blank">
+            <span class="ds-link-item__icon">📋</span>
+            <span class="ds-link-item__name">列表</span>
+            <span class="ds-link-item__desc">标准行 · 头像 · 状态标签 · 操作 chip</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/forms-edit.html" target="_blank">
+            <span class="ds-link-item__icon">📝</span>
+            <span class="ds-link-item__name">表单</span>
+            <span class="ds-link-item__desc">label/value · 必填标记 · 内联错误 · 日期触发器</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/filters.html" target="_blank">
+            <span class="ds-link-item__icon">🔍</span>
+            <span class="ds-link-item__name">搜索 & 筛选</span>
+            <span class="ds-link-item__desc">搜索 pill · 筛选面板 · 数据范围选择器</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/detail.html" target="_blank">
+            <span class="ds-link-item__icon">👤</span>
+            <span class="ds-link-item__name">详情页</span>
+            <span class="ds-link-item__desc">Identity card · 分组 section · 底部操作栏</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/comp-toast.html" target="_blank">
+            <span class="ds-link-item__icon">💬</span>
+            <span class="ds-link-item__name">提示 & 反馈</span>
+            <span class="ds-link-item__desc">Toast · Modal · Banner · Field hint · Soft reminder</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/demo-hospital-list.html" target="_blank">
+            <span class="ds-link-item__icon">🏥</span>
+            <span class="ds-link-item__name">Demo：医院列表</span>
+            <span class="ds-link-item__desc">完整页面示例 — 搜索 + 筛选 + 列表 + 空状态</span>
+          </a>
+          <a class="ds-link-item ds-link-item--blue" href="preview/component-event-card.html" target="_blank">
+            <span class="ds-link-item__icon">📅</span>
+            <span class="ds-link-item__name">活动卡片</span>
+            <span class="ds-link-item__desc">Event card — 标题、状态、时间、操作</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Agent links -->
+    <div class="ds-card">
+      <div class="ds-card__head">
+        <span class="ds-card__title">AI Agent — Chat & Voice 组件</span>
+      </div>
+      <div class="ds-card__body">
+        <div class="ds-links">
+          <a class="ds-link-item" href="preview/chat-shell.html" target="_blank">
+            <span class="ds-link-item__icon">🤖</span>
+            <span class="ds-link-item__name">Chat Shell</span>
+            <span class="ds-link-item__desc">消息气泡 · 思考流 · Composer · FAB · Hint bubble</span>
+          </a>
+          <a class="ds-link-item" href="preview/chat-cards.html" target="_blank">
+            <span class="ds-link-item__icon">🃏</span>
+            <span class="ds-link-item__name">Chat 卡片</span>
+            <span class="ds-link-item__desc">Structured card · Source card · Info banners · HITL 表单</span>
+          </a>
+          <a class="ds-link-item" href="preview/chat-thinking-stream.html" target="_blank">
+            <span class="ds-link-item__icon">✨</span>
+            <span class="ds-link-item__name">Thinking Stream</span>
+            <span class="ds-link-item__desc">AI sparkle 动画 · 思考气泡 · 推理步骤流</span>
+          </a>
+          <a class="ds-link-item" href="preview/chat-pre-call-plan.html" target="_blank">
+            <span class="ds-link-item__icon">📊</span>
+            <span class="ds-link-item__name">Pre-Call Planning</span>
+            <span class="ds-link-item__desc">拜访前 AI 摘要卡 · HCP 概览 · 医学询问提醒</span>
+          </a>
+          <a class="ds-link-item" href="preview/voice-chrome.html" target="_blank">
+            <span class="ds-link-item__icon">🎙</span>
+            <span class="ds-link-item__name">Voice Shell</span>
+            <span class="ds-link-item__desc">语音输入底栏 · 实时转录 · 录音波形 · 状态指示</span>
+          </a>
+          <a class="ds-link-item" href="preview/voice-card-report.html" target="_blank">
+            <span class="ds-link-item__icon">📄</span>
+            <span class="ds-link-item__name">拜访报告卡</span>
+            <span class="ds-link-item__desc">AI 生成拜访报告卡片 · 字段 · 编辑态</span>
+          </a>
+          <a class="ds-link-item" href="preview/voice-modal-sheet.html" target="_blank">
+            <span class="ds-link-item__icon">❓</span>
+            <span class="ds-link-item__name">AI 追问面板</span>
+            <span class="ds-link-item__desc">底部抽屉 · 结构化追问 · 快速选项</span>
+          </a>
+          <a class="ds-link-item" href="preview/component-hcp-insights.html" target="_blank">
+            <span class="ds-link-item__icon">💡</span>
+            <span class="ds-link-item__name">HCP Insights</span>
+            <span class="ds-link-item__desc">医生洞察卡 · 拜访频率 · 偏好标签</span>
+          </a>
+          <a class="ds-link-item" href="preview/chat-source-card.html" target="_blank">
+            <span class="ds-link-item__icon">🔗</span>
+            <span class="ds-link-item__name">Source 卡片</span>
+            <span class="ds-link-item__desc">AI 引用来源 · 语义内容搜索结果卡</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS file index -->
+    <div class="ds-card">
+      <div class="ds-card__head">
+        <span class="ds-card__title">CSS 模块索引</span>
+      </div>
+      <div class="ds-card__body" style="padding:0;">
+        <table class="ds-status-table">
+          <thead>
+            <tr>
+              <th style="padding-left:24px">文件</th>
+              <th>用途</th>
+              <th>Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px; color:var(--veeva-orange)">colors_and_type.css</td>
+              <td>全部设计 Token（颜色、字体、间距、圆角、阴影）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">navbar.css</td>
+              <td>顶部导航栏（88px，WeChat 蓝，白色图标）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">lists.css</td>
+              <td>标准列表行（头像、标题、状态标签、次要信息）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">forms.css</td>
+              <td>一级表单（label/value 行、必填标记、内联错误）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">filters.css</td>
+              <td>外部筛选栏 + 筛选面板（文本/数字/日期/查找/下拉）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">home-*.css（7个）</td>
+              <td>首页各区域：Banner · 入口网格 · 公告条 · 数据卡 · Tab Bar · Voice 入口</td>
+              <td><span class="ds-badge ds-badge--ea">Event</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">detail-identity.css</td>
+              <td>详情页身份卡（头像 + 名称 + chip + meta + 关注 pill）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">list-shell.css</td>
+              <td>列表页框架（tabs / picker / 月份导航 / 计数条 / 空状态）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">actions.css</td>
+              <td>底部操作栏 + overflow popover</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">prompts.css</td>
+              <td>反馈提示（Toast · Modal · 底部 Banner · 字段 hint · 软提醒）</td>
+              <td><span class="ds-badge ds-badge--both">共用</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">chat-shell.css</td>
+              <td>Chat AI 浮层 Shell：消息气泡、思考流、Composer、FAB</td>
+              <td><span class="ds-badge ds-badge--ea">Event</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">chat-cards.css</td>
+              <td>Chat 卡片：Structured card · Source card · Info banners · HITL 表单</td>
+              <td><span class="ds-badge ds-badge--ea">Event</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">voice-shell.css</td>
+              <td>Voice Call Agent 主框架</td>
+              <td><span class="ds-badge ds-badge--vc">Voice</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">voice-bubbles.css</td>
+              <td>语音气泡 + 转录文字流</td>
+              <td><span class="ds-badge ds-badge--vc">Voice</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">voice-dock.css</td>
+              <td>语音输入底栏（录音按钮、波形、发送）</td>
+              <td><span class="ds-badge ds-badge--vc">Voice</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">voice-modal.css</td>
+              <td>AI 追问底部抽屉面板</td>
+              <td><span class="ds-badge ds-badge--vc">Voice</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px">voice-report.css</td>
+              <td>拜访报告卡片</td>
+              <td><span class="ds-badge ds-badge--vc">Voice</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px; font-family:'SF Mono',monospace; font-size:12px; padding-bottom:4px">voice-toasts.css</td>
+              <td style="padding-bottom:4px">语音加载提示 / 状态 Toast</td>
+              <td style="padding-bottom:4px"><span class="ds-badge ds-badge--vc">Voice</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Token overview -->
+    <div class="ds-card">
+      <div class="ds-card__head">
+        <span class="ds-card__title">Token 概览</span>
+        <a href="preview/colors.html" target="_blank" style="font-size:13px; color:var(--veeva-orange); text-decoration:none;">查看完整色板 →</a>
+      </div>
+      <div class="ds-card__body">
+        <p style="font-size:13px; color:var(--text-h4); margin-bottom:12px; font-weight:500; text-transform:uppercase; letter-spacing:.06em;">品牌色</p>
+        <div class="ds-color-row" style="margin-bottom:24px">
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#F7981D"></div><div class="ds-swatch__label">Veeva</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#3975C6"></div><div class="ds-swatch__label">WeChat</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#EB1700"></div><div class="ds-swatch__label">J&amp;J</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#00857C"></div><div class="ds-swatch__label">MSD</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#503191"></div><div class="ds-swatch__label">Merck</div></div>
+        </div>
+        <p style="font-size:13px; color:var(--text-h4); margin-bottom:12px; font-weight:500; text-transform:uppercase; letter-spacing:.06em;">AI 渐变色（Chat Bubble）</p>
+        <div class="ds-color-row" style="margin-bottom:24px">
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:linear-gradient(135deg,#3FCFD3,#4988F1)"></div><div class="ds-swatch__label">User</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#F2F2F2"></div><div class="ds-swatch__label">Bot</div></div>
+        </div>
+        <p style="font-size:13px; color:var(--text-h4); margin-bottom:12px; font-weight:500; text-transform:uppercase; letter-spacing:.06em;">状态色</p>
+        <div class="ds-color-row">
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#007AFF"></div><div class="ds-swatch__label">Blue</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#00DF93"></div><div class="ds-swatch__label">Success</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#FFCC00"></div><div class="ds-swatch__label">Warning</div></div>
+          <div class="ds-swatch"><div class="ds-swatch__dot" style="background:#FF5543"></div><div class="ds-swatch__label">Error</div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

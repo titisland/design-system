@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Veeva — Logo &amp; Icons</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { background: #fff; padding: 32px; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 4px; color: var(--text-h1); }
+  .sub { color: var(--text-h3); font-size: 13px; margin: 0 0 24px; max-width: 640px; line-height: 20px; }
+  h2 { font-size: 12px; font-weight: 500; color: var(--text-h4); text-transform: uppercase; letter-spacing: 0.06em; margin: 32px 0 12px; }
+  .logo-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .logo-tile {
+    padding: 32px; border: 1px solid var(--border-base); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 120px;
+  }
+  .logo-tile img { max-width: 180px; height: auto; }
+  .logo-tile--dark { background: #1F1F24; }
+  .icon-grid {
+    display: grid; grid-template-columns: repeat(9, 1fr); gap: 8px;
+  }
+  .icon-tile {
+    border: 1px solid var(--border-base); border-radius: 4px;
+    padding: 12px 8px 8px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .icon-tile img { width: 20px; height: 20px; }
+  .icon-tile__name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-h4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+</style>
+</head>
+<body>
+  <h1>Logo &amp; Icons</h1>
+  <p class="sub">The Veeva mark and the working icon set. Icons are monochrome — recolor via <code>filter</code> or by swapping the <code>fill</code> on the SVG root.</p>
+
+  <h2>Logo</h2>
+  <div class="logo-row">
+    <div class="logo-tile"><img src="../assets/veeva-logo.svg" alt="Veeva logo"></div>
+    <div class="logo-tile logo-tile--dark"><img src="../assets/veeva-logo.svg" alt="Veeva logo on dark"></div>
+  </div>
+
+  <h2>Icons · navigation</h2>
+  <div class="icon-grid">
+    <div class="icon-tile"><img src="../assets/icons/home.svg"><span class="icon-tile__name">home</span></div>
+    <div class="icon-tile"><img src="../assets/icons/workspace.svg"><span class="icon-tile__name">workspace</span></div>
+    <div class="icon-tile"><img src="../assets/icons/schedule.svg"><span class="icon-tile__name">schedule</span></div>
+    <div class="icon-tile"><img src="../assets/icons/user.svg"><span class="icon-tile__name">user</span></div>
+    <div class="icon-tile"><img src="../assets/icons/expand.svg"><span class="icon-tile__name">expand</span></div>
+    <div class="icon-tile"><img src="../assets/icons/chevron-down.svg"><span class="icon-tile__name">chev-down</span></div>
+    <div class="icon-tile"><img src="../assets/icons/chevron-left.svg"><span class="icon-tile__name">chev-left</span></div>
+    <div class="icon-tile"><img src="../assets/icons/bar-chart.svg"><span class="icon-tile__name">chart</span></div>
+    <div class="icon-tile"><img src="../assets/icons/table.svg"><span class="icon-tile__name">table</span></div>
+  </div>
+
+  <h2>Icons · HCP / pharma</h2>
+  <div class="icon-grid">
+    <div class="icon-tile"><img src="../assets/icons/doctor.svg"><span class="icon-tile__name">doctor</span></div>
+    <div class="icon-tile"><img src="../assets/icons/hospital.svg"><span class="icon-tile__name">hospital</span></div>
+    <div class="icon-tile"><img src="../assets/icons/pharmacy.svg"><span class="icon-tile__name">pharmacy</span></div>
+    <div class="icon-tile"><img src="../assets/icons/my-events.svg"><span class="icon-tile__name">events</span></div>
+    <div class="icon-tile"><img src="../assets/icons/sales.svg"><span class="icon-tile__name">sales</span></div>
+    <div class="icon-tile"><img src="../assets/icons/tag.svg"><span class="icon-tile__name">tag</span></div>
+    <div class="icon-tile"><img src="../assets/icons/thumbs-up.svg"><span class="icon-tile__name">thumb-up</span></div>
+  </div>
+
+  <h2>Icons · actions &amp; status</h2>
+  <div class="icon-grid">
+    <div class="icon-tile"><img src="../assets/icons/plus.svg"><span class="icon-tile__name">plus</span></div>
+    <div class="icon-tile"><img src="../assets/icons/eye.svg"><span class="icon-tile__name">eye</span></div>
+    <div class="icon-tile"><img src="../assets/icons/search.svg"><span class="icon-tile__name">search</span></div>
+    <div class="icon-tile"><img src="../assets/icons/x.svg"><span class="icon-tile__name">close</span></div>
+    <div class="icon-tile"><img src="../assets/icons/sort.svg"><span class="icon-tile__name">sort</span></div>
+    <div class="icon-tile"><img src="../assets/icons/more.svg"><span class="icon-tile__name">more-v</span></div>
+    <div class="icon-tile"><img src="../assets/icons/more-h.svg"><span class="icon-tile__name">more-h</span></div>
+    <div class="icon-tile"><img src="../assets/icons/circle-check.svg"><span class="icon-tile__name">ok</span></div>
+    <div class="icon-tile"><img src="../assets/icons/circle-warn.svg"><span class="icon-tile__name">warn</span></div>
+    <div class="icon-tile"><img src="../assets/icons/circle-error.svg"><span class="icon-tile__name">error</span></div>
+  </div>
+</body>
+</html>

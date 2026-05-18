@@ -1,0 +1,1095 @@
+/* ──────────────────────────────────────────────────────────────────
+   Veeva CRM — Component styles
+   Companion to colors_and_type.css. All components are CSS-only;
+   class names are prefixed .v-* to avoid collisions.
+   ────────────────────────────────────────────────────────────────── */
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+/* ─── Buttons ──────────────────────────────────────────────────── */
+.v-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: var(--radius-base);
+  font: inherit;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: 1;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .12s, border-color .12s, color .12s;
+}
+.v-btn--primary {
+  background: var(--veeva-orange);
+  color: #fff;
+  border-color: var(--veeva-orange);
+}
+.v-btn--primary:hover { background: #E7871A; border-color: #E7871A; }
+.v-btn--primary:active { background: #D07412; border-color: #D07412; }
+.v-btn--primary:disabled { background: #FFD28A; border-color: #FFD28A; cursor: not-allowed; }
+
+.v-btn--secondary {
+  background: #fff;
+  color: var(--text-h2);
+  border-color: var(--border-3);
+}
+.v-btn--secondary:hover { color: var(--veeva-orange); border-color: var(--veeva-orange); }
+.v-btn--secondary:active { background: #FFF6E8; }
+
+.v-btn--ghost {
+  background: transparent;
+  color: var(--text-h2);
+  border-color: transparent;
+}
+.v-btn--ghost:hover { background: var(--bg-f5); }
+
+.v-btn--link {
+  background: transparent;
+  color: var(--text-link);
+  padding: 0;
+  height: auto;
+  border: none;
+}
+.v-btn--link:hover { text-decoration: underline; }
+
+.v-btn--danger {
+  background: #fff;
+  color: var(--error);
+  border-color: var(--border-3);
+}
+.v-btn--danger:hover { color: #fff; background: var(--error); border-color: var(--error); }
+
+.v-btn--lg { height: 40px; padding: 0 20px; font-size: var(--fs-md); }
+.v-btn--sm { height: 28px; padding: 0 12px; font-size: var(--fs-sm); }
+.v-btn--icon { width: 32px; padding: 0; }
+
+.v-btn-group { display: inline-flex; gap: 8px; }
+.v-btn-group--attached .v-btn { border-radius: 0; }
+.v-btn-group--attached .v-btn:first-child { border-top-left-radius: var(--radius-base); border-bottom-left-radius: var(--radius-base); }
+.v-btn-group--attached .v-btn:last-child { border-top-right-radius: var(--radius-base); border-bottom-right-radius: var(--radius-base); }
+
+.v-icon { display: inline-block; vertical-align: -2px; }
+.v-icon-invert { filter: brightness(0) invert(1); }
+
+/* ─── Inputs ───────────────────────────────────────────────────── */
+.v-input, .v-select, .v-textarea {
+  width: 100%;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border-3);
+  border-radius: var(--radius-base);
+  background: #fff;
+  font: inherit;
+  font-size: var(--fs-base);
+  color: var(--text-h2);
+  outline: none;
+  transition: border-color .12s, box-shadow .12s;
+}
+.v-input::placeholder, .v-textarea::placeholder { color: var(--text-placeholder); }
+.v-input:hover, .v-select:hover, .v-textarea:hover { border-color: var(--veeva-orange); }
+.v-input:focus, .v-select:focus, .v-textarea:focus {
+  border-color: var(--veeva-orange);
+  box-shadow: 0 0 0 3px rgba(247,152,29,0.15);
+}
+.v-input:disabled { background: var(--bg-f5); color: var(--text-disabled); cursor: not-allowed; }
+
+.v-textarea { height: auto; padding: 8px 12px; resize: vertical; min-height: 72px; line-height: 22px; }
+
+.v-input--error, .v-select--error { border-color: var(--error); }
+.v-input--error:focus, .v-select--error:focus { box-shadow: 0 0 0 3px rgba(255,85,67,0.15); }
+
+.v-field { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 20px; }
+.v-field__label {
+  flex: 0 0 120px;
+  text-align: right;
+  padding-top: 7px;
+  font-size: var(--fs-base);
+  color: var(--text-h3);
+  white-space: nowrap;
+}
+.v-field__label--required::before { content: "*"; color: var(--error); margin-right: 2px; }
+.v-field__control { flex: 1; min-width: 0; }
+.v-field__error { color: var(--error); font-size: var(--fs-sm); margin-top: 4px; }
+.v-field__hint  { color: var(--text-h4); font-size: var(--fs-sm); margin-top: 4px; }
+
+.v-input-group { position: relative; }
+.v-input-group .v-input { padding-right: 32px; }
+.v-input-group__icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .5;
+  pointer-events: none;
+}
+.v-input-group__icon--clickable { cursor: pointer; pointer-events: auto; }
+
+.v-select {
+  appearance: none;
+  background-image: url("../assets/icons/chevron-down.svg");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+  padding-right: 32px;
+}
+
+/* ─── Checkbox & Radio ─────────────────────────────────────────── */
+.v-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--fs-base);
+  color: var(--text-h2);
+}
+.v-check input { position: absolute; opacity: 0; pointer-events: none; }
+.v-check__box, .v-check__dot {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 1px solid var(--border-3);
+  background: #fff;
+  position: relative;
+  flex: none;
+  transition: background .12s, border-color .12s;
+}
+.v-check__box { border-radius: 2px; }
+.v-check__dot { border-radius: 50%; }
+.v-check input:checked + .v-check__box {
+  background: var(--veeva-orange);
+  border-color: var(--veeva-orange);
+}
+.v-check input:checked + .v-check__box::after {
+  content: "";
+  position: absolute;
+  left: 3px; top: 0px;
+  width: 5px; height: 9px;
+  border-right: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  transform: rotate(45deg);
+}
+.v-check input:checked + .v-check__dot { border-color: var(--veeva-orange); }
+.v-check input:checked + .v-check__dot::after {
+  content: "";
+  position: absolute;
+  left: 3px; top: 3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--veeva-orange);
+}
+.v-check--disabled { color: var(--text-disabled); cursor: not-allowed; }
+
+/* ─── Switch ───────────────────────────────────────────────────── */
+.v-switch {
+  display: inline-block;
+  width: 32px; height: 18px;
+  background: #D0D3D8;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: background .15s;
+}
+.v-switch::after {
+  content: "";
+  position: absolute;
+  width: 14px; height: 14px;
+  left: 2px; top: 2px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  transition: left .15s;
+}
+.v-switch[aria-checked="true"] { background: var(--veeva-orange); }
+.v-switch[aria-checked="true"]::after { left: 16px; }
+
+/* ─── Chip / Tag ───────────────────────────────────────────────── */
+.v-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  font-size: var(--fs-xs);
+  line-height: 1;
+  border-radius: var(--radius-round);
+  background: var(--bg-f5);
+  color: var(--text-h3);
+  white-space: nowrap;
+}
+.v-tag--brand   { background: #FFF1DF; color: #C57100; }
+.v-tag--success { background: #E5FBF2; color: #03A275; }
+.v-tag--warning { background: #FFF8D9; color: #A88A00; }
+.v-tag--error   { background: #FFEEEC; color: #D13B2D; }
+.v-tag--info    { background: #E8F0FA; color: #0E62C1; }
+.v-tag--ghost   { background: #fff; color: var(--text-h3); border: 1px solid var(--border-2); }
+.v-tag__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-right: 2px; }
+
+/* ─── Card ─────────────────────────────────────────────────────── */
+.v-card {
+  background: #fff;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  padding: var(--space-6);
+}
+.v-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-base);
+}
+.v-card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+  margin: 0;
+}
+
+/* ─── Data card (accent bar) ──────────────────────────────────── */
+.v-data-card {
+  background: #fff;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lighter);
+  overflow: hidden;
+}
+.v-data-card__title {
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+  border-bottom: 2px solid var(--veeva-orange);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ─── Table ────────────────────────────────────────────────────── */
+.v-table { width: 100%; border-collapse: collapse; font-size: var(--fs-base); }
+.v-table thead th {
+  background: var(--bg-f8);
+  font-weight: var(--fw-medium);
+  text-align: left;
+  padding: 10px 20px;
+  color: var(--text-h3);
+  border-bottom: 1px solid var(--border-base);
+  white-space: nowrap;
+}
+.v-table thead th .v-th-filter { margin-left: 6px; opacity: .5; }
+.v-table tbody td {
+  padding: 12px 20px;
+  color: var(--text-h2);
+  border-bottom: 1px solid var(--border-base);
+  vertical-align: middle;
+}
+.v-table tbody tr:hover { background: var(--bg-row-hover); }
+.v-table tbody tr.is-selected { background: #FFF1DE; }
+.v-table__empty { padding: 64px 0; text-align: center; color: var(--text-disabled); }
+
+/* ─── Pagination ──────────────────────────────────────────────── */
+.v-pager {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: var(--fs-sm);
+  color: var(--text-h3);
+}
+.v-pager__btn {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-2);
+  background: #fff;
+  border-radius: var(--radius-base);
+  cursor: pointer;
+}
+.v-pager__btn:hover { color: var(--veeva-orange); border-color: var(--veeva-orange); }
+.v-pager__btn--active {
+  background: var(--veeva-orange);
+  border-color: var(--veeva-orange);
+  color: #fff;
+}
+.v-pager__input {
+  width: 44px; height: 28px;
+  padding: 0 4px;
+  text-align: center;
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-base);
+  font: inherit;
+}
+.v-pager__sep { color: var(--text-h4); }
+.v-pager__total { margin-left: auto; color: var(--text-h3); }
+
+/* ─── Modal ────────────────────────────────────────────────────── */
+.v-modal-scrim {
+  position: fixed; inset: 0;
+  background: var(--bg-overlay);
+  display: grid; place-items: center;
+  z-index: 100;
+}
+.v-modal {
+  width: 480px;
+  max-width: calc(100vw - 48px);
+  background: #fff;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-dark);
+  overflow: hidden;
+}
+.v-modal--lg { width: 640px; }
+.v-modal--xl { width: 800px; }
+.v-modal__body {
+  padding: 24px;
+  display: flex; gap: 12px;
+  color: var(--text-h2);
+}
+.v-modal__body-icon { flex: none; }
+.v-modal__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  line-height: 22px;
+  margin: 0 0 8px;
+}
+.v-modal__msg { font-size: var(--fs-base); color: var(--text-h2); }
+.v-modal__actions {
+  display: flex; gap: 12px;
+  justify-content: flex-end;
+  padding: 0 24px 20px;
+}
+
+/* ─── Toast / Banner ───────────────────────────────────────────── */
+.v-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-base);
+  font-size: var(--fs-base);
+  color: var(--text-h2);
+}
+.v-banner--info    { background: #EFF6FF; }
+.v-banner--success { background: #E5FBF2; }
+.v-banner--warning { background: #FFF8DE; }
+.v-banner--error   { background: #FFEEEC; }
+
+/* ─── Tabs ─────────────────────────────────────────────────────── */
+.v-tabs { display: flex; gap: 32px; border-bottom: 1px solid var(--border-base); }
+.v-tabs__item {
+  padding: 14px 0;
+  font-size: var(--fs-base);
+  color: var(--text-h3);
+  cursor: pointer;
+  position: relative;
+}
+.v-tabs__item.is-active { color: var(--veeva-orange); }
+.v-tabs__item.is-active::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
+  height: 2px; background: var(--veeva-orange);
+}
+
+/* ─── Breadcrumb ──────────────────────────────────────────────── */
+.v-crumb { display: flex; gap: 8px; font-size: var(--fs-sm); color: var(--text-h4); }
+.v-crumb a { color: var(--text-h4); text-decoration: none; }
+.v-crumb a:hover { color: var(--veeva-orange); }
+.v-crumb__sep::before { content: "/"; margin: 0 4px; color: var(--text-disabled); }
+
+/* ─── Avatar ──────────────────────────────────────────────────── */
+.v-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--veeva-orange-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  overflow: hidden;
+  flex: none;
+}
+.v-avatar--sm { width: 24px; height: 24px; font-size: 11px; }
+.v-avatar--lg { width: 40px; height: 40px; font-size: 16px; }
+
+/* ─── Section header  ─────────────────────────────────────────── */
+.v-section-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+  margin: 0 0 20px;
+}
+.v-section-title__mark {
+  width: 18px; height: 18px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 4px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+
+/* ─── App shell ───────────────────────────────────────────────── */
+.v-app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr;
+  background: var(--bg-canvas);
+}
+.v-topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--border-base);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 32px;
+  grid-column: 1 / -1;
+}
+.v-topbar__logo { height: 26px; }
+.v-topbar__nav { display: flex; gap: 4px; margin-left: 24px; }
+.v-topbar__nav a {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 52px; padding: 0 16px;
+  text-decoration: none;
+  color: var(--text-h2);
+  font-size: var(--fs-base);
+}
+.v-topbar__nav a.is-active {
+  color: var(--veeva-orange);
+  box-shadow: inset 0 -2px 0 var(--veeva-orange);
+}
+.v-topbar__right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 24px;
+  color: var(--text-h2);
+}
+
+/* grid switches column width when sidebar is expanded */
+.v-app__body {
+  display: grid;
+  grid-template-columns: var(--sidebar-w-collapsed) 1fr;
+  min-height: 0;
+  transition: grid-template-columns .2s ease;
+}
+.v-app__body.sidebar-expanded {
+  grid-template-columns: var(--sidebar-w-expanded) 1fr;
+}
+
+/* ─── Sidebar (two-level, collapsible) ─────────────────────────── */
+/* Replaces the old .v-rail. Supports collapsed (52px icon-only)
+   and expanded (220px category + menu tree) states. */
+
+.v-sidebar {
+  background: var(--bg-f8);
+  box-shadow: var(--shadow-sidebar);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: var(--sidebar-w-collapsed);
+  transition: width .2s ease;
+  position: relative;
+  z-index: 10;
+}
+.v-sidebar.is-expanded { width: var(--sidebar-w-expanded); }
+
+/* Search – only shown when expanded */
+.v-sidebar__search-wrap {
+  padding: 10px 10px 6px;
+  display: none;
+  flex: none;
+  position: relative;
+}
+.v-sidebar.is-expanded .v-sidebar__search-wrap { display: block; }
+/* Search icon via ::before on the wrap */
+.v-sidebar__search-wrap::before {
+  content: "\e669"; /* veev-search */
+  font-family: veev;
+  position: absolute;
+  left: 19px; top: 50%; transform: translateY(-60%);
+  font-size: 13px;
+  color: var(--text-h4);
+  pointer-events: none;
+}
+.v-sidebar__search {
+  width: 100%;
+  height: 30px;
+  border: 1px solid var(--border-2);
+  border-radius: 15px;
+  padding: 0 10px 0 28px;
+  font: inherit;
+  font-size: var(--fs-xs);
+  color: var(--text-h2);
+  background: var(--bg-white);
+  outline: none;
+}
+.v-sidebar__search:focus { border-color: var(--veeva-orange); outline: none; }
+
+/* Scrollable body */
+.v-sidebar__body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 4px 0; }
+
+/* ── Category row ────────────────────────────────────────────────── */
+.v-sidebar__category { position: relative; }
+
+.v-sidebar__cat-head {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  gap: 0;
+  white-space: nowrap;
+}
+
+/* Expanded sidebar: full-row hover */
+.v-sidebar.is-expanded .v-sidebar__cat-head:hover { background: rgba(247,152,29,0.08); }
+.v-sidebar.is-expanded .v-sidebar__cat-head:hover .v-sidebar__cat-icon,
+.v-sidebar.is-expanded .v-sidebar__cat-head:hover .v-sidebar__cat-name { color: var(--veeva-orange); }
+
+/* Category with a selected child — expanded */
+.v-sidebar.is-expanded .v-sidebar__category.has-active > .v-sidebar__cat-head {
+  background: rgba(247,152,29,0.08);
+}
+.v-sidebar__category.has-active .v-sidebar__cat-icon,
+.v-sidebar__category.has-active .v-sidebar__cat-name { color: var(--veeva-orange); }
+
+/* Icon slot */
+.v-sidebar__cat-icon {
+  width: 52px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-h3);
+  flex: none;
+  border-radius: 8px;
+  transition: background .12s, color .12s;
+}
+
+/* Collapsed sidebar: center icon, all states have rounded square bg */
+.v-sidebar:not(.is-expanded) .v-sidebar__cat-head {
+  justify-content: center;
+}
+/* Default: light gray bg */
+.v-sidebar:not(.is-expanded) .v-sidebar__cat-icon {
+  width: 36px;
+  background: var(--bg-f5);
+  color: var(--text-h3);
+}
+/* Hover (no selection): medium gray bg, icon stays dark */
+.v-sidebar:not(.is-expanded) .v-sidebar__cat-head:hover .v-sidebar__cat-icon {
+  background: #E0E0E0;
+  color: var(--text-h2);
+}
+/* Click / :active: light orange bg, orange icon */
+.v-sidebar:not(.is-expanded) .v-sidebar__cat-head:active .v-sidebar__cat-icon {
+  background: rgba(247,152,29,0.15);
+  color: var(--veeva-orange);
+}
+/* Selected (has active child): solid orange bg, white icon */
+.v-sidebar:not(.is-expanded) .v-sidebar__category.has-active .v-sidebar__cat-icon {
+  background: var(--veeva-orange);
+  color: #fff;
+}
+/* Keep solid orange even on hover when selected */
+.v-sidebar:not(.is-expanded) .v-sidebar__category.has-active .v-sidebar__cat-head:hover .v-sidebar__cat-icon {
+  background: var(--veeva-orange);
+  color: #fff;
+}
+
+/* Name – hidden when collapsed */
+.v-sidebar__cat-name {
+  flex: 1;
+  font-size: var(--fs-sm);
+  color: var(--text-h2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+}
+.v-sidebar.is-expanded .v-sidebar__cat-name { display: block; }
+
+/* Chevron – hidden when collapsed */
+.v-sidebar__cat-arrow {
+  font-size: 10px;
+  color: var(--text-h4);
+  margin-right: 12px;
+  flex: none;
+  transition: transform .2s;
+  display: none;
+}
+.v-sidebar.is-expanded .v-sidebar__cat-arrow { display: block; }
+.v-sidebar__category.is-expanded > .v-sidebar__cat-head .v-sidebar__cat-arrow {
+  transform: rotate(90deg);
+  color: var(--veeva-orange);
+}
+
+/* ── Menu items (within expanded category) ───────────────────────── */
+.v-sidebar__items { display: none; padding: 2px 0 4px; }
+.v-sidebar.is-expanded .v-sidebar__category.is-expanded .v-sidebar__items { display: block; }
+
+.v-sidebar__item {
+  height: 36px;
+  margin: 2px 8px;
+  padding: 0 12px 0 44px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-sm);
+  color: var(--text-h3);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background .12s, color .12s;
+}
+.v-sidebar__item:hover {
+  background: var(--bg-f5);
+  color: var(--text-h2);
+}
+.v-sidebar__item.is-active {
+  background: var(--veeva-orange);
+  color: #fff;
+  font-weight: var(--fw-medium);
+}
+
+/* ── Flyout (collapsed state, hover on category) ─────────────────── */
+/* Shown when the sidebar is collapsed (not .is-expanded) and the
+   category row is hovered. Max 664×536 px per spec. */
+.v-sidebar__flyout {
+  position: fixed;
+  /* top is set inline by JS to match the hovered category's Y */
+  left: var(--sidebar-w-collapsed);
+  min-width: 160px;
+  max-width: 664px;
+  max-height: 536px;
+  overflow-y: auto;
+  background: var(--bg-white);
+  border: 1px solid var(--border-base);
+  box-shadow: var(--shadow-base);
+  border-radius: 0 var(--radius-base) var(--radius-base) 0;
+  z-index: 100;
+  padding: 6px 0;
+  /* hidden by default; shown via JS */
+  display: none;
+  pointer-events: none;
+}
+.v-sidebar__flyout.is-visible {
+  display: block;
+  pointer-events: auto;
+}
+.v-sidebar.is-expanded .v-sidebar__flyout { display: none !important; }
+
+.v-sidebar__flyout-title {
+  padding: 6px 16px 4px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-h4);
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+.v-sidebar__flyout-items { padding: 0; }
+.v-sidebar__flyout-item {
+  padding: 9px 20px;
+  font-size: var(--fs-sm);
+  color: var(--text-h2);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.v-sidebar__flyout-item:hover { background: var(--bg-f5); color: var(--veeva-orange); }
+.v-sidebar__flyout-item.is-active { color: var(--veeva-orange); font-weight: var(--fw-medium); }
+
+/* ── Sidebar footer toggle ──────────────────────────────────────── */
+.v-sidebar__footer {
+  flex: none;
+  border-top: 1px solid var(--border-base);
+}
+.v-sidebar__toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  width: 100%;
+  padding: 0 0 0 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fs-sm);
+  color: var(--text-h3);
+}
+.v-sidebar__toggle:hover { background: var(--bg-f5); color: var(--text-h2); }
+.v-sidebar__toggle-icon { font-size: 16px; flex: none; width: 20px; text-align: center; }
+.v-sidebar__toggle-text { display: none; white-space: nowrap; }
+.v-sidebar.is-expanded .v-sidebar__toggle-text { display: block; }
+/* Arrow flips direction based on expanded state */
+.v-sidebar__toggle .toggle-arrow { transition: transform .2s; }
+.v-sidebar.is-expanded .v-sidebar__toggle .toggle-arrow { transform: rotate(180deg); }
+
+/* ── Legacy .v-rail (kept for backward compatibility) ───────────── */
+.v-rail {
+  background: var(--bg-f8);
+  box-shadow: var(--shadow-sidebar);
+  padding: 16px 0;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+}
+.v-rail__item {
+  width: 52px; height: 52px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-h2);
+  cursor: pointer;
+  position: relative;
+}
+.v-rail__item:hover { background: rgba(247,152,29,0.08); }
+.v-rail__item.is-active { background: rgba(247,152,29,0.12); color: var(--veeva-orange); }
+.v-rail__item.is-active::before {
+  content: ""; position: absolute; left: 0; top: 8px; bottom: 8px;
+  width: 3px; background: var(--veeva-orange); border-radius: 0 2px 2px 0;
+}
+
+/* ── Table row actions ──────────────────────────────────────────── */
+/* Small icon buttons, always visible at row end. Colored. */
+.v-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.v-row-action {
+  width: 24px; height: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  color: var(--text-h4);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: color .12s, background .12s;
+}
+.v-row-action:hover { background: var(--bg-f5); }
+.v-row-action--view  { color: var(--veeva-orange); }
+.v-row-action--edit  { color: var(--veeva-orange); }
+.v-row-action--delete { color: var(--error); }
+.v-row-action--view:hover  { background: #FFF1DF; }
+.v-row-action--edit:hover  { background: #FFF1DF; }
+.v-row-action--delete:hover { background: #FFEEEC; }
+
+/* ── Workspace ──────────────────────────────────────────────────── */
+.v-workspace { padding: 24px 32px; min-width: 0; }
+
+/* ── Detail page: accordion sections ───────────────────────────── */
+/* Flat white card with border. Arrow on far right rotates on open.
+   No orange left border — clean card style matching design spec. */
+.v-section {
+  background: var(--bg-white);
+  border: 1px solid var(--border-base);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lighter);
+}
+.v-section__head {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 16px 0 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s;
+  position: relative;
+}
+/* Orange left stripe only on the header row when section is open */
+.v-section.is-open > .v-section__head::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--veeva-orange);
+}
+.v-section__head:hover { background: var(--bg-f5); }
+.v-section.is-open > .v-section__head {
+  border-bottom: 1px solid var(--border-base);
+}
+/* Arrow sits on the LEFT of the title */
+.v-section__arrow {
+  order: -1;
+  flex: none;
+  font-size: 10px;
+  color: var(--text-h4);
+  transition: transform .2s, color .2s;
+  width: 20px;
+  text-align: center;
+  margin-right: 4px;
+}
+.v-section.is-open > .v-section__head .v-section__arrow {
+  transform: rotate(90deg);
+  color: var(--veeva-orange);
+}
+.v-section__title {
+  flex: 1;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-h2);
+}
+/* Extra actions (e.g. Edit button) stay on the right */
+.v-section__head-extra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 8px;
+}
+.v-section__body { display: none; padding: 16px 20px; }
+.v-section.is-open > .v-section__body { display: block; }
+
+/* ── Detail page: horizontal label-value layout ─────────────────── */
+/* Two-column grid. Labels are fixed-width, right-aligned.
+   Values grow left to fill remaining space. */
+.v-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 32px;
+}
+.v-info-item {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+}
+.v-info-label {
+  width: 80px;
+  flex: none;
+  font-size: var(--fs-sm);
+  color: var(--text-h4);
+  line-height: 22px;
+  text-align: right;
+  padding-right: 12px;
+}
+.v-info-value {
+  flex: 1;
+  font-size: var(--fs-sm);
+  color: var(--text-h2);
+  line-height: 22px;
+  min-width: 0;
+  word-break: break-word;
+}
+.v-info-item--full { grid-column: 1 / -1; }
+.v-info-value--empty { color: var(--text-placeholder); }
+
+/* ── Detail page: sticky section-navigation tab bar ─────────────── */
+/* Sits directly in the scroll flow after the hero area.
+   CSS sticky: sticks to top:0 once scrolled past hero.
+   JS adds .is-stuck when hero is out of view → reveals back button.
+   JS adds .has-overflow when tabs overflow → reveals arrow buttons. */
+.detail-tab-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: stretch;
+  height: 44px;
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-base);
+  transition: box-shadow .2s;
+}
+.detail-tab-bar.is-stuck {
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+/* Back button — hidden until tab bar is stuck */
+.detail-tab-bar__back {
+  flex: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  border: none;
+  border-right: 1px solid var(--border-base);
+  background: none;
+  cursor: pointer;
+  color: var(--text-h3);
+  font-size: 14px;
+  transition: background .12s, color .12s;
+  font-family: inherit;
+}
+.detail-tab-bar__back:hover { background: var(--bg-f5); color: var(--text-h2); }
+.detail-tab-bar.is-stuck .detail-tab-bar__back { display: flex; }
+
+/* Left / right scroll arrows — hidden until tabs overflow */
+.detail-tab-bar__nav {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  border: none;
+  border-right: 1px solid var(--border-base);
+  background: var(--bg-white);
+  cursor: pointer;
+  color: var(--text-h4);
+  font-size: 11px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s, background .12s;
+  font-family: inherit;
+}
+.detail-tab-bar__nav--right {
+  border-right: none;
+  border-left: 1px solid var(--border-base);
+}
+.detail-tab-bar.has-overflow .detail-tab-bar__nav {
+  opacity: 1;
+  pointer-events: auto;
+}
+.detail-tab-bar__nav:hover { background: var(--bg-f5); color: var(--text-h2); }
+
+/* Tab scroll container — hides native scrollbar */
+.detail-tab-bar__scroll {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+.detail-tab-bar__scroll::-webkit-scrollbar { display: none; }
+
+/* Individual tab items — flex:1 fills width equally;
+   min-width prevents over-compression when many tabs exist */
+.detail-tab-bar__item {
+  flex: 1;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-sm);
+  color: var(--text-h3);
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 0 8px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  user-select: none;
+  transition: color .12s, background .12s;
+}
+.detail-tab-bar__item:hover { color: var(--text-h2); background: var(--bg-f5); }
+.detail-tab-bar__item.is-active {
+  color: var(--veeva-orange);
+  border-bottom-color: var(--veeva-orange);
+  font-weight: var(--fw-medium);
+}
+
+/* ── Form row layout (.v-form-row) ────────────────────────────── */
+/* 96px right-aligned label + flex control. Pair with .v-input etc. */
+.v-form-row { display: flex; align-items: flex-start; }
+.v-form-row__label {
+  width: 96px;
+  flex: none;
+  text-align: right;
+  padding-right: 12px;
+  padding-top: 7px;
+  font-size: var(--fs-base);
+  color: var(--text-h3);
+  line-height: 22px;
+}
+.v-form-row__label--required::before { content: '*'; color: var(--error); margin-right: 2px; }
+.v-form-row__control { flex: 1; min-width: 0; }
+
+/* ── Info field — wide label (.v-info-field) ──────────────────── */
+/* Detail-view label-value pair. 144px label (vs 80px in .v-info-label),
+   32px line-height, pre-line whitespace for multiline values. */
+.v-info-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 32px;
+}
+.v-info-field__label {
+  width: 144px;
+  flex: none;
+  text-align: right;
+  font-size: var(--fs-base);
+  color: var(--text-h3);
+  line-height: 32px;
+}
+.v-info-field__value {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-base);
+  color: var(--text-h2);
+  line-height: 32px;
+  word-break: break-word;
+  white-space: pre-line;
+}
+.v-info-field__value--empty { color: var(--text-placeholder); }
+
+/* ── Panel section variant (.v-section--panel) ────────────────── */
+/* Heavier 8px orange accent bar on header left, 50px header, 16px title.
+   Apply alongside .v-section: <div class="v-section v-section--panel is-open"> */
+.v-section--panel {
+  position: relative;
+  border: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.04);
+}
+/* Suppress the 3px inline stripe inherited from base .v-section */
+.v-section--panel.is-open > .v-section__head::before { display: none; }
+/* 8px bar — covers full header height, hidden when collapsed */
+.v-section--panel.is-open::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 8px;
+  height: 50px;
+  background: var(--veeva-orange);
+  border-radius: 4px 0 0 4px;
+}
+.v-section--panel:not(.is-open)::before { display: none; }
+.v-section--panel > .v-section__head { height: 50px; padding-left: 24px; }
+.v-section--panel > .v-section__head .v-section__title { font-size: var(--fs-md); }
+.v-section--panel.is-open > .v-section__body { display: block; }
+
+/* ── Pagination: page-size dropdown (.v-pager__size-select) ───── */
+.v-pager__size-select { position: relative; }
+.v-pager__size-btn {
+  height: 28px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--border-2);
+  background: #fff;
+  border-radius: var(--radius-base);
+  font: inherit;
+  font-size: var(--fs-sm);
+  color: var(--text-h2);
+  cursor: pointer;
+  transition: border-color .12s, color .12s;
+}
+.v-pager__size-btn:hover { color: var(--veeva-orange); border-color: var(--veeva-orange); }
+.v-pager__size-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 4px;
+  min-width: 110px;
+  background: #fff;
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-base);
+  z-index: 10;
+  padding: 4px 0;
+}
+.v-pager__size-option {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  text-align: left;
+  font: inherit;
+  font-size: var(--fs-base);
+  color: var(--text-h2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background .1s;
+}
+.v-pager__size-option:hover { background: var(--bg-f5); }
+.v-pager__size-option.is-active { color: var(--veeva-orange); }
