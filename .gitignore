@@ -20,3 +20,6 @@ npm-debug.log*
 # Temp
 *.tmp
 *.bak
+
+# Claude Code local settings
+.claude/
