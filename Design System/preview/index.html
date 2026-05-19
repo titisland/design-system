@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>CRM Online Design System</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange:    #F7981D;
+    --fg1:       #000;
+    --fg2:       #333;
+    --fg3:       #666;
+    --fg4:       #999;
+    --border:    #EEEEEE;
+    --bg-page:   #F4F6F8;
+    --bg-card:   #FFFFFF;
+    --sidebar-w: 220px;
+    --header-h:  52px;
+  }
+
+  body {
+    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Inter", system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--fg2);
+    background: var(--bg-page);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .header {
+    height: var(--header-h);
+    background: var(--orange);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .header__title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  .header__tag {
+    font-size: 11px;
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2px 8px;
+    letter-spacing: 0.3px;
+  }
+  .header__back {
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    padding: 4px 12px;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px;
+    transition: background 100ms;
+  }
+  .header__back:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  /* ── Layout ── */
+  .layout {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    flex-shrink: 0;
+    padding: 12px 0 24px;
+  }
+  .sidebar__group-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--fg4);
+    padding: 10px 16px 4px;
+  }
+  .sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    cursor: pointer;
+    color: var(--fg3);
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: background 80ms, color 80ms, border-color 80ms;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar__item:hover { background: #F8F8F8; color: var(--fg2); }
+  .sidebar__item.active {
+    color: var(--orange);
+    border-left-color: var(--orange);
+    background: rgba(247,152,29,0.06);
+    font-weight: 500;
+  }
+  .sidebar__dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+  .sidebar__item.active .sidebar__dot { opacity: 1; }
+
+  /* ── Preview pane ── */
+  .preview-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg-page);
+  }
+  .preview-toolbar {
+    height: 40px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .preview-toolbar__name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg2);
+  }
+  .preview-toolbar__file {
+    font-size: 11px;
+    color: var(--fg4);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+  .preview-toolbar__open {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--orange);
+    text-decoration: none;
+    padding: 3px 10px;
+    border: 1px solid var(--orange);
+    border-radius: 20px;
+    transition: background 100ms;
+    white-space: nowrap;
+  }
+  .preview-toolbar__open:hover { background: rgba(247,152,29,0.08); }
+
+  .preview-frame-wrap {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+  .preview-frame-wrap iframe {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+    background: #fff;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    min-height: 400px;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <span class="header__title">CRM Online Design System</span>
+  <span class="header__tag">2026</span>
+  <a class="header__back" href="../../index.html">← 返回 Hub</a>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <main class="preview-pane">
+    <div class="preview-toolbar">
+      <span class="preview-toolbar__name" id="previewName">选择左侧页面预览</span>
+      <span class="preview-toolbar__file" id="previewFile"></span>
+      <a class="preview-toolbar__open" id="previewOpen" href="#" target="_blank" style="display:none">在新标签页打开 ↗</a>
+    </div>
+    <div class="preview-frame-wrap">
+      <iframe id="previewFrame" src="about:blank" title="Component preview"></iframe>
+    </div>
+  </main>
+</div>
+
+<script>
+const ITEMS = [
+  { group: "Foundation" },
+  { name: "Color tokens",  file: "colors.html" },
+  { name: "Typography",    file: "type.html" },
+  { name: "Spacing",       file: "spacing.html" },
+  { name: "Logo",          file: "logo.html" },
+  { name: "Icons",         file: "icons.html" },
+
+  { group: "UI Kit · Components" },
+  { name: "Components",    file: "../ui-kit/components.html" },
+  { name: "App Shell",     file: "../ui-kit/layout.html" },
+  { name: "Brand Themes",  file: "../ui-kit/brand-themes.html" },
+
+  { group: "Pages · 页面示例" },
+  { name: "Target HCP",    file: "../screens/hcp.html" },
+  { name: "Call Record",   file: "../screens/call.html" },
+];
+
+let currentFile = null;
+
+function buildSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  ITEMS.forEach(item => {
+    if (item.group) {
+      const g = document.createElement('div');
+      g.innerHTML = `<div class="sidebar__group-label">${item.group}</div>`;
+      sidebar.appendChild(g);
+    } else {
+      const el = document.createElement('div');
+      el.className = 'sidebar__item' + (item.file === currentFile ? ' active' : '');
+      el.dataset.file = item.file;
+      el.innerHTML = `<span class="sidebar__dot"></span>${item.name}`;
+      el.onclick = () => loadPreview(item.file, item.name, el);
+      sidebar.appendChild(el);
+    }
+  });
+}
+
+function loadPreview(file, name, el) {
+  currentFile = file;
+  document.querySelectorAll('.sidebar__item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('previewName').textContent = name;
+  document.getElementById('previewFile').textContent = file;
+  const openLink = document.getElementById('previewOpen');
+  openLink.href = file;
+  openLink.style.display = '';
+  document.getElementById('previewFrame').src = file + '?v=' + Date.now();
+  location.hash = file;
+}
+
+(function init() {
+  buildSidebar();
+  const hashFile = location.hash.slice(1);
+  const target = hashFile && ITEMS.find(i => i.file === hashFile)
+    ? hashFile
+    : (ITEMS.find(i => i.file) || {}).file;
+  if (target) {
+    setTimeout(() => {
+      const el = document.querySelector(`.sidebar__item[data-file="${CSS.escape(target)}"]`);
+      if (el) el.click();
+    }, 0);
+  }
+})();
+</script>
+</body>
+</html>
