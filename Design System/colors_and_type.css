@@ -338,21 +338,20 @@ body,
 
 
 /* ══════════════════════════════════════════════════════════════════
-   VEEVA CRM ONLINE — 补充 tokens
-   来源：Veeva CRM Online Design System / colors_and_type.css
-   策略：所有变量均为新增别名或新增 token，不修改上方任何现有变量。
+   SHARED SHORT-HAND ALIASES
+   两套产品共用的简写别名 + 各自的专属 token。
+   WeChat Design System 为基础，Online 专属 token 有注释标记。
    ══════════════════════════════════════════════════════════════════ */
 
 :root {
 
-  /* ── Brand 短别名（ui-kit HTML 引用此命名）──────────────────── */
-  --veeva-orange:   var(--color-brand-veeva);   /* #F7981D */
-  --veeva-orange-2: #f8a83a;                    /* 略浅暖橙，头像/次级强调 */
-  --brand-jj:       var(--color-brand-jj);      /* #EB1700 */
-  --brand-msd:      var(--color-brand-msd);     /* #00857C */
-  --brand-merck:    var(--color-brand-merck);   /* #503191 */
+  /* ── Brand 短别名 ────────────────────────────────────────────── */
+  --veeva-orange: var(--color-brand-veeva);   /* #F7981D */
+  --brand-jj:     var(--color-brand-jj);      /* #EB1700 */
+  --brand-msd:    var(--color-brand-msd);     /* #00857C */
+  --brand-merck:  var(--color-brand-merck);   /* #503191 */
 
-  /* Brand alpha 快捷变量（与 light-* 等值，命名更语义化）*/
+  /* Brand alpha 快捷变量 */
   --brand-a65: var(--color-brand-veeva-light-6);  /* 65% */
   --brand-a50: var(--color-brand-veeva-light-5);  /* 50% */
   --brand-a40: var(--color-brand-veeva-light-4);  /* 40% */
@@ -361,7 +360,7 @@ body,
   --brand-a05: var(--color-brand-veeva-light-0);  /*  5% */
 
   /* ── Status 短别名 ──────────────────────────────────────────── */
-  --blue:    var(--color-veeva-blue);   /* #007AFF 链接/信息强调 */
+  --blue:    var(--color-veeva-blue);   /* #007AFF */
   --success: var(--color-success);     /* #00DF93 */
   --warning: var(--color-warning);     /* #FFCC00 */
   --error:   var(--color-error);       /* #FF5543 */
@@ -378,25 +377,25 @@ body,
   --text-link:        var(--color-fg-link);
   --text-on-brand:    var(--color-white);
 
-  /* ── Border 短别名 + 新 token ───────────────────────────────── */
+  /* ── Border 短别名 ──────────────────────────────────────────── */
   --border-base:   var(--color-border-base);   /* #EEEEEE */
   --border-2:      var(--color-border-e2);     /* #E2E2E2 */
   --border-3:      var(--color-border-cc);     /* #CCCCCC */
-  --border-soft:   var(--color-border-l6);     /* #F2F5FC 蓝色调软边框 */
-  --border-accent: var(--color-brand-veeva);   /* #F7981D 数据区橙色顶边线 */
+  --border-soft:   var(--color-border-l6);     /* #F2F5FC */
+  --border-accent: var(--color-brand-veeva);   /* #F7981D 数据区顶边线 */
 
-  /* ── Background 短别名 + 新 token ──────────────────────────── */
-  --bg-canvas:    #f4f6f8;          /* CRM Online 工作区底色（略深于 WeChat f8f8f8）*/
-  --bg-f2:        var(--color-bg-f2);
-  --bg-f5:        var(--color-bg-f5);
-  --bg-f8:        var(--color-bg-f8);
-  --bg-fa:        var(--color-bg-fa);
-  --bg-white:     var(--color-bg-white);
-  --bg-overlay:   rgba(0, 0, 0, 0.45);   /* CRM modal 遮罩（WeChat 用 0.50）*/
-  --bg-row-hover: #fff6e8;               /* 橙色调行悬停背景（CRM 专用）*/
+  /* ── Background 短别名 ──────────────────────────────────────── */
+  --bg-white:  var(--color-bg-white);
+  --bg-fa:     var(--color-bg-fa);
+  --bg-f8:     var(--color-bg-f8);
+  --bg-f5:     var(--color-bg-f5);
+  --bg-f2:     var(--color-bg-f2);
+  --bg-canvas: #f4f6f8;   /* Desktop 工作区底色（略深于 WeChat #f8f8f8）*/
+
+  /* 行 hover 背景（桌面表格专用）*/
+  --bg-row-hover: #fff6e8;   /* 橙色调 */
 
   /* ── Chart / Category 顺序色板 ──────────────────────────────── */
-  /* 与上方 --color-palette-* 颜色相同，提供 cat-N 顺序下标以便循环使用 */
   --cat-1: #ff945a;
   --cat-2: #ffcc00;
   --cat-3: #c4e649;
@@ -407,53 +406,44 @@ body,
   --cat-8: #aca3ff;
   --cat-9: #f26d5f;
 
-  /* ── Spacing 别名（--space-* 对应 --sp-*）────────────────────── */
-  --space-0:   0px;
-  --space-1:   var(--sp-1);   /* 4px */
-  --space-2:   var(--sp-2);   /* 8px */
-  --space-3:   var(--sp-3);   /* 12px */
-  --space-4:   var(--sp-4);   /* 16px */
-  --space-5:   var(--sp-5);   /* 20px */
-  --space-6:   var(--sp-6);   /* 24px */
-  --space-8:   var(--sp-8);   /* 32px */
-  --space-10:  40px;
-  --space-16:  64px;
+  /* ── Spacing 别名（--space-* → --sp-*）─────────────────────── */
+  --space-0:  0px;
+  --space-1:  var(--sp-1);   /* 4px */
+  --space-2:  var(--sp-2);   /* 8px */
+  --space-3:  var(--sp-3);   /* 12px */
+  --space-4:  var(--sp-4);   /* 16px */
+  --space-5:  var(--sp-5);   /* 20px */
+  --space-6:  var(--sp-6);   /* 24px */
+  --space-8:  var(--sp-8);   /* 32px */
+  --space-10: 40px;
+  --space-16: 64px;
 
-  /* ── Radius 别名（--radius-* 对应 --r-*）────────────────────── */
+  /* ── Radius 别名（--radius-* → --r-*）──────────────────────── */
   --radius-none:   var(--r-none);
   --radius-sm:     var(--r-small);   /* 2px */
   --radius-base:   var(--r-base);    /* 4px */
   --radius-round:  var(--r-round);   /* 20px */
   --radius-circle: var(--r-circle);  /* 9999px */
 
-  /* ── Shadow 补充（sidebar 专用，四档主体已在上方定义）────────── */
+  /* ── Shadow 补充 ────────────────────────────────────────────── */
   --shadow-sidebar: 4px 0 8px 0 rgba(0, 0, 0, 0.03);
 
-  /* ── Font 别名 ──────────────────────────────────────────────── */
-  /* CRM Online 用 Inter 打头（Latin 混排更优），WeChat 用 PingFang 打头 */
-  --font-sans: "Inter", "PingFang SC", "Source Han Sans SC",
-               "Noto Sans SC", -apple-system, "Segoe UI",
-               "Microsoft YaHei", sans-serif;
+  /* ── Font-size 别名（--fs-xs/sm/base/md/lg/xl/2xl）─────────── */
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono",
                "Source Han Mono SC", monospace;
-
-  /* ── Font-size 别名（CRM Online 命名，对应 WeChat --fs-* 值）── */
   --fs-xs:   var(--fs-caption);   /* 12px */
   --fs-sm:   var(--fs-body-sm);   /* 13px */
   --fs-base: var(--fs-body);      /* 14px */
   --fs-md:   var(--fs-title);     /* 16px */
-  --fs-lg:   var(--fs-section);   /* 20px  ← WeChat --fs-section = 20px */
-  --fs-xl:   20px;                /* 20px page titles */
+  --fs-lg:   var(--fs-section);   /* 20px */
+  --fs-xl:   20px;
   --fs-2xl:  var(--fs-hero);      /* 24px */
-  --fs-3xl:  30px;
-  --fs-4xl:  40px;
-  --fs-5xl:  48px;
 
-  /* ── Layout 尺寸 token（CRM Online 桌面端专用）────────────────── */
-  --topbar-h:              52px;
-  --sidebar-w-collapsed:   52px;
-  --sidebar-w-expanded:    220px;
-  --page-max-w:            1366px;
+  /* ── Layout token（Desktop-only · CRM Online 桌面端专用）────── */
+  --topbar-h:            52px;
+  --sidebar-w-collapsed: 52px;
+  --sidebar-w-expanded:  220px;
+  --page-max-w:          1366px;
 }
 
 
@@ -481,19 +471,16 @@ body,
 
 [data-theme="jj"] {
   --veeva-orange:  #eb1700;
-  --veeva-orange-2: #ff3e28;
   --border-accent: #eb1700;
   --bg-row-hover:  #fff0ee;
 }
 [data-theme="msd"] {
   --veeva-orange:  #00857c;
-  --veeva-orange-2: #1aa198;
   --border-accent: #00857c;
   --bg-row-hover:  #e8f5f3;
 }
 [data-theme="merck"] {
   --veeva-orange:  #503191;
-  --veeva-orange-2: #6b4cb2;
   --border-accent: #503191;
   --bg-row-hover:  #f0ebf8;
 }
