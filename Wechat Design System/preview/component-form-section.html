@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Form Section Header — 表单分组标题</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../form-section.css">
+<link rel="stylesheet" href="../forms.css">
+<style>
+  html, body { margin:0; padding:0; background:var(--color-bg-f8); font-family:var(--font-cn); color:var(--color-fg-h2); }
+  .stage { padding:32px; max-width:900px; margin:0 auto; }
+  .group { background:var(--color-bg-white); border:1px solid var(--color-border-base);
+            border-radius:12px; padding:20px; margin-bottom:24px; }
+  .group__title { font-size:16px; font-weight:500; color:#000; margin:0 0 4px; }
+  .group__sub   { font-size:12px; color:var(--color-fg-h4); margin:0 0 16px;
+                  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .label { font-size:11px; color:var(--color-fg-h4); margin:14px 0 6px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+  /* Narrow phone-width canvas matching detail page context */
+  .phone {
+    width:100%; max-width:420px;
+    background:var(--color-bg-white);
+    border:1px solid var(--color-border-base);
+    border-radius:14px; overflow:hidden;
+    box-shadow:var(--shadow-light);
+    margin-bottom:14px;
+  }
+
+  /* Token table */
+  .token-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }
+  .token-table th { text-align:left; padding:6px 10px; background:var(--color-bg-f8);
+                    color:var(--color-fg-h4); font-weight:500; border-bottom:1px solid var(--color-border-base); }
+  .token-table td { padding:6px 10px; border-bottom:1px solid var(--color-border-base);
+                    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:var(--color-fg-h2); }
+  .token-table tr:last-child td { border-bottom:0; }
+  .swatch { display:inline-block; width:14px; height:14px; border-radius:3px;
+            border:1px solid rgba(0,0,0,0.08); vertical-align:middle; margin-right:6px; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ─── 1. 基础用法 ───────────────────────────────── -->
+  <div class="group">
+    <h2 class="group__title">Form Section Header — 表单分组标题</h2>
+    <p class="group__sub">.ea-form-section · form-section.css · Figma 详情页面 9I1NNGaRTsFFcAnWFzW5qe · node 2481:62357</p>
+
+    <p class="label">基础（标题只有文字）</p>
+    <div class="phone">
+      <div class="ea-form-section">
+        <div class="ea-form-section__strip">
+          <span class="ea-form-section__title">基本信息</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="label">带数量徽标（.ea-form-section__count）</p>
+    <div class="phone">
+      <div class="ea-form-section">
+        <div class="ea-form-section__strip">
+          <span class="ea-form-section__title">联系方式</span>
+          <span class="ea-form-section__count">3</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="label">长标题（自动截断）</p>
+    <div class="phone">
+      <div class="ea-form-section">
+        <div class="ea-form-section__strip">
+          <span class="ea-form-section__title">医院执业资质与认证信息</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 2. 上下文：section + form rows ────────────── -->
+  <div class="group">
+    <h2 class="group__title">上下文组合 — Section + 字段行</h2>
+    <p class="group__sub">section header 搭配 .ff-row（forms.css）的标准用法；白底 body-bg 容器</p>
+
+    <p class="label">两个分组、各含若干字段行</p>
+    <div class="phone">
+      <!-- 分组 1 -->
+      <div class="ea-form-section">
+        <div class="ea-form-section__strip">
+          <span class="ea-form-section__title">基本信息</span>
+        </div>
+      </div>
+      <div class="ff-row"><div class="ff-row__inner">
+        <div class="ff-label"><span class="ff-label__txt">医生姓名</span></div>
+        <div class="ff-value"><span class="ff-value__text">李大魁</span></div>
+      </div></div>
+      <div class="ff-row"><div class="ff-row__inner">
+        <div class="ff-label"><span class="ff-label__txt">性别</span></div>
+        <div class="ff-value"><span class="ff-value__text">男</span></div>
+      </div></div>
+      <div class="ff-row"><div class="ff-row__inner">
+        <div class="ff-label"><span class="ff-label__txt">职称</span></div>
+        <div class="ff-value"><span class="ff-value__text">主任医师</span></div>
+      </div></div>
+
+      <!-- 分组 2 -->
+      <div class="ea-form-section">
+        <div class="ea-form-section__strip">
+          <span class="ea-form-section__title">联系方式</span>
+          <span class="ea-form-section__count">2</span>
+        </div>
+      </div>
+      <div class="ff-row"><div class="ff-row__inner">
+        <div class="ff-label"><span class="ff-label__txt">手机号码</span></div>
+        <div class="ff-value"><span class="ff-value__text">15739901787</span></div>
+      </div></div>
+      <div class="ff-row"><div class="ff-row__inner">
+        <div class="ff-label"><span class="ff-label__txt">邮箱</span></div>
+        <div class="ff-value"><span class="ff-value__text">li.dakui@example.cn</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ─── 3. 规格 & Token ────────────────────────────── -->
+  <div class="group">
+    <h2 class="group__title">规格 &amp; CSS Tokens</h2>
+    <p class="group__sub">所有尺寸/色值均由 CSS 变量控制，修改 form-section.css 中 :root 即可全局生效</p>
+
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>默认值</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>--fsec-h</td>
+          <td>40px</td>
+          <td>外层条高度</td>
+        </tr>
+        <tr>
+          <td>--fsec-pad-x / --fsec-pad-y</td>
+          <td>8px / 4px</td>
+          <td>外层条内边距</td>
+        </tr>
+        <tr>
+          <td>--fsec-strip-h</td>
+          <td>32px</td>
+          <td>内层蓝色胶囊高度</td>
+        </tr>
+        <tr>
+          <td>--fsec-strip-bg</td>
+          <td><span class="swatch" style="background:rgba(0,122,255,0.05)"></span>--color-bg-extra-blue-2 (5%)</td>
+          <td>内层蓝色胶囊背景</td>
+        </tr>
+        <tr>
+          <td>--fsec-strip-pad-x</td>
+          <td>8px</td>
+          <td>胶囊左右内边距</td>
+        </tr>
+        <tr>
+          <td>--fsec-radius</td>
+          <td>var(--r-base) = 4px</td>
+          <td>胶囊圆角</td>
+        </tr>
+        <tr>
+          <td>--fsec-title-fs / --fsec-title-fw</td>
+          <td>14px / 500</td>
+          <td>标题字号 / 字重</td>
+        </tr>
+        <tr>
+          <td>--fsec-title-color</td>
+          <td><span class="swatch" style="background:#2069D6"></span>--color-section-blue (#2069D6)</td>
+          <td>标题色（Section blue，仅用于分组标题）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── 4. 结构 ────────────────────────────────────── -->
+  <div class="group">
+    <h2 class="group__title">HTML 结构</h2>
+    <p class="group__sub">最小必须结构；__count 为可选</p>
+    <pre style="margin:0;font-size:12px;line-height:1.7;color:var(--color-fg-h2);
+                background:var(--color-bg-f8);padding:14px 16px;border-radius:8px;
+                overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">&lt;!-- 基础 --&gt;
+&lt;div class="ea-form-section"&gt;
+  &lt;div class="ea-form-section__strip"&gt;
+    &lt;span class="ea-form-section__title"&gt;基本信息&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 带数量 --&gt;
+&lt;div class="ea-form-section"&gt;
+  &lt;div class="ea-form-section__strip"&gt;
+    &lt;span class="ea-form-section__title"&gt;联系方式&lt;/span&gt;
+    &lt;span class="ea-form-section__count"&gt;3&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+  </div>
+
+</div>
+</body>
+</html>

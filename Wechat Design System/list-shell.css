@@ -259,7 +259,28 @@
 
 
 /* ============================================================
-   4. COUNT BAR                                   (Figma 1:1836)
+   4. LIST SCROLL BODY                            (layout utility)
+   ============================================================
+   Flex-grow scrollable container — the middle body of a list page
+   sitting between the fixed header stack (navbar + search + filterbar)
+   and the fixed footer (ea-bab). Matches `.dl-scroll` in DoctorList.vue.
+
+   Usage:
+     <main class="ea-list-scroll">
+       <div class="ea-list"> … rows … </div>
+       <div class="ea-list-count-bar">共计 N 条</div>
+     </main> */
+
+.ea-list-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--color-bg-f8);
+}
+
+
+/* ============================================================
+   5. COUNT BAR                                   (Figma 1:1836)
    ============================================================
    Thin gray strip after the last list row, "共计 13 条". */
 

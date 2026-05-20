@@ -149,7 +149,7 @@
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 25px;
   height: 100%;
   padding: 0 16px 0 12px;
   background: var(--bg-surface);
@@ -157,20 +157,17 @@
   position: relative;
 }
 
-/* Trailing tool icon — mask-driven via --icon CSS var.
-   Caller sets `style="--icon: url(.../线性-筛选.svg)"`.
-
-   IMPORTANT: `background-color` here is the FILL of the masked icon
-   (the mask clips the box to the icon's shape, so only the icon glyph
-   shows in this color — no rectangle is rendered). Idle = #666 gray;
-   Active = brand-veeva orange. The button bg itself stays transparent. */
+/* Trailing tool icon — dual-pattern (mask or SVG child).
+   Caller sets `style="--icon: url(...)"` or places an SVG inside.
+   Idle = #666 gray; Active = brand-veeva orange. */
 .ea-fb__tool {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border: 0;
   padding: 0;
   cursor: pointer;
-  background-color: var(--color-fg-h3);    /* idle icon color #666 */
+  color: var(--color-fg-h3);    /* idle icon color #666 */
+  background-color: currentColor;
   -webkit-mask-image: var(--icon, none);
   -webkit-mask-position: center;
   -webkit-mask-size: contain;
@@ -180,11 +177,18 @@
           mask-size: contain;
           mask-repeat: no-repeat;
 }
-/* Active: ONLY the icon glyph turns orange. No background rectangle —
-   the masked region is the same icon shape, just recolored. */
+.ea-fb__tool:has(svg) {
+  background-color: transparent;
+}
+.ea-fb__tool svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: inherit;
+}
 .ea-fb__tool--active,
 .ea-fb__tool[aria-pressed="true"] {
-  background-color: var(--color-brand-veeva);
+  color: var(--color-brand-veeva);
 }
 
 /* ──────────────────────────────────────────────────────────

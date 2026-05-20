@@ -55,14 +55,15 @@
   flex: 0 0 14px;
   width: 14px;
   height: 14px;
-  /* Dual-pattern icon — supports BOTH mask URL and SVG child.
-     background-color is NOT set in the class — a hard-coded value would
-     render as a solid square when mask-image is absent (SVG-child case).
+  /* Mask-pattern icon — background-color is the icon fill (mask clips the
+     box to the icon shape). Default = #999 gray for standard search glyph.
+     SVG-child callers (legacy) should override: style="background-color:transparent"
 
        Mask usage:  <span class="ea-search__icon"
-                          style="--icon: url(线性-搜索-方.svg);
-                                 background-color: var(--color-fg-h4);"></span>
-       SVG child:   <span class="ea-search__icon"><svg fill="#999">…</svg></span>  */
+                          style="--icon: url(线性-搜索-方.svg)"></span>
+       SVG child:   <span class="ea-search__icon"
+                          style="background-color:transparent"><svg fill="#999">…</svg></span> */
+  background-color: var(--color-fg-h4);   /* mask icon fill — #999 gray */
   -webkit-mask: var(--icon, none) center / contain no-repeat;
           mask: var(--icon, none) center / contain no-repeat;
   color: var(--color-fg-h4);

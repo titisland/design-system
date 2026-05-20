@@ -25,7 +25,7 @@
      • Inner pill    — 32 tall, light-blue tint
                        background: --color-bg-extra-blue-2 (5% wash)
                        OR --color-bg-tint-blue (legacy alias) — both work
-     • Title         — 14 / 500 / #000
+     • Title         — 14 / 500 / #2069D6 (--color-section-blue)
      • Inner padding — 4 (top) / 8 (sides) / 4 (bottom)
 */
 
@@ -39,7 +39,7 @@
   --fsec-radius:      var(--r-base);
   --fsec-title-fs:    14px;
   --fsec-title-fw:    var(--fw-medium);
-  --fsec-title-color: var(--color-fg-h1);             /* #000 */
+  --fsec-title-color: var(--color-section-blue);       /* #2069D6 */
 }
 
 .ea-form-section {

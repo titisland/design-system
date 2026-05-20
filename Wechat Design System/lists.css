@@ -331,10 +331,18 @@
   color: var(--fg-muted);
 }
 /* Homepage multicolor SVGs — no tinted background circle, icon renders at
-   full colour. Always use <img src="Homepage-*.svg"> inside this modifier.
+   full colour. Can be rendered via CSS background (defaults to 我的医生)
+   or by placing an <img> inside this modifier.
    Inherits the avatar size & border-radius from .ea-avatar. */
 .ea-avatar--homepage {
-  background: transparent;
+  background-color: transparent;
+  background-image: var(--icon, url("assets/icons/Homepage/Homepage-我的医生.svg"));
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.ea-avatar--homepage:has(img) {
+  background-image: none;
 }
 .ea-avatar--homepage img {
   object-fit: contain;   /* preserve SVG aspect ratio (not cover) */

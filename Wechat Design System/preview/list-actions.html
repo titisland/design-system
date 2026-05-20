@@ -5,9 +5,17 @@
 <title>List Actions — 列表项操作按钮</title>
 <link rel="stylesheet" href="../colors_and_type.css?v=1">
 <link rel="stylesheet" href="../lists.css?v=1">
-<link rel="stylesheet" href="../list-actions.css?v=1">
+<link rel="stylesheet" href="../list-actions.css?v=2">
 <style>
   html, body { margin: 0; padding: 0; background: #F8F8F8; font-family: var(--font-cn); }
+
+  /* ── inline override: ensure mask rule always applies regardless of CSS cache ── */
+  .ea-popover__icon {
+    width: 12px; height: 12px; flex: 0 0 12px; display: block;
+    background-color: currentColor;
+    -webkit-mask: var(--icon, none) center / contain no-repeat;
+            mask: var(--icon, none) center / contain no-repeat;
+  }
   .stage { padding: 24px; display: flex; flex-direction: column; gap: 36px; max-width: 1400px; margin: 0 auto; }
   h2.section { font-size: 28px; font-weight: 600; margin: 0 0 4px; color: #000; letter-spacing: 0.01em; }
   .lede { font-size: 13px; color: #666; max-width: 64ch; margin: 0 0 4px; line-height: 1.55; }
@@ -34,10 +42,6 @@
   }
   .demo-row__top {
     display: flex; flex-direction: row; gap: 12px; padding: 4px 0 12px;
-  }
-  .demo-row__avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: #DBE6F4 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%233975C6' d='M12 4 4 8v8l8 4 8-4V8L12 4Zm0 2.4 5.5 2.75L12 11.9 6.5 9.15 12 6.4ZM6 10.6l5 2.5v6L6 16.6v-6Zm12 0v6l-5 2.5v-6l5-2.5Z'/></svg>") center/24px no-repeat;
   }
   .demo-row__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
   .demo-row__title { font-size: 16px; font-weight: 600; color: #000; line-height: 1.4;
@@ -72,7 +76,7 @@
         <div class="frame">
           <div class="demo-row">
             <div class="demo-row__top">
-              <div class="demo-row__avatar"></div>
+              <div class="ea-avatar ea-avatar--homepage"><img src="../assets/icons/Homepage/Homepage-我的医生.svg" alt=""></div>
               <div class="demo-row__body">
                 <div class="demo-row__title">主要标题名称主要标题名称主要标题</div>
                 <div class="demo-row__sub">次要内容内容超长</div>
@@ -95,7 +99,7 @@
         <div class="frame">
           <div class="demo-row">
             <div class="demo-row__top">
-              <div class="demo-row__avatar"></div>
+              <div class="ea-avatar ea-avatar--homepage"><img src="../assets/icons/Homepage/Homepage-我的医生.svg" alt=""></div>
               <div class="demo-row__body">
                 <div class="demo-row__title">主要标题名称主要标题名称主要标题</div>
                 <div class="demo-row__sub">次要内容内容超长</div>
@@ -112,11 +116,11 @@
       </div>
 
       <div>
-        <div class="col-title">主操作 / 危险态 <small>· 变体</small></div>
+        <div class="col-title">主操作 <small>· 变体</small></div>
         <div class="frame">
           <div class="demo-row">
             <div class="demo-row__top">
-              <div class="demo-row__avatar"></div>
+              <div class="ea-avatar ea-avatar--homepage"><img src="../assets/icons/Homepage/Homepage-我的医生.svg" alt=""></div>
               <div class="demo-row__body">
                 <div class="demo-row__title">主要标题名称主要标题名称主要标题</div>
                 <div class="demo-row__sub">次要内容内容超长</div>
@@ -124,13 +128,12 @@
             </div>
             <div class="ea-actions">
               <div class="ea-actions__group">
-                <button class="ea-action ea-action--danger">作废</button>
                 <button class="ea-action">编辑</button>
                 <button class="ea-action ea-action--primary">跟进</button>
               </div>
             </div>
           </div>
-          <div class="frame-cap">.ea-action--danger · .ea-action--primary</div>
+          <div class="frame-cap">.ea-action--primary</div>
         </div>
       </div>
 
@@ -139,7 +142,7 @@
         <div class="frame">
           <div class="demo-row">
             <div class="demo-row__top">
-              <div class="demo-row__avatar"></div>
+              <div class="ea-avatar ea-avatar--homepage"><img src="../assets/icons/Homepage/Homepage-我的医生.svg" alt=""></div>
               <div class="demo-row__body">
                 <div class="demo-row__title">主要标题名称主要标题名称主要标题</div>
                 <div class="demo-row__sub">次要内容内容超长</div>
@@ -175,15 +178,11 @@
         <div class="frame" style="padding: 16px 16px 24px;">
           <div class="ea-popover">
             <div class="ea-popover__row">
-              <span class="ea-popover__icon" aria-hidden="true">
-                <svg viewBox="0 0 12 12" fill="none"><rect x="3.5" y="3.5" width="6" height="7" rx="1" stroke="currentColor" stroke-width="1"/><path d="M2 8.5V2.5a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="1" fill="none"/></svg>
-              </span>
+                            <span class="ea-popover__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%3E%0A%3Cpath%20d%3D%22M18.2857%204.28571C20.0215%204.28571%2021.4286%205.69282%2021.4286%207.42857V23.4286H26.8571C27.3258%2023.4286%2027.7066%2023.0525%2027.7142%2022.5856L27.7143%2022.5714V3.14286C27.7143%202.67421%2027.3382%202.29339%2026.8713%202.28582L26.8571%202.28571H13.8571C13.3885%202.28571%2013.0077%202.66182%2013.0001%203.12868L13%203.14286V4.28571H18.2857ZM18.2999%206.57143H3.14286C2.67421%206.57143%202.29339%206.94754%202.28571%207.41439V26.8571C2.28571%2027.3258%202.66182%2027.7066%203.12868%2027.7143H18.2857C18.7544%2027.7143%2019.1352%2027.3382%2019.1429%2026.8713V7.42857C19.1429%206.95993%2018.7668%206.57911%2018.2999%206.57143ZM10.7143%2010.7143C11.3391%2010.7143%2011.8469%2011.2158%2011.857%2011.8382L11.8571%2011.8571V16H16C16.6312%2016%2017.1429%2016.5117%2017.1429%2017.1429C17.1429%2017.7677%2016.6414%2018.2755%2016.0189%2018.2856L16%2018.2857H11.8571V22.4286C11.8571%2023.0597%2011.3455%2023.5714%2010.7143%2023.5714C10.0894%2023.5714%209.58168%2023.0699%209.57157%2022.4475L9.57143%2022.4286V18.2857H5.42857C4.79739%2018.2857%204.28571%2017.774%204.28571%2017.1429C4.28571%2016.518%204.78721%2016.0102%205.40964%2016.0001L5.42857%2016H9.57143V11.8571C9.57143%2011.226%2010.0831%2010.7143%2010.7143%2010.7143ZM10.7143%203.14286C10.7143%201.42446%2012.0934%200.0281786%2013.8052%200.000428643L13.8571%200H26.8571C28.5755%200%2029.9718%201.37911%2029.9996%203.09089L30%203.14286V22.5714C30%2024.2898%2028.6209%2025.6861%2026.9091%2025.7139L26.8571%2025.7143H21.4286V26.8571C21.4286%2028.5929%2020.0215%2030%2018.2857%2030H3.14286C1.40711%2030%200%2028.5929%200%2026.8571V7.42857C0%205.69282%201.40711%204.28571%203.14286%204.28571H10.7143V3.14286Z%22%20fill%3D%22%23333333%22%2F%3E%0A%3C%2Fg%3E%0A%0A%3C%2Fsvg%3E%0A')" aria-hidden="true"></span>
               <span class="ea-popover__label">复制</span>
             </div>
             <div class="ea-popover__row ea-popover__row--danger">
-              <span class="ea-popover__icon" aria-hidden="true">
-                <svg viewBox="0 0 12 12" fill="none"><rect x="2.5" y="3.5" width="7" height="7" rx="0.5" stroke="currentColor" stroke-width="1"/><path d="M1 3.5h10M5 1.5h2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
-              </span>
+                            <span class="ea-popover__icon" style="--icon: url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%3E%0A%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M19.2857%209.71428V22.4286C19.2857%2023.0597%2018.774%2023.5714%2018.1429%2023.5714C17.5116%2023.5714%2017%2023.0597%2017%2022.4286V9.71428C17%209.08311%2017.5116%208.57143%2018.1429%208.57143C18.774%208.57143%2019.2857%209.08311%2019.2857%209.71428ZM23.5714%204.14286H28.8571C29.4883%204.14286%2030%204.65454%2030%205.28571C30%205.91689%2029.4883%206.42857%2028.8571%206.42857H1.14286C0.511643%206.42857%200%205.91689%200%205.28571C0%204.65454%200.511643%204.14286%201.14286%204.14286H6.42857V3.42857C6.42857%201.535%207.96357%200%209.85714%200H20.1429C22.0364%200%2023.5714%201.535%2023.5714%203.42857V4.14286ZM8.71428%204.14286H21.2857V3.42857C21.2857%202.79739%2020.774%202.28571%2020.1429%202.28571H9.85714C9.22593%202.28571%208.71428%202.79739%208.71428%203.42857V4.14286ZM24.6429%208.57143C24.0116%208.57143%2023.5%209.08311%2023.5%209.71428V25.6217C23.5%2026.7888%2022.6159%2027.7143%2021.552%2027.7143H8.448C7.38414%2027.7143%206.5%2026.7888%206.5%2025.6217V9.71428C6.5%209.08311%205.98832%208.57143%205.35714%208.57143C4.72593%208.57143%204.21429%209.08311%204.21429%209.71428V25.6217C4.21429%2028.0284%206.09782%2030%208.448%2030H21.552C23.9022%2030%2025.7857%2028.0284%2025.7857%2025.6217V9.71428C25.7857%209.08311%2025.274%208.57143%2024.6429%208.57143ZM13%2022.4286V9.71428C13%209.08311%2012.4883%208.57143%2011.8571%208.57143C11.2259%208.57143%2010.7143%209.08311%2010.7143%209.71428V22.4286C10.7143%2023.0597%2011.2259%2023.5714%2011.8571%2023.5714C12.4883%2023.5714%2013%2023.0597%2013%2022.4286Z%22%20fill%3D%22%23333333%22%2F%3E%0A%3C%2Fg%3E%0A%0A%3C%2Fsvg%3E%0A')" aria-hidden="true"></span>
               <span class="ea-popover__label">删除</span>
             </div>
           </div>
@@ -214,7 +213,7 @@
         <div class="frame anchor-stage">
           <div class="demo-row">
             <div class="demo-row__top">
-              <div class="demo-row__avatar"></div>
+              <div class="ea-avatar ea-avatar--homepage"><img src="../assets/icons/Homepage/Homepage-我的医生.svg" alt=""></div>
               <div class="demo-row__body">
                 <div class="demo-row__title">主要标题名称主要标题名称主要标题</div>
                 <div class="demo-row__sub">次要内容内容超长</div>
